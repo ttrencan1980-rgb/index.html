@@ -91,12 +91,18 @@
       background-color: var(--secondary-hover);
     }
 
+    #quiz-container {
+      display: block;
+      min-height: 100px;
+    }
+
     .question-card {
       margin-bottom: 20px;
       padding: 16px;
       border: 1px solid #e0e0e0;
       border-radius: var(--border-radius);
       background-color: #fafafa;
+      display: block;
     }
 
     .question-title {
@@ -530,7 +536,7 @@
       question: "32. Čo tvorí systém ochrany pred bleskom (LPS)?",
       options: [
         "Vonkajší LPS (zachytávače, zvodidlá, uzemnenie) a vnútorný LPS (prepäťová ochrana, vyrovnanie potenciálov)",
-        "Len ističe a prúdové chrániče",
+        "Len ističe a prúdové chrániace",
         "Len uzemňovací pásik FeZn"
       ],
       correctIndex: 0
@@ -621,6 +627,8 @@
 
   function renderQuiz() {
     const container = document.getElementById('quiz-container');
+    if (!container) return;
+    
     container.innerHTML = '';
 
     testQuestions.forEach((q, index) => {
@@ -638,6 +646,7 @@
       q.options.forEach((opt, optIndex) => {
         const li = document.createElement('li');
         const btn = document.createElement('button');
+        btn.type = 'button';
         btn.className = `option-btn opt-${index}-${optIndex}`;
         btn.innerText = opt;
         btn.onclick = () => selectOption(index, optIndex);
@@ -656,18 +665,20 @@
 
     qData.options.forEach((_, idx) => {
       const btn = document.querySelector(`.opt-${qIndex}-${idx}`);
-      btn.classList.remove('correct', 'incorrect');
-      
-      if (idx === optIndex) {
-        if (optIndex === qData.correctIndex) {
-          btn.classList.add('correct');
-        } else {
-          btn.classList.add('incorrect');
+      if (btn) {
+        btn.classList.remove('correct', 'incorrect');
+        
+        if (idx === optIndex) {
+          if (optIndex === qData.correctIndex) {
+            btn.classList.add('correct');
+          } else {
+            btn.classList.add('incorrect');
+          }
         }
-      }
-      
-      if (idx === qData.correctIndex && optIndex !== qData.correctIndex) {
-        btn.classList.add('correct');
+        
+        if (idx === qData.correctIndex && optIndex !== qData.correctIndex) {
+          btn.classList.add('correct');
+        }
       }
     });
   }
@@ -705,7 +716,18 @@
     }
   }
 
-  document.addEventListener('DOMContentLoaded', renderQuiz);
+  // Poistka pre spustenie načítania v rôznych stavoch prehliadača
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderQuiz);
+  } else {
+    renderQuiz();
+  }
+  
+  window.onload = function() {
+    if (document.getElementById('quiz-container').children.length === 0) {
+      renderQuiz();
+    }
+  };
 </script>
 
 </body>
