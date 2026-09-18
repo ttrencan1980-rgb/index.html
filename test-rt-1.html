@@ -1,112 +1,164 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test RT1_2 - Revízny technik</title>
+  <style>
+    :root {
+      --primary-color: #0056b3;
+      --bg-color: #f4f7f6;
+      --card-bg: #ffffff;
+      --text-color: #333333;
+      --correct-color: #28a745;
+      --incorrect-color: #dc3545;
+      --border-radius: 8px;
+    }
 
-<style>
-  .quiz-modal-container {
-    max-width: 800px;
-    margin: 20px auto;
-    background: #ffffff;
-    padding: 25px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 20px;
+    }
 
-  .quiz-nav-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #eee;
-    padding-bottom: 10px;
-  }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      padding: 25px;
+      border-radius: var(--border-radius);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
 
-  .btn-quiz {
-    background-color: #0056b3;
-    color: white;
-    border: none;
-    padding: 10px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    text-decoration: none;
-    display: inline-block;
-  }
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 10px;
+    }
 
-  .btn-quiz:hover {
-    background-color: #003d80;
-  }
+    .btn-nav {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
+    }
 
-  .quiz-card-item {
-    background: #ffffff;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 16px;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
+    .btn-nav:hover {
+      background-color: #003d80;
+    }
 
-  .quiz-card-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  }
+    h1 {
+      font-size: 1.5rem;
+      margin: 0;
+      color: var(--primary-color);
+    }
 
-  .question-card {
-    margin-bottom: 20px;
-    padding: 15px;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    background-color: #fafafa;
-  }
+    .question-card {
+      margin-bottom: 25px;
+      padding: 15px;
+      border: 1px solid #e0e0e0;
+      border-radius: var(--border-radius);
+      background-color: #fafafa;
+    }
 
-  .question-title {
-    font-weight: 600;
-    margin-bottom: 12px;
-  }
+    .question-title {
+      font-weight: 600;
+      margin-bottom: 12px;
+      font-size: 1.05rem;
+    }
 
-  .options-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
+    .options-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
 
-  .option-btn {
-    width: 100%;
-    text-align: left;
-    padding: 10px 12px;
-    margin-bottom: 8px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    background-color: white;
-    cursor: pointer;
-    font-size: 0.95rem;
-  }
+    .option-btn {
+      width: 100%;
+      text-align: left;
+      padding: 12px;
+      margin-bottom: 8px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background-color: white;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: background-color 0.2s, border-color 0.2s;
+    }
 
-  .option-btn.correct {
-    background-color: #d4edda !important;
-    border-color: #28a745 !important;
-    color: #155724;
-    font-weight: bold;
-  }
+    .option-btn:hover:not(:disabled) {
+      background-color: #eef5ff;
+      border-color: var(--primary-color);
+    }
 
-  .option-btn.incorrect {
-    background-color: #f8d7da !important;
-    border-color: #dc3545 !important;
-    color: #721c24;
-  }
+    .option-btn.correct {
+      background-color: #d4edda !important;
+      border-color: var(--correct-color) !important;
+      color: #155724;
+      font-weight: bold;
+    }
 
-  .result-section {
-    display: none;
-    text-align: center;
-    padding: 20px;
-    background: #e9ecef;
-    border-radius: 8px;
-    margin-top: 20px;
-  }
-</style>
+    .option-btn.incorrect {
+      background-color: #f8d7da !important;
+      border-color: var(--incorrect-color) !important;
+      color: #721c24;
+    }
 
-<div id="">Revízna Technika (RT)</div>
+    .result-section {
+      display: none;
+      text-align: center;
+      padding: 20px;
+      background: #e9ecef;
+      border-radius: var(--border-radius);
+      margin-top: 20px;
+    }
+
+    .result-score {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+
+    #finish-btn {
+      width: 100%;
+      padding: 15px;
+      font-size: 1.1rem;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="nav-bar">
+    <a href="#" onclick="history.back(); return false;" class="btn-nav">&larr; Predchádzajúca</a>
+    <h1>Test RT1_2 (26 otázok)</h1>
+    <a href="/revizny-technik" class="btn-nav">Revízny technik</a>
+  </div>
+
+  <div id="quiz-container"></div>
+
+  <button id="finish-btn" class="btn-nav" onclick="evaluateQuiz()">Vyhodnotiť test</button>
+
+  <div id="result-section" class="result-section">
+    <h2>Výsledok testu</h2>
+    <p class="result-score" id="score-text"></p>
+    <p id="percentage-text"></p>
+    <button class="btn-nav" onclick="resetQuiz()">Opakovať test</button>
+  </div>
+</div>
 
 <script>
-(function() {
   const testQuestions = [
     {
       id: 1,
@@ -372,103 +424,54 @@
 
   let userAnswers = {};
 
-  function init() {
-    const listRt = document.getElementById('list-rt');
-    if (!listRt) return;
-
-    // Vytvorenie položky (karty) do kategórie RT
-    const card = document.createElement('div');
-    card.className = 'quiz-card-item';
-    card.innerHTML = `
-      <h3 style="margin: 0 0 8px 0; color: #0056b3;">Test RT1_2</h3>
-      <p style="margin: 0; color: #666; font-size: 0.9rem;">Prípravný test pre revíznych technikov (26 otázok)</p>
-    `;
-    card.onclick = openTest;
-    listRt.appendChild(card);
-  }
-
-  function openTest() {
-    const wrapper = document.getElementById('rt-test-wrapper');
-    wrapper.className = 'quiz-modal-container';
-    
-    wrapper.innerHTML = `
-      <div class="quiz-nav-bar">
-        <button class="btn-quiz" id="rt-back-btn">&larr; Späť na kategórie</button>
-        <h2 style="margin: 0; font-size: 1.3rem; color: #0056b3;">Test RT1_2</h2>
-      </div>
-      <div id="rt-quiz-questions"></div>
-      <button class="btn-quiz" id="rt-finish-btn" style="width: 100%; margin-top: 20px; padding: 12px;">Vyhodnotiť test</button>
-      <div id="rt-result-section" class="result-section">
-        <h3>Výsledok testu</h3>
-        <p id="rt-score-text" style="font-size: 1.5rem; font-weight: bold; color: #0056b3;"></p>
-        <p id="rt-percentage-text"></p>
-        <button class="btn-quiz" id="rt-reset-btn">Opakovať test</button>
-      </div>
-    `;
-
-    document.getElementById('rt-back-btn').onclick = closeTest;
-    document.getElementById('rt-finish-btn').onclick = evaluateQuiz;
-    document.getElementById('rt-reset-btn').onclick = resetQuiz;
-
-    renderQuestions();
-    wrapper.scrollIntoView({ behavior: 'smooth' });
-  }
-
-  function closeTest() {
-    const wrapper = document.getElementById('rt-test-wrapper');
-    wrapper.className = '';
-    wrapper.innerHTML = '';
-    userAnswers = {};
-  }
-
-  function renderQuestions() {
-    const container = document.getElementById('rt-quiz-questions');
+  function renderQuiz() {
+    const container = document.getElementById('quiz-container');
     container.innerHTML = '';
 
-    testQuestions.forEach((q, qIdx) => {
+    testQuestions.forEach((q, index) => {
       const qCard = document.createElement('div');
       qCard.className = 'question-card';
 
-      const title = document.createElement('div');
-      title.className = 'question-title';
-      title.innerText = q.question;
-      qCard.appendChild(title);
+      const qTitle = document.createElement('div');
+      qTitle.className = 'question-title';
+      qTitle.innerText = q.question;
+      qCard.appendChild(qTitle);
 
-      const list = document.createElement('ul');
-      list.className = 'options-list';
+      const optionsList = document.createElement('ul');
+      optionsList.className = 'options-list';
 
-      q.options.forEach((opt, optIdx) => {
+      q.options.forEach((opt, optIndex) => {
         const li = document.createElement('li');
         const btn = document.createElement('button');
-        btn.className = `option-btn rt-opt-${qIdx}-${optIdx}`;
+        btn.className = `option-btn opt-${index}-${optIndex}`;
         btn.innerText = opt;
-        btn.onclick = () => selectOption(qIdx, optIdx);
+        btn.onclick = () => selectOption(index, optIndex);
         li.appendChild(btn);
-        list.appendChild(li);
+        optionsList.appendChild(li);
       });
 
-      qCard.appendChild(list);
+      qCard.appendChild(optionsList);
       container.appendChild(qCard);
     });
   }
 
-  function selectOption(qIdx, optIdx) {
-    userAnswers[qIdx] = optIdx;
-    const qData = testQuestions[qIdx];
+  function selectOption(qIndex, optIndex) {
+    userAnswers[qIndex] = optIndex;
+    const qData = testQuestions[qIndex];
 
     qData.options.forEach((_, idx) => {
-      const btn = document.querySelector(`.rt-opt-${qIdx}-${idx}`);
+      const btn = document.querySelector(`.opt-${qIndex}-${idx}`);
       btn.classList.remove('correct', 'incorrect');
       
-      if (idx === optIdx) {
-        if (optIdx === qData.correctIndex) {
+      if (idx === optIndex) {
+        if (optIndex === qData.correctIndex) {
           btn.classList.add('correct');
         } else {
           btn.classList.add('incorrect');
         }
       }
       
-      if (idx === qData.correctIndex && optIdx !== qData.correctIndex) {
+      if (idx === qData.correctIndex && optIndex !== qData.correctIndex) {
         btn.classList.add('correct');
       }
     });
@@ -483,17 +486,23 @@
     });
 
     const percentage = Math.round((score / testQuestions.length) * 100);
-    document.getElementById('rt-score-text').innerText = `${score} / ${testQuestions.length}`;
-    document.getElementById('rt-percentage-text').innerText = `Úspešnosť: ${percentage}%`;
-    document.getElementById('rt-result-section').style.display = 'block';
+    
+    document.getElementById('score-text').innerText = `${score} / ${testQuestions.length}`;
+    document.getElementById('percentage-text').innerText = `Úspešnosť: ${percentage}%`;
+    document.getElementById('result-section').style.display = 'block';
+    
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
   }
 
   function resetQuiz() {
     userAnswers = {};
-    document.getElementById('rt-result-section').style.display = 'none';
-    renderQuestions();
+    document.getElementById('result-section').style.display = 'none';
+    renderQuiz();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  document.addEventListener('DOMContentLoaded', init);
-})();
+  document.addEventListener('DOMContentLoaded', renderQuiz);
 </script>
+
+</body>
+</html>
