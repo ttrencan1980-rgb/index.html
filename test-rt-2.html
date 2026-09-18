@@ -2,113 +2,235 @@
 <html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Test RT2 - Revízny technik</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      background-color: #f9f9f9;
+    :root {
+      --primary-color: #0056b3;
+      --primary-hover: #003d80;
+      --secondary-color: #6c757d;
+      --secondary-hover: #5a6268;
+      --bg-color: #f4f7f6;
+      --card-bg: #ffffff;
+      --text-color: #333333;
+      --correct-color: #28a745;
+      --incorrect-color: #dc3545;
+      --border-radius: 12px;
     }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 12px;
+      line-height: 1.5;
+    }
+
     .container {
       max-width: 800px;
       margin: 0 auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      background: var(--card-bg);
+      padding: 16px;
+      border-radius: var(--border-radius);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     }
-    h1 {
-      text-align: center;
-      color: #333;
-    }
-    .question {
+
+    .nav-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 20px;
-      padding: 15px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 12px;
+    }
+
+    h1 {
+      font-size: 1.25rem;
+      margin: 0;
+      color: var(--primary-color);
+      text-align: center;
+      width: 100%;
+      order: -1;
+    }
+
+    .btn-nav {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 12px 16px;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px; /* Optimalizované pre dotyk */
+      flex: 1;
+      text-align: center;
+    }
+
+    .btn-nav:hover, .btn-nav:active {
+      background-color: var(--primary-hover);
+    }
+
+    .btn-secondary {
+      background-color: var(--secondary-color);
+    }
+
+    .btn-secondary:hover, .btn-secondary:active {
+      background-color: var(--secondary-hover);
+    }
+
+    .question-card {
+      margin-bottom: 20px;
+      padding: 16px;
+      border: 1px solid #e0e0e0;
+      border-radius: var(--border-radius);
       background-color: #fafafa;
     }
+
     .question-title {
-      font-weight: bold;
-      margin-bottom: 5px;
+      font-weight: 600;
+      margin-bottom: 14px;
+      font-size: 1rem;
+      color: #111;
     }
-    .question-norm {
-      font-size: 0.9em;
-      color: #666;
+
+    .options-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .option-btn {
+      width: 100%;
+      text-align: left;
+      padding: 14px 16px;
       margin-bottom: 10px;
-      font-style: italic;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: white;
+      cursor: pointer;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      transition: background-color 0.2s, border-color 0.2s;
+      min-height: 48px; /* Taktilná odozva pre prsty */
     }
-    .options {
-      margin-left: 20px;
+
+    .option-btn:hover:not(:disabled) {
+      background-color: #eef5ff;
+      border-color: var(--primary-color);
     }
-    .option {
-      margin-bottom: 5px;
-      display: block;
-      padding: 5px;
-      border-radius: 3px;
-    }
-    .correct {
+
+    .option-btn.correct {
       background-color: #d4edda !important;
+      border-color: var(--correct-color) !important;
       color: #155724;
-      font-weight: bold;
+      font-weight: 600;
     }
-    .incorrect {
+
+    .option-btn.incorrect {
       background-color: #f8d7da !important;
+      border-color: var(--incorrect-color) !important;
       color: #721c24;
     }
-    .buttons {
+
+    .action-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
       margin-top: 20px;
+    }
+
+    .result-section {
+      display: none;
       text-align: center;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      margin: 0 10px;
-      cursor: pointer;
-      border: none;
-      border-radius: 5px;
-      background-color: #007bff;
-      color: white;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    #result {
+      padding: 20px;
+      background: #e9ecef;
+      border-radius: var(--border-radius);
       margin-top: 20px;
-      font-size: 1.2em;
-      font-weight: bold;
-      text-align: center;
     }
-    .timer {
-      font-size: 1.2em;
+
+    .result-score {
+      font-size: 1.8rem;
       font-weight: bold;
-      text-align: right;
-      margin-bottom: 15px;
-      color: #d9534f;
+      color: var(--primary-color);
+      margin: 10px 0;
+    }
+
+    /* Špecifické úpravy pre širšie obrazovky (tablety a počítače) */
+    @media (min-width: 600px) {
+      body {
+        padding: 20px;
+      }
+      .container {
+        padding: 25px;
+      }
+      h1 {
+        width: auto;
+        order: 0;
+        font-size: 1.5rem;
+      }
+      .btn-nav {
+        flex: initial;
+      }
+      .action-buttons {
+        flex-direction: row;
+      }
     }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <h1>Test RT2</h1>
-  <div class="timer" id="timer">Čas: 00:00</div>
-  
-  <form id="quizForm">
-    <div id="questionsContainer"></div>
+  <div class="nav-bar">
+    <a href="#" onclick="history.back(); return false;" class="btn-nav">&larr; Späť</a>
+    <h1>Test RT1_2 (26 otázok)</h1>
+    <a href="/revizny-technik" class="btn-nav">Revízny technik</a>
+  </div>
 
-    <div class="buttons">
-      <button type="button" onclick="checkAnswers()">Vyhodnotiť test</button>
-      <button type="button" onclick="resetQuiz()">Resetovať test</button>
-    </div>
-  </form>
+  <div id="quiz-container"></div>
 
-  <div id="result"></div>
+  <div class="action-buttons">
+    <button id="finish-btn" class="btn-nav" onclick="evaluateQuiz()">Vyhodnotiť test</button>
+    <button id="later-btn" class="btn-nav btn-secondary" onclick="tryLater()">Vyskúšať neskôr</button>
+  </div>
+
+  <div id="result-section" class="result-section">
+    <h2>Výsledok testu</h2>
+    <p class="result-score" id="score-text"></p>
+    <p id="percentage-text"></p>
+    <button class="btn-nav" onclick="resetQuiz()">Opakovať test</button>
+  </div>
 </div>
 
 <script>
-const questions = [
+  const testQuestions = [
+    {
+      id: 1,
+      question: "1. Vznikne na vodivom predmete nebezpečné dotykové napätie pri jednofázovom skrate v sieti TN bez prúdového chrániča?",
+      options: [
+        "Nie, pretože ochranný vodič je uzemnený.",
+        "Áno, počas trvania poruchy až do vypnutia nadprúdovým ochranným prístrojom.",
+        "Nie, ochranný vodič zabezpečí okamžitý nulový potenciál."
+      ],
+      correctIndex: 1
+    },
+    {
+      id: 2,
+      question: "2. Aké podmienky musia byť splnené pri ochrane neprepínaním v sieťach TN?",
+      options: [
+        "Impedancia slučky poruchového prúdu musí byť dostatočne nízka, aby došlo k včasnému odpojeniu.",
   {
     q: "Práca pod dohľadom je",
     norm: "STN 34 3100:2001",
@@ -511,101 +633,3 @@ const questions = [
   }
 ];
 
-let startTime;
-let timerInterval;
-
-function renderQuestions() {
-  const container = document.getElementById('questionsContainer');
-  container.innerHTML = '';
-  
-  questions.forEach((q, index) => {
-    const qDiv = document.createElement('div');
-    qDiv.className = 'question';
-    
-    let optionsHtml = '';
-    q.options.forEach((opt, optIndex) => {
-      optionsHtml += `
-        <label class="option" id="label-${index}-${optIndex}">
-          <input type="radio" name="q${index}" value="${optIndex}">
-          ${String.fromCharCode(65 + optIndex)}) ${opt}
-        </label>
-      `;
-    });
-
-    qDiv.innerHTML = `
-      <div class="question-title">${index + 1}. ${q.q}</div>
-      <div class="question-norm">Norma: ${q.norm}</div>
-      <div class="options">${optionsHtml}</div>
-    `;
-    container.appendChild(qDiv);
-  });
-}
-
-function startTimer() {
-  startTime = Date.now();
-  timerInterval = setInterval(() => {
-    const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
-    const minutes = Math.floor(elapsedTime / 60).toString().padStart(2, '0');
-    const seconds = (elapsedTime % 60).toString().padStart(2, '0');
-    document.getElementById('timer').innerText = `Čas: ${minutes}:${seconds}`;
-  }, 1000);
-}
-
-function checkAnswers() {
-  clearInterval(timerInterval);
-  let score = 0;
-
-  questions.forEach((q, index) => {
-    const selected = document.querySelector(`input[name="q${index}"]:checked`);
-    
-    // Vyčistenie predchádzajúceho zvýraznenia
-    q.options.forEach((_, optIndex) => {
-      const label = document.getElementById(`label-${index}-${optIndex}`);
-      label.classList.remove('correct', 'incorrect');
-    });
-
-    // Zvýraznenie správnej odpovede
-    const correctLabel = document.getElementById(`label-${index}-${q.correct}`);
-    correctLabel.classList.add('correct');
-
-    if (selected) {
-      const userAns = parseInt(selected.value);
-      if (userAns === q.correct) {
-        score++;
-      } else {
-        const userLabel = document.getElementById(`label-${index}-${userAns}`);
-        userLabel.classList.add('incorrect');
-      }
-    }
-  });
-
-  const percentage = Math.round((score / questions.length) * 100);
-  const resultDiv = document.getElementById('result');
-  resultDiv.innerHTML = `Skóre: ${score} z ${questions.length} (${percentage}%)`;
-}
-
-function resetQuiz() {
-  clearInterval(timerInterval);
-  document.getElementById('quizForm').reset();
-  
-  // Vyčistenie farieb
-  questions.forEach((q, index) => {
-    q.options.forEach((_, optIndex) => {
-      const label = document.getElementById(`label-${index}-${optIndex}`);
-      label.classList.remove('correct', 'incorrect');
-    });
-  });
-
-  document.getElementById('result').innerText = '';
-  startTimer();
-}
-
-// Inicializácia pri načítaní stránky
-window.onload = function() {
-  renderQuestions();
-  startTimer();
-};
-</script>
-
-</body>
-</html>
