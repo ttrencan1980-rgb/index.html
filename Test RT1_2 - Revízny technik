@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test RT1_2 - Revízny technik</title>
+  <style>
+    :root {
+      --primary-color: #0056b3;
+      --bg-color: #f4f7f6;
+      --card-bg: #ffffff;
+      --text-color: #333333;
+      --correct-color: #28a745;
+      --incorrect-color: #dc3545;
+      --border-radius: 8px;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      padding: 25px;
+      border-radius: var(--border-radius);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 10px;
+    }
+
+    .btn-nav {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-nav:hover {
+      background-color: #003d80;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      margin: 0;
+      color: var(--primary-color);
+    }
+
+    .question-card {
+      margin-bottom: 25px;
+      padding: 15px;
+      border: 1px solid #e0e0e0;
+      border-radius: var(--border-radius);
+      background-color: #fafafa;
+    }
+
+    .question-title {
+      font-weight: 600;
+      margin-bottom: 12px;
+      font-size: 1.05rem;
+    }
+
+    .options-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .option-btn {
+      width: 100%;
+      text-align: left;
+      padding: 12px;
+      margin-bottom: 8px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background-color: white;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: background-color 0.2s, border-color 0.2s;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      background-color: #eef5ff;
+      border-color: var(--primary-color);
+    }
+
+    .option-btn.correct {
+      background-color: #d4edda !important;
+      border-color: var(--correct-color) !important;
+      color: #155724;
+      font-weight: bold;
+    }
+
+    .option-btn.incorrect {
+      background-color: #f8d7da !important;
+      border-color: var(--incorrect-color) !important;
+      color: #721c24;
+    }
+
+    .result-section {
+      display: none;
+      text-align: center;
+      padding: 20px;
+      background: #e9ecef;
+      border-radius: var(--border-radius);
+      margin-top: 20px;
+    }
+
+    .result-score {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+
+    #finish-btn {
+      width: 100%;
+      padding: 15px;
+      font-size: 1.1rem;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="nav-bar">
+    <a href="#" onclick="history.back(); return false;" class="btn-nav">&larr; Predchádzajúca</a>
+    <h1>Test RT1_2 (26 otázok)</h1>
+    <a href="/revizny-technik" class="btn-nav">Revízny technik</a>
+  </div>
+
+  <div id="quiz-container"></div>
+
+  <button id="finish-btn" class="btn-nav" onclick="evaluateQuiz()">Vyhodnotiť test</button>
+
+  <div id="result-section" class="result-section">
+    <h2>Výsledok testu</h2>
+    <p class="result-score" id="score-text"></p>
+    <p id="percentage-text"></p>
+    <button class="btn-nav" onclick="resetQuiz()">Opakovať test</button>
+  </div>
+</div>
+
+<script>
+  const testQuestions = [
+    {
+      id: 1,
+      question: "1. Vznikne na vodivom predmete nebezpečné dotykové napätie pri jednofázovom skrate v sieti TN bez prúdového chrániča?",
+      options: [
+        "Nie, pretože ochranný vodič je uzemnený.",
+        "Áno, počas trvania poruchy až do vypnutia nadprúdovým ochranným prístrojom.",
+        "Nie, ochranný vodič zabezpečí okamžitý nulový potenciál."
+      ],
+      correctIndex: 1
+    },
+    {
+      id: 2,
+      question: "2. Aké podmienky musia byť splnené pri ochrane neprepínaním v sieťach TN?",
+      options: [
+        "Impedancia slučky poruchového prúdu musí byť dostatočne nízka, aby došlo k včasnému odpojeniu.",
+        "Všetky neživé časti musia byť spojené len s fázovým vodičom.",
+        "Použitie prúdového chrániča je povinné v celom rozvode bez výnimky."
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 3,
+      question: "3. Aký je hlavný účel doplnkového ochranného pospájania?",
+      options: [
+        "Zvýšiť prevádzkové napätie v systéme.",
+        "Vyrovnať potenciály medzi súčasne dotykovými vodivými časťami a znížiť dotykové napätie.",
+        "Nahrádzať funkciu hlavného ističa."
+      ],
+      correctIndex: 1
+    },
+    {
+      id: 4,
+      question: "4. Ako sa klasifikujú elektrické spotrebiče podľa spôsobu ochrany pred zásahom elektrickým prúdom?",
+      options: [
+        "Triedy 1, 2, 3, 4",
+        "Triedy 0, I, II, III",
+        "Kategórie A, B, C, D"
+      ],
+      correctIndex: 1
+    },
+    {
+      id: 5,
+      question: "5. Aká je maximálna hodnota odporu uzemnenia pre hlavnú uzemňovaciu svorku (HUS) podľa normy STN?",
+      options: [
+        "10 Ω (resp. podľa požiadaviek danej siete/normy)",
+        "100 Ω",
+        "0,5 Ω"
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 6,
+      question: "6. Kedy je povinné vykonávať odborné prehliadky a odborné skúšky (revízie) elektrického zariadenia?",
+      options: [
+        "Len pri zmene majiteľa nehnuteľnosti.",
+        "Pred uvedením do prevádzky, po rekonštrukcii a pravidelne počas prevádzky v lehotách stanovených predpismi.",
+        "Každých 6 mesiacov bez ohľadu na prostredie."
+      ],
+      correctIndex: 1
+    },
+    {
+      id: 7,
+      question: "7. Aký je minimálny izolačný odpor pre elektrické inštalácie s menovitým napätím do 500 V (vrátane SELV a PELV pri skúšobnom napätí)?",
+      options: [
+        "0,1 MΩ",
+        "1,0 MΩ (pri skúšobnom napätí 500 V DC)",
+        "10 MΩ"
+      ],
+      correctIndex: 1
+    },
+    {
+      id: 8,
+      question: "8. Čo znamená skratka SELV?",
+      options: [
+        "Safety Extra-Low Voltage (Bezpečné malé napätie oddelené od zeme).",
+        "Standard Electrical Low Voltage.",
+        "System Earth Leakage Verification."
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 9,
+      question: "9. Čo znamená skratka PELV?",
+      options: [
+        "Protected Extra-Low Voltage (Bezpečné malé napätie spojené so zemou).",
+        "Power Electrical Low Voltage.",
+        "Primary Earth Leakage Voltage."
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 10,
+      question: "10. Aký skúšobný prúd sa používa pri overovaní funkcie prúdového chrániča (RCD)?",
+      options: [
+        "Menovitý rozdielový prúd IΔn a jeho násobky (napr. 1/2 IΔn, 1x IΔn, 5x IΔn).",
+        "Skratový prúd siete Isc.",
+        "Menovitý prúd ističa In."
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 11,
+      question: "11. Aký je rozdiel medzi vodičom PE a PEN?",
+      options: [
+        "Vodič PE plní funkciu ochrannú aj neutrálnu, PEN len ochrannú.",
+        "Vodič PE je len ochranný vodič, vodič PEN kombinuje funkciu ochranného (PE) a neutrálneho (N) vodiča.",
+        "Sú to identické vodiče bez rozdielu."
+      ],
+      correctIndex: 1
+    },
+    {
+      id: 12,
+      question: "12. Aký minimálny prierez musí mať vodič PEN z hľadiska mechanickej pevnosti (Cu/Al)?",
+      options: [
+        "10 mm² Cu alebo 16 mm² Al",
+        "2,5 mm² Cu alebo 4 mm² Al",
+        "6 mm² Cu alebo 10 mm² Al"
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 13,
+      question: "13. Ktoré zariadenia sa považujú za vyhradené elektrické zariadenia podľa platnej legislatívy SR?",
+      options: [
+        "Zariadenia na výrobu, premenu, prenos, rozvod a spotrebu elektrickej energie a ochrany pred účinkami atmosférickej elektriny.",
+        "Len vysokoúrovňové priemyselné roboty.",
+        "Len batériové ručné náradie do 24 V."
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 14,
+      question: "14. Môže sa v sieti TN-S opätovne spojiť vodič PE a N po ich rozdelení?",
+      options: [
+        "Áno, v ľubovoľnom mieste rozvádzača.",
+        "Nie, po rozdelení vodiča PEN na PE a N sa tieto vodiče už nesmú nikde spojiť.",
+        "Áno, ale len pri použití prúdového chrániča."
+      ],
+      correctIndex: 1
+    },
+    {
+      id: 15,
+      question: "15. Aký je maximálny čas automatického odpojenia od napájania v sieti TN pre koncové obvody do 62 A s U0 = 230 V AC?",
+      options: [
+        "0,4 s",
+        "5 s",
+        "0,2 s"
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 16,
+      question: "16. Aký je maximálny čas odpojenia v sieti TT pre koncové obvody do 62 A pri U0 = 230 V AC?",
+      options: [
+        "0,2 s",
+        "0,4 s",
+        "1,0 s"
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 17,
+      question: "17. Pri akej hodnote dotykového napätia UL hovoríme o bezpečnom nepretržitom striedavom napätí v normálnych priestoroch?",
+      options: [
+        "50 V AC",
+        "120 V AC",
+        "25 V AC"
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 18,
+      question: "18. Aká je hodnota bezpečného napätia v priestoroch nebezpečných pre striedavý prúd?",
+      options: [
+        "25 V AC",
+        "50 V AC",
+        "12 V AC"
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 19,
+      question: "19. Aká je hodnota bezpečného napätia v priestoroch zvlášť nebezpečných pre striedavý prúd?",
+      options: [
+        "12 V AC",
+        "25 V AC",
+        "50 V AC"
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 20,
+      question: "20. Aká farba označenia sa používa pre ochranný vodič PE?",
+      options: [
+        "Kombinácia zelenej a žltej farby.",
+        "Svetlomodrá.",
+        "Hnedá alebo čierna."
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 21,
+      question: "21. Aká farba označenia sa používa pre neutrálny vodič N?",
+      options: [
+        "Svetlomodrá.",
+        "Zeleno-žltá.",
+        "Sivá."
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 22,
+      question: "22. Ako sa označuje sústava, v ktorej je jeden bod priamo uzemnený a neživé časti sú spojené s týmto bodom ochranným vodičom?",
+      options: [
+        "Sieť TN",
+        "Sieť TT",
+        "Sieť IT"
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 23,
+      question: "23. Ako sa označuje sústava, ktorá má uzol izolovaný od zeme alebo uzemnený cez veľkú impedanciu?",
+      options: [
+        "Sieť IT",
+        "Sieť TN-C",
+        "Sieť TT"
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 24,
+      question: "24. Čo je to sprievodná dokumentácia elektrického zariadenia?",
+      options: [
+        "Dokumentácia dodávaná výrobcom alebo dodávateľom (návod na obsluhu, schémy, vyhlásenie o zhode a pod.).",
+        "Faktúra za montážne práce.",
+        "Revízna správa od predošlého objektu."
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 25,
+      question: "25. Kto môže vykonávať odborné prehliadky a odborné skúšky (revízie) vyhradených elektrických zariadení?",
+      options: [
+        "Elektrotechník špecialista – Revízny technik (§ 24).",
+        "Samostatný elektrotechník (§ 22).",
+        "Elektrotechník na riadenie činnosti (§ 23)."
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 26,
+      question: "26. Aký typ prúdového chrániča reaguje na jednosmerný pulzujúci poruchový prúd?",
+      options: [
+        "Typ A",
+        "Typ AC",
+        "Typ B len pre striedavé prúdy"
+      ],
+      correctIndex: 0
+    }
+  ];
+
+  let userAnswers = {};
+
+  function renderQuiz() {
+    const container = document.getElementById('quiz-container');
+    container.innerHTML = '';
+
+    testQuestions.forEach((q, index) => {
+      const qCard = document.createElement('div');
+      qCard.className = 'question-card';
+
+      const qTitle = document.createElement('div');
+      qTitle.className = 'question-title';
+      qTitle.innerText = q.question;
+      qCard.appendChild(qTitle);
+
+      const optionsList = document.createElement('ul');
+      optionsList.className = 'options-list';
+
+      q.options.forEach((opt, optIndex) => {
+        const li = document.createElement('li');
+        const btn = document.createElement('button');
+        btn.className = `option-btn opt-${index}-${optIndex}`;
+        btn.innerText = opt;
+        btn.onclick = () => selectOption(index, optIndex);
+        li.appendChild(btn);
+        optionsList.appendChild(li);
+      });
+
+      qCard.appendChild(optionsList);
+      container.appendChild(qCard);
+    });
+  }
+
+  function selectOption(qIndex, optIndex) {
+    userAnswers[qIndex] = optIndex;
+    const qData = testQuestions[qIndex];
+
+    qData.options.forEach((_, idx) => {
+      const btn = document.querySelector(`.opt-${qIndex}-${idx}`);
+      btn.classList.remove('correct', 'incorrect');
+      
+      if (idx === optIndex) {
+        if (optIndex === qData.correctIndex) {
+          btn.classList.add('correct');
+        } else {
+          btn.classList.add('incorrect');
+        }
+      }
+      
+      if (idx === qData.correctIndex && optIndex !== qData.correctIndex) {
+        btn.classList.add('correct');
+      }
+    });
+  }
+
+  function evaluateQuiz() {
+    let score = 0;
+    testQuestions.forEach((q, index) => {
+      if (userAnswers[index] === q.correctIndex) {
+        score++;
+      }
+    });
+
+    const percentage = Math.round((score / testQuestions.length) * 100);
+    
+    document.getElementById('score-text').innerText = `${score} / ${testQuestions.length}`;
+    document.getElementById('percentage-text').innerText = `Úspešnosť: ${percentage}%`;
+    document.getElementById('result-section').style.display = 'block';
+    
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  }
+
+  function resetQuiz() {
+    userAnswers = {};
+    document.getElementById('result-section').style.display = 'none';
+    renderQuiz();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  document.addEventListener('DOMContentLoaded', renderQuiz);
+</script>
+
+</body>
+</html>
