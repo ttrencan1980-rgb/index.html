@@ -74,7 +74,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-height: 44px; /* Optimalizované pre dotyk */
+      min-height: 44px;
       flex: 1;
       text-align: center;
     }
@@ -124,7 +124,7 @@
       font-size: 0.95rem;
       line-height: 1.4;
       transition: background-color 0.2s, border-color 0.2s;
-      min-height: 48px; /* Taktilná odozva pre prsty */
+      min-height: 48px;
     }
 
     .option-btn:hover:not(:disabled) {
@@ -168,7 +168,6 @@
       margin: 10px 0;
     }
 
-    /* Špecifické úpravy pre širšie obrazovky (tablety a počítače) */
     @media (min-width: 600px) {
       body {
         padding: 20px;
@@ -218,422 +217,407 @@
   const testQuestions = [
     {
       id: 1,
-      question: "1. Vznikne na vodivom predmete nebezpečné dotykové napätie pri jednofázovom skrate v sieti TN bez prúdového chrániča?",
+      question: "1. Ktorá norma upravuje požiadavky na vypracovanie Správy o odbornej prehliadke a odbornej skúške (revíznej správy)?",
       options: [
-        "Nie, pretože ochranný vodič je uzemnený.",
-        "Áno, počas trvania poruchy až do vypnutia nadprúdovým ochranným prístrojom.",
-        "Nie, ochranný vodič zabezpečí okamžitý nulový potenciál."
+        "STN 33 2000-6",
+        "STN 33 2000-4-41",
+        "STN 33 1500"
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 2,
+      question: "2. Ktoré zariadenie sa považuje za prúdový chránič s vstavanou nadprúdovou ochranou?",
+      options: [
+        "RCCB",
+        "RCBO",
+        "RCM"
       ],
       correctIndex: 1
     },
     {
-      id: 2,
-      question: "2. Aké podmienky musia byť splnené pri ochrane neprepínaním v sieťach TN?",
+      id: 3,
+      question: "3. Aká je povinná frekvencia skúšania tlačidla TEST na prúdovom chrániči užívateľom podľa odporúčaní výrobcov a noriem v bežnej inštalácii?",
       options: [
-        "Impedancia slučky poruchového prúdu musí byť dostatočne nízka, aby došlo k včasnému odpojeniu.",
-  {
-    q: "Práca pod dohľadom je",
-    norm: "STN 34 3100:2001",
-    options: [
-      "práca, podľa podrobnejších pokynov, za bezpečnosť práce zodpovedá osoba vykonávajúca dohľad",
-      "práca, podľa podrobnejších pokynov, za bezpečnosť práce zodpovedá pracovník riadiaci prevádzku",
-      "práca, podľa podrobnejších pokynov, za bezpečnosť práce zodpovedajú pracovníci vykonávajúci prácu"
-    ],
-    correct: 2
-  },
-  {
-    q: "Podnikateľ ktorý je zamestnávateľom môže vykonávať odborné prehliadky a odborné skúšky a opravy vyhradeného technického zariadenia na základe",
-    norm: "zákon 124/2006 Z. z.",
-    options: [
-      "oprávnenia na činnosť vydaného inšpektorátom práce",
-      "oprávnenia na činnosť vydaného oprávnenou právnickou osobou",
-      "dokladu o odbornej spôsobilosti fyzickej osoby"
-    ],
-    correct: 1
-  },
-  {
-    q: "Môžu byť pri ochrane zábranami odstránené prekážky bez použitia kľúča",
-    norm: "STN 33 2000-4-41:2019",
-    options: [
-      "áno, ak medziľahlá zábrana, zaisťujúca stupeň ochrany aspoň IP1X zabraňuje dotyku so živými časťami, táto zábrana sa smie odstrániť iba použitím kľúča alebo nástroja",
-      "áno, napr. po odpojení napájania živých častí, pred dotykom ktorých chránia zábrany alebo kryty, obnovenie napájania smie byť možné až po opätovnom nasadení alebo uzavretí zábran alebo krytov,",
-      "áno ak zábrany nie sú upevnené pomocou skrutiek"
-    ],
-    correct: 1
-  },
-  {
-    q: "Ako je špecifikovaná doplnková ochrana",
-    norm: "STN 33 2000-4-41:2019",
-    options: [
-      "ako zvýšená ochrana živej časti",
-      "ako kombinácia opatrenia na ochranu pred nebezpečným dotykovým napätím a nezávislého opatrenia na ochranu pri poruche",
-      "časť ochranného opatrenia za určitých podmienok vonkajších vplyvov a v určitých osobitných priestoroch"
-    ],
-    correct: 2
-  },
-  {
-    q: "Aká je maximálna vzdialenosť dvoch častí, o ktorých sa predpokladá, že sú súčasne prípustné dotyku",
-    norm: "STN 33 2000-4-41:2019",
-    options: [
-      "2 m",
-      "1,8 m",
-      "2,5 m"
-    ],
-    correct: 2
-  },
-  {
-    q: "Čomu musí u nízkonapäťových inštaláciách obvykle odpovedať základná ochrana pred dotykom",
-    norm: "STN EN 61140:2018",
-    options: [
-      "ochrane pred priamym dotykom",
-      "ochrane pomocou ochranného vodiča",
-      "ochrane pred poškodením spotrebiča"
-    ],
-    correct: 0
-  },
-  {
-    q: "Ako sa kladú uzemňovač do káblových rýh",
-    norm: "STN 33 2000-5-54:2012",
-    options: [
-      "na vrch výkopu a najmenej 5 cm pod kábel alebo vedľa neho",
-      "na dno výkopu a najmenej 10 cm pod kábel alebo vedľa neho",
-      "na stred výkopu a najmenej 10 cm pod kábel alebo vedľa neho"
-    ],
-    correct: 1
-  },
-  {
-    q: "Ochrana pri poruche musí byť tvorená jedným alebo viacerymi prostriedkami, ktoré na základnej ochrane nezávisia ani ju nedopĺňajú. Akými prostriedkami musí byť tvorená táto ochrana",
-    norm: "STN EN 61140:2018",
-    options: [
-      "nezávislými ochrannými prostriedkami, ktoré sa nesmú navzájom ovplyvňovať",
-      "izoláciou",
-      "ochrannými prostriedkami, ktoré sa musia navzájom ovplyvňovať"
-    ],
-    correct: 0
-  },
-  {
-    q: "Musia byť oddelené živé časti obvodov SELV a PELV",
-    norm: "STN 33 2000-4-41:2019",
-    options: [
-      "nie",
-      "áno",
-      "áno u SELV"
-    ],
-    correct: 1
-  },
-  {
-    q: "Môžu byť živé časti elektricky oddeleného obvodu spojené s iným obvodom alebo so zemou",
-    norm: "STN 33 2000-4-41:2019",
-    options: [
-      "môžu",
-      "nesmú",
-      "môžu ak sa nespoja s PE vodičom"
-    ],
-    correct: 1
-  },
-  {
-    q: "Minimálny menovitý prúd trojfázového istenia pred elektromerom pri stupni elektrifikácie bytu B je",
-    norm: "STN 33 2130:1983",
-    options: [
-      "20 A pri súdobom príkone 9 kW",
-      "25 A pri súdobom príkone 8 kW",
-      "25 A pri súdobom príkone 11 kW"
-    ],
-    correct: 2
-  },
-  {
-    q: "Vodorovná inštalačná zóna šírky 300 mm zóna vodorovná stredná (ZV-s) je",
-    norm: "STN 33 2130:1983",
-    options: [
-      "od 800 mm do 1100 mm nad dokončenou dlážkou",
-      "od 900 mm do 1200 mm nad dokončenou dlážkou",
-      "od 1000 mm do 1300 mm nad dokončenou dlážkou"
-    ],
-    correct: 1
-  },
-  {
-    q: "Ako nemôže byť na stroji umiestnení prístroj pre núdzové vypnutie",
-    norm: "STN EN 60204-1:2019",
-    options: [
-      "pedálový spínač",
-      "spínač ovládaný tlačidlom prispôsobený tvaru dlane alebo hríba",
-      "spínač ovládaný ťažným lankom"
-    ],
-    correct: 0
-  },
-  {
-    q: "Je možné u rozvádzača nn používať medzi dvoma pripojovacími zariadeniami kabely so spletenými alebo spájkovanými spojmi",
-    norm: "STN EN 61439-1:2012",
-    options: [
-      "áno",
-      "nie",
-      "určí prevádzkovateľ"
-    ],
-    correct: 1
-  },
-  {
-    q: "Ktoré časti nemusia byť pripojené k ochrannému obvodu pracovného stroja",
-    norm: "STN EN 60204-1:2019",
-    options: [
-      "všetky časti musia byť pripojené",
-      "pokiaľ tieto časti sú namontované tak, že nevzniká nebezpečenstvo (ak sú malej veľkosti alebo ich dotyk je nepravdepodobný)",
-      "ak sa tieto časti bežne nepoužívajú"
-    ],
-    correct: 1
-  },
-  {
-    q: "Aké opatrenia je nutné prekontrolovať u rozvádzača vonkajšieho prevedenia alebo krytého rozvádzača vnútorného prevedenia v miestach s vysokou vlhkosťou a s teplotami meniacich sa v širokých medziach",
-    norm: "STN EN 61439-1:2012",
-    options: [
-      "na zabránenie účinkov vysokých teplôt",
-      "na zabránenie účinkov nízkych teplôt",
-      "na zabránenie škodlivej kondenzácie"
-    ],
-    correct: 2
-  },
-  {
-    q: "Kde môže byť umiestnený štítok u rozvádzača pre inštaláciu do miest prípustných laickej obsluhe",
-    norm: "STN EN 61439-1:2012",
-    options: [
-      "na spodnej časti rozvádzača",
-      "na vnútornej strane",
-      "na mieste, kde bude viditeľný a čitateľný"
-    ],
-    correct: 2
-  },
-  {
-    q: "Zóna 0 pri sprche bez vane je",
-    norm: "STN 33 2000-7-701:2007",
-    options: [
-      "výška zóny 0 je 15cm od podlahy",
-      "výška zóny 0 je 20cm od podlahy",
-      "výška zóny 0 je 10cm od podlahy"
-    ],
-    correct: 2
-  },
-  {
-    q: "V zdravotníckych priestoroch skupiny 1 a 2 na Slovensku, odpor ochranných vodičov medzi zásuvkami, svorkami pevne inštalovaných zariadení, akýchkoľvek cudzích vodivých častí a prípojnicou ochranného pospájania",
-    norm: "STN 33 2000-7-710:2013",
-    options: [
-      "nesmie prevýšiť 0,5 Ω",
-      "nesmie prevýšiť 0,2 Ω",
-      "nesmie prevýšiť 0,7 Ω"
-    ],
-    correct: 1
-  },
-  {
-    q: "Obvody so zásuvkami do 32 A na staveniskách",
-    norm: "STN 33 2000-7-704:2019",
-    options: [
-      "sa musia chrániť prúdovým chráničom s vypínacím prúdom do 30 mA len v prípade ak nie je možné dosiahnuť dotykové napätie 25 V",
-      "sa nemusia chrániť prúdovým chráničom s vypínacím prúdom do 30 mA ak je použitá ochrana SELV",
-      "sa musia chrániť prúdovým chráničom s vypínacím prúdom do 30 mA len v prípade ak nie je možné dosiahnuť dotykové napätie 60 V"
-    ],
-    correct: 1
-  },
-  {
-    q: "Doplnková ochrana pospájaním v poľnohospodárskych objektoch pre hospodárske zvieratá je",
-    norm: "STN 33 2000-7-705:2007",
-    options: [
-      "nie je nutná",
-      "je nutná pre všetky neživé časti",
-      "nutná pre všetky neživé časti ktorých sa môžu dotknúť zvieratá"
-    ],
-    correct: 2
-  },
-  {
-    q: "Pri vedeniach do 1 kV vzdialenosť živej časti vedenia od nádvoria, skladovacej plochy je min.",
-    norm: "STN 33 3300:1983",
-    options: [
-      "6 m",
-      "5 m",
-      "7 m"
-    ],
-    correct: 1
-  },
-  {
-    q: "Vodiče PEN a PE vo vonkajších vedeniach (distribučných rozvodov) sa musia uzemniť na trase vedenia každých",
-    norm: "STN 33 2000-4-41:2019",
-    options: [
-      "200 m",
-      "100 m",
-      "500 m"
-    ],
-    correct: 2
-  },
-  {
-    q: "Pri prípojkách s holými vodičmi do 1 kV vzdialenosť živej časti vedenia pod schodnou časťou budovy je min.",
-    norm: "STN 33 3300:1983",
-    options: [
-      "1 m",
-      "3 m",
-      "2 m"
-    ],
-    correct: 2
-  },
-  {
-    q: "Ak sa na ochranu PV striedavého napájacieho obvodu používa prúdový chránič, tak musí byť typu",
-    norm: "STN 33 2000-7-712:2022",
-    options: [
-      "B",
-      "AC",
-      "A"
-    ],
-    correct: 0
-  },
-  {
-    q: "Ako sú označované základné typy škôd pri výpočtoch",
-    norm: "STN EN 62305-2:2013",
-    options: [
-      "D1 ľudské životy , D2 verejné služby , D3 porucha elektrických a elektronických systémov",
-      "D1 úraz živých bytostí , D2 hmotná škoda , D3 porucha elektrických a elektronických systémov",
-      "D1 ľudské životy , D2 verejné služby , D3 kultúrne dedičstvo , D4 ekonomické"
-    ],
-    correct: 1
-  },
-  {
-    q: "Čo je to prípustné riziko (RT) určované vo výpočtoch",
-    norm: "STN EN 62305-1:2012",
-    options: [
-      "Maximálna hodnota rizika ktorá sa môže pripustiť pri chránenej stavbe",
-      "Minimálna hodnota rizika ktorá sa môže pripustiť pri chránenej stavbe",
-      "Hodnota rizika ktorá sa môže pripustiť pri chránenej stavbe"
-    ],
-    correct: 0
-  },
-  {
-    q: "Normy rady STN EN 62305 využívajú v celom rozsahu skrátené názvy. Čo znamená označenie LPL",
-    norm: "STN EN 62305-1:2012",
-    options: [
-      "Zóna ochrany pred bleskom",
-      "Systém ochrany pred bleskom",
-      "Úroveň ochrany pred bleskom"
-    ],
-    correct: 2
-  },
-  {
-    q: "Čo je ekvipotenciálne pospájanie proti blesku ( vyrovnanie potenciálov pri pôsobení blesku) označovaný EB",
-    norm: "STN EN 62305-3:2012",
-    options: [
-      "pospájanie k SPD oddelených kovových častí priamym vodivým spojením alebo pripojením cez prepäťové ochranné zariadenia na zníženie rozdielov potenciálov spôsobených bleskovým prúdom",
-      "pospájanie k LEMP oddelených kovových častí priamym vodivým spojením alebo pripojením cez prepäťové ochranné zariadenia na zníženie rozdielov potenciálov spôsobených bleskovým prúdom",
-      "pospájanie k LPS oddelených kovových častí priamym vodivým spojením alebo pripojením cez prepäťové ochranné zariadenia na zníženie rozdielov potenciálov spôsobených bleskovým prúdom"
-    ],
-    correct: 2
-  },
-  {
-    q: "Normy rady STN EN 62305 využívajú v celom rozsahu skrátené názvy. Čo znamená označenie LPZ",
-    norm: "STN EN 62305-1:2012",
-    options: [
-      "Úroveň ochrany pred bleskom",
-      "Systém ochrany pred bleskom",
-      "Zóna ochrany pred bleskom"
-    ],
-    correct: 2
-  },
-  {
-    q: "Spojitosť ochranného vodiča sa meria:",
-    norm: "STN EN 50699:2022",
-    options: [
-      "Medzi svorkou prívodu stredného vodiča spotrebiča (prípadne kontaktu v sieťovej vidlici) a každou fázou spotrebiča.",
-      "Medzi ochrannou uzemňovacou svorkou zariadenia (prípadne kontaktu v sieťovej vidlici) a každou prístupnou vodivou časťou, ktorá je priamo pripojená k ochrannej zemi.",
-      "Medzi svorkou prívodu fázy zariadenia (prípadne kontaktu v sieťovej vidlici) a každou prístupnou vodivou časťou, ktorá je priamo pripojená k ochrannej zemi."
-    ],
-    correct: 1
-  },
-  {
-    q: "Elektrické spotrebiče, alebo predlžovacie prívody zaradené do skupiny A podľa oblasti ich používania sú:",
-    norm: "STN 33 1630:2025",
-    options: [
-      "Spotrebiče a/alebo predlžovacie prívody poskytované formou prenájmu ďalšiemu používateľovi elektrického spotrebiča",
-      "Spotrebiče a/alebo predlžovacie prívody používané vo vnútorných verejne prístupných priestoroch (napr. zdravotnícke objekty, objekty sociálnych služieb)",
-      "Spotrebiče a/alebo predlžovacie prívody používané vo vnútornom prostredí s vonkajším vplyvom vody AD3 a vyšším"
-    ],
-    correct: 0
-  },
-  {
-    q: "Skúšobné napätie el. inštalácie s menovitým napätím od 500 V do 1 000 V je",
-    norm: "STN 33 2000-6:2018",
-    options: [
-      "1000 V DC",
-      "1000 V AC",
-      "500 V DC"
-    ],
-    correct: 0
-  },
-  {
-    q: "Skúšobné napätie el. inštalácie s menovitým napätím FELV je",
-    norm: "STN 33 2000-6:2018",
-    options: [
-      "250 V AC",
-      "250 V DC",
-      "500 V DC"
-    ],
-    correct: 2
-  },
-  {
-    q: "Skúšanie (testing) je",
-    norm: "STN 33 2000-6:2018",
-    options: [
-      "realizácia opatrení v el. inštalácii, ktoré preukážu jej spôsobilosť, zahŕňa to zisťovanie hodnôt vhodnými meracími prístrojmi",
-      "súbor všetkých opatrení ktorými sa kontroluje súlad kompletnej el. inštalácie s harmonizačnými dokumentami",
-      "súbor kontrola el.inštalácie použitím všetkých zmyslov potrebných na zistenie správnosti výberu a zhotovenia el. inštalácie"
-    ],
-    correct: 0
-  },
-  {
-    q: "Elektrické spotrebiče, alebo predlžovacie prívody zaradené do skupiny B podľa oblasti ich používania sú:",
-    norm: "STN 33 1630:2025",
-    options: [
-      "Spotrebiče a/alebo predlžovacie prívody používané vo vnútorných priestoroch (napr. obchodnej činnosti, spotrebiče v kuchynkách a pod.)",
-      "Spotrebiče a/alebo predlžovacie prívody používané vo vnútorných verejne prístupných priestoroch (napr. zdravotnícke objekty, objekty sociálnych služieb)",
-      "Spotrebiče a/alebo predlžovacie prívody používané vo vnútornom prostredí s vonkajším vplyvom vody AD3 a vyšším"
-    ],
-    correct: 2
-  },
-  {
-    q: "Vizuálna prehliadka",
-    norm: "STN 33 2000-6:2018",
-    options: [
-      "je určená aj na kontrolu, že inštalácia zariadení nie je viditeľne poškodená tak, aby zhoršila bezpečnosť",
-      "porovnáva meranie a stav el. inštalácie s harmonizovanými predpismi",
-      "vyhodnocuje meranie s dovolenými hodnotami podľa harmonizovaných predpisov"
-    ],
-    correct: 0
-  },
-  {
-    q: "Pravidelná revízia predlžovacieho prívodu bez mechanického namáhania zaradeného do skupiny E podľa oblasti jeho používania sa vykonáva",
-    norm: "STN 33 1630:2025",
-    options: [
-      "1 x za 24 mesiacov",
-      "1 x za 6 mesiacov",
-      "1 x za 12 mesiacov"
-    ],
-    correct: 0
-  },
-  {
-    q: "Aký je účel revízií LPS",
-    norm: "STN EN 62305-3:2012",
-    options: [
-      "zistiť či LPS vyhovuje projektu podľa tejto normy, či sú všetky súčasti LPS v dobrom technickom stave, či sú všetky nové pridané inžinierske siete alebo konštrukcie začlenené do LPS",
-      "či sú všetky nové pridané inžinierske siete alebo konštrukcie začlenené do LPS, ktorý nemusí vyhovovať tejto norme",
-      "zistiť či LPS vyhovuje projektu podľa tejto normy, súčasti LPS nemusia byť v dobrom technickom stave"
-    ],
-    correct: 0
-  },
-  {
-    q: "Na základe akých údajov sa rozhoduje o ochrane stavby alebo inžinierskych sietí pred bleskom, rovnakým ako o výberu ochranných opatrení",
-    norm: "STN EN 62305-1:2012",
-    options: [
-      "strata alebo úraz ľudského života, strata služieb pre verejnosť, strata kultúrneho dedičstva",
-      "vzdialenosť objektu od okolitých stavieb",
-      "hodnoty investície"
-    ],
-    correct: 0
-  }
-];
-  
- let userAnswers = {};
+        "Raz za mesiac až raz za 6 mesiacov",
+        "Raz za 5 rokov počas revízie",
+        "Nikdy, pokiaľ nevznikne porucha"
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 4,
+      question: "4. Aký je minimálny prierez medeného ochranného vodiča PE, ak nie je súčasťou káblového vedenia a nie je chránený proti mechanickému poškodeniu?",
+      options: [
+        "2,5 mm² Cu",
+        "4 mm² Cu",
+        "6 mm² Cu"
+      ],
+      correctIndex: 1
+    },
+    {
+      id: 5,
+      question: "5. Aký musí byť minimálny prierez hlavného vodiča pospájania (ochranného pospájania) pripojeného na HUS/MET?",
+      options: [
+        "Najmenej 6 mm² Cu (resp. polovica prierezu najväčšieho ochranného vodiča v objekte, max. 25 mm² Cu)",
+        "Vždy presne 2,5 mm² Cu",
+        "Libovoľný prierez od 1,5 mm² Cu"
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 6,
+      question: "6. Aké meracie napätie sa používa pri meraní izolačného odporu obvodov s menovitým napätím SELV a PELV?",
+      options: [
+        "250 V DC",
+        "500 V DC",
+        "1000 V DC"
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 7,
+      question: "7. Aká je minimálna hodnota izolačného odporu pre obvody SELV a PELV pri skúšobnom napätí 250 V DC?",
+      options: [
+        "0,25 MΩ",
+        "0,5 MΩ",
+        "1,0 MΩ"
+      ],
+      correctIndex: 1
+    },
+    {
+      id: 8,
+      question: "8. Pri meraní impedancie poruchovej slučky prístrojom nameriame hodnotu Zs. Aký koeficient bezpečnosti (podľa STN 33 2000-6) sa odporúča použiť pri porovnaní s vypínacou charakteristikou ističa?",
+      options: [
+        "1,0 (žiadna rezerva)",
+        "1,2 alebo 1,5 (zohľadnenie oteplenia vodičov a chyby merania)",
+        "2,0"
+      ],
+      correctIndex: 1
+    },
+    {
+      id: 9,
+      question: "9. V akom časovom intervale sa spravidla vykonávajú pravidelné revízie bleskozvodov (LPS) pre objekt s triedou ochrany LPI alebo LPII (STN EN 62305)?",
+      options: [
+        "Každé 2 roky (a vizuálna kontrola každý rok)",
+        "Každých 5 rokov",
+        "Každých 10 rokov"
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 10,
+      question: "10. Ktorá trieda prúdových chráničov (RCD) je určená aj pre obvody s frekvenčnými meničmi, kde môžu vznikať vyhladené jednosmerné poruchové prúdy?",
+      options: [
+        "Typ AC",
+        "Typ A",
+        "Typ B"
+      ],
+      correctIndex: 2
+    },
+    {
+      id: 11,
+      question: "11. Aké je maximálne povolené dotykové napätie U_L v priestoroch nebezpečných (striedavý prúd)?",
+      options: [
+        "50 V AC",
+        "25 V AC",
+        "12 V AC"
+      ],
+      correctIndex: 1
+    },
+    {
+      id: 12,
+      question: "12. Čo je to kontakt SELV?",
+      options: [
+        "Obvod malého napätia, ktorý je elektricky oddelený od zeme aj od iných obvodov a jeho živé časti nesmú byť spojené so zemou.",
+        "Obvod spojený priamo so sieťou TN-C.",
+        "Obvod ochranného pospájania vysokého napätia."
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 13,
+      question: "13. Ako sa označuje dočasné uzemňovacie a skratovacie zariadenie používané pri prácach na odpojenom vedení?",
+      options: [
+        "Skratovacia súprava",
+        "Izolačný koberček",
+        "Prepäťová ochrana typ 1"
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 14,
+      question: "14. Aký je hlavný cieľ vykonávania odbornej prehliadky a odbornej skúšky (revízie)?",
+      options: [
+        "Overenie, či elektrické zariadenie zodpovedá bezpečnostno-technickým požiadavkám a je schopné bezpečnej prevádzky.",
+        "Zvýšenie odberu elektrickej energie.",
+        "Výpočet ceny elektrickej energie pre odberateľa."
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 15,
+      question: "15. Aký minimálny kryt (IP) musia mať elektrické zariadenia v priestoroch s nebezpečenstvom striekajúcej vody (napr. Zóna 1 v kúpeľni)?",
+      options: [
+        "IPX1",
+        "IPX4",
+        "IP20"
+      ],
+      correctIndex: 1
+    },
+    {
+      id: 16,
+      question: "16. Môže revízny technik vystaviť kladnú Správu o OP a OS, ak na zariadení zistí nebezpečnú vyhotovovaciu závadu bezprostredne ohrozujúcu život?",
+      options: [
+        "Áno, ak prevádzkovateľ sľúbi jej odstránenie do 30 dní.",
+        "Nie, zariadenie nie je schopné bezpečnej prevádzky a závada musí byť ihneď hlásená prevádzkovateľovi.",
+        "Áno, ale len pri východiskovej revízii."
+      ],
+      correctIndex: 1
+    },
+    {
+      id: 17,
+      question: "17. V sieti IT sa pri prvej poruche (spojení jednej fázy so zemou):",
+      options: [
+        "Automaticky odpojí napájanie v čase do 0,1 s.",
+        "Spustí akustický/svatelný signál hlásiča izolačného stavu (HIS), ale napájanie sa nemusí ihneď odpojiť.",
+        "Vznikne okamžitý trojfázový skrat."
+      ],
+      correctIndex: 1
+    },
+    {
+      id: 18,
+      question: "18. Aká je odporúčaná maximálna hodnota odporu uzemnenia bleskozvodu pre objekt podľa STN EN 62305?",
+      options: [
+        "10 Ω",
+        "100 Ω",
+        "1 Ω"
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 19,
+      question: "19. Ktorá ochrana sa považuje za základnú ochranu (ochranu pred priamym dotykom)?",
+      options: [
+        "Ochrana izolovaním živých častí alebo zábranami/krytmi",
+        "Ochrana automatickým odpojením od napájania",
+        "Ochrana doplnkovým pospájaním"
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 20,
+      question: "20. Ktorá ochrana sa považuje za ochranu pri poruche (ochranu pred nepriamym dotykom)?",
+      options: [
+        "Zábrany a polohové umiestnenie",
+        "Ochrana automatickým odpojením od napájania (ochranné uzemnenie, pospájanie)",
+        "Izolácia živých častí"
+      ],
+      correctIndex: 1
+    },
+    {
+      id: 21,
+      question: "21. Aký je hlavný rozdiel medzi prepäťovou ochranou Typ 1 (T1/Class B) a Typ 2 (T2/Class C)?",
+      options: [
+        "Typ 1 zvládne skúšobný prúd Iimp (bleskový prúd 10/350 µs), Typ 2 zvládne prúd I_n (8/20 µs).",
+        "Typ 1 sa montuje len k spotrebičom, Typ 2 do hlavného rozvádzača.",
+        "Nie je medzi nimi žiaden rozdiel."
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 22,
+      question: "22. Ako sa skúša správna funkcia SPD (ochrany pred prepätím) pri revízii?",
+      options: [
+        "Vizuálnou kontrolou stavu ukazovateľa (optický indikátor) a meraním miliohmovým prístrojom alebo varistorovým napätím.",
+        "Skratovaním fázy na zem.",
+        "Aplikáciou napätia 10 kV na svorky."
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 23,
+      question: "23. Čo znamená skratka PEN?",
+      options: [
+        "Vodič plniaci súčasne funkciu ochranného vodiča (PE) a neutralného vodiča (N).",
+        "Protective Earth Network.",
+        "Primary Electrical Node."
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 24,
+      question: "24. Prečo nie je dovolené osadiť vypínací prvok (spínač, poistku) do vodiča PE alebo PEN?",
+      options: [
+        "Pretože prerušenie ochranného vodiča by spôsobilo stratu ochrany pred zásahom el. prúdom na pripojených neživých častiach.",
+        "Pretože by to zvýšilo spotrebu elektriny.",
+        "Je to dovolené bez obmedzenia."
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 25,
+      question: "25. Aký zostatkový rozdielový prúd IΔn sa vyžaduje pre doplňujúcu ochranu zásuvkových obvodov do 32 A určených pre laikov?",
+      options: [
+        "30 mA",
+        "100 mA",
+        "300 mA"
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 26,
+      question: "26. Aký je maximálny čas odpojenia v sieti TN pre koncové obvody do 32 A pri napätí 230 V AC podľa STN 33 2000-4-41 ed. 3?",
+      options: [
+        "0,4 s",
+        "0,2 s",
+        "5,0 s"
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 27,
+      question: "27. Pri revízii elektrického spotrebiča triedy I sa meria odpor ochranného vodiča. Aká je maximálna prípustná hodnota pre prívodný kábel do 3 m?",
+      options: [
+        "0,3 Ω (resp. 0,2 Ω + odpor kábla podľa STN 33 1630)",
+        "10 Ω",
+        "1,0 MΩ"
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 28,
+      question: "28. Akým prístrojom sa meria odpor uzemnenia uzemňovacej sústavy?",
+      options: [
+        "Meračom uzemnenia (3-pólová alebo 4-pólová metóda, prípadne kliešťový merač)",
+        "Bežným multimetrom na rozsahu 200 Ω",
+        "Meračom izolačného odporu pri 1000 V"
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 29,
+      question: "29. Čo je to hlavná uzemňovacia svorka (HUS / MET)?",
+      options: [
+        "Svorka alebo prípojnica určená na pripojenie ochranných vodičov, vodičov hlavného pospájania a vodičov uzemnenia.",
+        "Nulový mostík v elektromerovom rozvádzači.",
+        "Svorka na pripojenie fázového vodiča."
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 30,
+      question: "30. Aký farebný odtieň musí mať vodič označujúci fázový vodič AC obvodov?",
+      options: [
+        "Čierna, hnedá alebo sivá",
+        "Svetlomodrá",
+        "Zeleno-žltá"
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 31,
+      question: "31. Smie sa zeleno-žltý vodič použiť ako fázový alebo neutrálny vodič, ak ho na koncoch preznačíme páskou?",
+      options: [
+        "Nie, označenie zeleno-žltou farbou je vyhradené výhradne pre ochranné vodiče a nesmie sa použiť na iné účely.",
+        "Áno, je to bežná prax v priemysle.",
+        "Áno, ale len pre vodiče s prierezom nad 16 mm²."
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 32,
+      question: "32. Čo tvorí systém ochrany pred bleskom (LPS)?",
+      options: [
+        "Vonkajší LPS (zachytávače, zvodidlá, uzemnenie) a vnútorný LPS (prepäťová ochrana, vyrovnanie potenciálov)",
+        "Len ističe a prúdové chrániče",
+        "Len uzemňovací pásik FeZn"
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 33,
+      question: "33. Ktorý typ siete využíva oddelený uzol zdroja od zeme a neživé časti pripojené na miestne uzemnenie?",
+      options: [
+        "Sieť IT",
+        "Sieť TN-C",
+        "Sieť TT"
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 34,
+      question: "34. Aká je definícia bezpečného priestoru z hľadiska nebezpečenstva úrazu el. prúdom?",
+      options: [
+        "Priestor, v ktorom je nebezpečenstvo úrazu el. prúdom zanedbateľné (suché priestory, drevená podlaha a pod.).",
+        "Priestor s vysokou vlhkosťou a vodivým okolím.",
+        "Exteriér počas dažďa."
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 35,
+      question: "35. Kto zodpovedá za udržiavanie elektrického zariadenia v bezpečnom stave a vykonávanie predpísaných revízií?",
+      options: [
+        "Prevádzkovateľ / majiteľ elektrického zariadenia",
+        "Revízny technik, ktorý vykonal poslednú revíziu",
+        "Dodávateľ elektrickej energie"
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 36,
+      question: "36. V akom rozsahu sa vykonáva spravidla vizuálna kontrola pred samotným meraním pri revízii?",
+      options: [
+        "Kontrola správnosti dimenzovania vodičov, označenia, krytia, ochrany pred priamym dotykom a prístupnosti rozvádzačov.",
+        "Nekompletná kontrola len hlavného ističa.",
+        "Vizuálna kontrola sa nevykonáva, meranie postačuje."
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 37,
+      question: "37. Aký skúšobný prúd sa aplikuje pri meraní nepretržitosti ochranného vodiča (kontinuitu) podľa normy?",
+      options: [
+        "Najmenej 200 mA (DC) pri napätí 4 V až 24 V",
+        "10 A AC",
+        "1 mA DC"
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 38,
+      question: "38. Pri použití prúdového chrániča v sieti TT je hlavnou podmienkou bezpečnosti vzťah:",
+      options: [
+        "Ra × IΔn ≤ 50 V (kde Ra je odpor uzemnenia neživých častí)",
+        "Ra × IΔn ≥ 500 V",
+        "Odpor uzemnenia musí byť presne 0 Ω"
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 39,
+      question: "39. Ako sa delia zóny v priestoroch s vaňou alebo sprchou podľa STN 33 2000-7-701?",
+      options: [
+        "Zóna 0, Zóna 1, Zóna 2",
+        "Zóna A, Zóna B, Zóna C, Zóna D",
+        "Zóna 1, Zóna 2, Zóna 3, Zóna 4"
+      ],
+      correctIndex: 0
+    },
+    {
+      id: 40,
+      question: "40. Môžu sa v Zóne 0 v kúpeľni inštalovať akékoľvek spínače alebo zásuvky 230 V?",
+      options: [
+        "Nie, v Zóne 0 nie je povolená inštalácia žiadnych spínačov ani zásuviek.",
+        "Áno, ak majú krytie IP44.",
+        "Áno, ak sú pripojené cez prúdový chránič 30 mA."
+      ],
+      correctIndex: 0
+    }
+  ];
+
+  let userAnswers = {};
 
   function renderQuiz() {
     const container = document.getElementById('quiz-container');
