@@ -2,70 +2,98 @@
 <html lang="sk">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Test RT1_2 - Revízny technik</title>
   <style>
     :root {
       --primary-color: #0056b3;
+      --primary-hover: #003d80;
+      --secondary-color: #6c757d;
+      --secondary-hover: #5a6268;
       --bg-color: #f4f7f6;
       --card-bg: #ffffff;
       --text-color: #333333;
       --correct-color: #28a745;
       --incorrect-color: #dc3545;
-      --border-radius: 8px;
+      --border-radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       background-color: var(--bg-color);
       color: var(--text-color);
       margin: 0;
-      padding: 20px;
+      padding: 12px;
+      line-height: 1.5;
     }
 
     .container {
       max-width: 800px;
       margin: 0 auto;
       background: var(--card-bg);
-      padding: 25px;
+      padding: 16px;
       border-radius: var(--border-radius);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     }
 
     .nav-bar {
       display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
       border-bottom: 2px solid #eee;
-      padding-bottom: 10px;
+      padding-bottom: 12px;
+    }
+
+    h1 {
+      font-size: 1.25rem;
+      margin: 0;
+      color: var(--primary-color);
+      text-align: center;
+      width: 100%;
+      order: -1;
     }
 
     .btn-nav {
       background-color: var(--primary-color);
       color: white;
       border: none;
-      padding: 10px 16px;
+      padding: 12px 16px;
       border-radius: var(--border-radius);
       cursor: pointer;
-      font-weight: bold;
+      font-weight: 600;
+      font-size: 0.95rem;
       text-decoration: none;
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px; /* Optimalizované pre dotyk */
+      flex: 1;
+      text-align: center;
     }
 
-    .btn-nav:hover {
-      background-color: #003d80;
+    .btn-nav:hover, .btn-nav:active {
+      background-color: var(--primary-hover);
     }
 
-    h1 {
-      font-size: 1.5rem;
-      margin: 0;
-      color: var(--primary-color);
+    .btn-secondary {
+      background-color: var(--secondary-color);
+    }
+
+    .btn-secondary:hover, .btn-secondary:active {
+      background-color: var(--secondary-hover);
     }
 
     .question-card {
-      margin-bottom: 25px;
-      padding: 15px;
+      margin-bottom: 20px;
+      padding: 16px;
       border: 1px solid #e0e0e0;
       border-radius: var(--border-radius);
       background-color: #fafafa;
@@ -73,8 +101,9 @@
 
     .question-title {
       font-weight: 600;
-      margin-bottom: 12px;
-      font-size: 1.05rem;
+      margin-bottom: 14px;
+      font-size: 1rem;
+      color: #111;
     }
 
     .options-list {
@@ -86,14 +115,16 @@
     .option-btn {
       width: 100%;
       text-align: left;
-      padding: 12px;
-      margin-bottom: 8px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
       border: 1px solid #ccc;
-      border-radius: 6px;
+      border-radius: 8px;
       background-color: white;
       cursor: pointer;
       font-size: 0.95rem;
+      line-height: 1.4;
       transition: background-color 0.2s, border-color 0.2s;
+      min-height: 48px; /* Taktilná odozva pre prsty */
     }
 
     .option-btn:hover:not(:disabled) {
@@ -105,13 +136,20 @@
       background-color: #d4edda !important;
       border-color: var(--correct-color) !important;
       color: #155724;
-      font-weight: bold;
+      font-weight: 600;
     }
 
     .option-btn.incorrect {
       background-color: #f8d7da !important;
       border-color: var(--incorrect-color) !important;
       color: #721c24;
+    }
+
+    .action-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 20px;
     }
 
     .result-section {
@@ -127,13 +165,28 @@
       font-size: 1.8rem;
       font-weight: bold;
       color: var(--primary-color);
+      margin: 10px 0;
     }
 
-    #finish-btn {
-      width: 100%;
-      padding: 15px;
-      font-size: 1.1rem;
-      margin-top: 20px;
+    /* Špecifické úpravy pre širšie obrazovky (tablety a počítače) */
+    @media (min-width: 600px) {
+      body {
+        padding: 20px;
+      }
+      .container {
+        padding: 25px;
+      }
+      h1 {
+        width: auto;
+        order: 0;
+        font-size: 1.5rem;
+      }
+      .btn-nav {
+        flex: initial;
+      }
+      .action-buttons {
+        flex-direction: row;
+      }
     }
   </style>
 </head>
@@ -141,14 +194,17 @@
 
 <div class="container">
   <div class="nav-bar">
-    <a href="#" onclick="history.back(); return false;" class="btn-nav">&larr; Predchádzajúca</a>
+    <a href="#" onclick="history.back(); return false;" class="btn-nav">&larr; Späť</a>
     <h1>Test RT1_2 (26 otázok)</h1>
     <a href="/revizny-technik" class="btn-nav">Revízny technik</a>
   </div>
 
   <div id="quiz-container"></div>
 
-  <button id="finish-btn" class="btn-nav" onclick="evaluateQuiz()">Vyhodnotiť test</button>
+  <div class="action-buttons">
+    <button id="finish-btn" class="btn-nav" onclick="evaluateQuiz()">Vyhodnotiť test</button>
+    <button id="later-btn" class="btn-nav btn-secondary" onclick="tryLater()">Vyskúšať neskôr</button>
+  </div>
 
   <div id="result-section" class="result-section">
     <h2>Výsledok testu</h2>
@@ -499,6 +555,15 @@
     document.getElementById('result-section').style.display = 'none';
     renderQuiz();
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function tryLater() {
+    resetQuiz();
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      window.location.href = '/revizny-technik';
+    }
   }
 
   document.addEventListener('DOMContentLoaded', renderQuiz);
