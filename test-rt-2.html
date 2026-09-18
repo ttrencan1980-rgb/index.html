@@ -632,4 +632,96 @@
     correct: 0
   }
 ];
+ let userAnswers = {};
 
+  function renderQuiz() {
+    const container = document.getElementById('quiz-container');
+    container.innerHTML = '';
+
+    testQuestions.forEach((q, index) => {
+      const qCard = document.createElement('div');
+      qCard.className = 'question-card';
+
+      const qTitle = document.createElement('div');
+      qTitle.className = 'question-title';
+      qTitle.innerText = q.question;
+      qCard.appendChild(qTitle);
+
+      const optionsList = document.createElement('ul');
+      optionsList.className = 'options-list';
+
+      q.options.forEach((opt, optIndex) => {
+        const li = document.createElement('li');
+        const btn = document.createElement('button');
+        btn.className = `option-btn opt-${index}-${optIndex}`;
+        btn.innerText = opt;
+        btn.onclick = () => selectOption(index, optIndex);
+        li.appendChild(btn);
+        optionsList.appendChild(li);
+      });
+
+      qCard.appendChild(optionsList);
+      container.appendChild(qCard);
+    });
+  }
+
+  function selectOption(qIndex, optIndex) {
+    userAnswers[qIndex] = optIndex;
+    const qData = testQuestions[qIndex];
+
+    qData.options.forEach((_, idx) => {
+      const btn = document.querySelector(`.opt-${qIndex}-${idx}`);
+      btn.classList.remove('correct', 'incorrect');
+      
+      if (idx === optIndex) {
+        if (optIndex === qData.correctIndex) {
+          btn.classList.add('correct');
+        } else {
+          btn.classList.add('incorrect');
+        }
+      }
+      
+      if (idx === qData.correctIndex && optIndex !== qData.correctIndex) {
+        btn.classList.add('correct');
+      }
+    });
+  }
+
+  function evaluateQuiz() {
+    let score = 0;
+    testQuestions.forEach((q, index) => {
+      if (userAnswers[index] === q.correctIndex) {
+        score++;
+      }
+    });
+
+    const percentage = Math.round((score / testQuestions.length) * 100);
+    
+    document.getElementById('score-text').innerText = `${score} / ${testQuestions.length}`;
+    document.getElementById('percentage-text').innerText = `Úspešnosť: ${percentage}%`;
+    document.getElementById('result-section').style.display = 'block';
+    
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  }
+
+  function resetQuiz() {
+    userAnswers = {};
+    document.getElementById('result-section').style.display = 'none';
+    renderQuiz();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function tryLater() {
+    resetQuiz();
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      window.location.href = '/revizny-technik';
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', renderQuiz);
+</script>
+
+</body>
+</html>
