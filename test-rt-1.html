@@ -16,7 +16,9 @@
       --text-muted: #64748b;
       --border: #e2e8f0;
       --success: #22c55e;
+      --success-bg: #dcfce7;
       --danger: #ef4444;
+      --danger-bg: #fee2e2;
       --warning: #f59e0b;
     }
 
@@ -119,6 +121,19 @@
     .nav-btn.active {
       outline: 2px solid var(--primary);
       outline-offset: 1px;
+    }
+
+    /* Štýly pre vyhodnotené tlačidlá v navigácii */
+    .nav-btn.nav-correct {
+      background-color: var(--success) !important;
+      color: white !important;
+      border-color: var(--success) !important;
+    }
+
+    .nav-btn.nav-incorrect {
+      background-color: var(--danger) !important;
+      color: white !important;
+      border-color: var(--danger) !important;
     }
 
     .question-box {
@@ -244,25 +259,45 @@
       padding: 16px;
       border: 1px solid var(--border);
       border-radius: 8px;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
+      background: #fff;
     }
 
     .review-item.correct-bg {
-      border-left: 4px solid var(--success);
+      border-left: 5px solid var(--success);
     }
 
     .review-item.incorrect-bg {
-      border-left: 4px solid var(--danger);
+      border-left: 5px solid var(--danger);
     }
 
-    .answer-status {
+    .review-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .review-opt {
+      padding: 10px 14px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      font-size: 0.95rem;
+    }
+
+    .review-opt.opt-correct {
+      background-color: var(--success-bg);
+      border-color: var(--success);
+      color: #14532d;
       font-weight: 600;
-      margin-top: 8px;
-      font-size: 0.9rem;
     }
 
-    .correct-text { color: var(--success); }
-    .incorrect-text { color: var(--danger); }
+    .review-opt.opt-incorrect {
+      background-color: var(--danger-bg);
+      border-color: var(--danger);
+      color: #7f1d1d;
+      font-weight: 600;
+    }
 
     .pdf-btn {
       margin-top: 16px;
@@ -306,6 +341,9 @@
       <p id="time-spent-text" style="margin-top: 8px; color: var(--text-muted); font-size: 0.9rem;"></p>
       <button class="btn btn-primary pdf-btn" onclick="downloadPDF()">Stiahnuť PDF Protokol</button>
     </div>
+
+    <!-- Mriežka otázok aj na obrazovke výsledkov -->
+    <div class="question-nav" id="results-question-nav"></div>
 
     <h3>Prehľad odpovedí</h3>
     <div id="review-container" style="margin-top: 16px;"></div>
@@ -360,6 +398,7 @@
   let userAnswers = new Array(questionsRT1.length).fill(null);
   let secondsElapsed = 0;
   let timerInterval = null;
+  let isEvaluated = false;
 
   function startTimer() {
     timerInterval = setInterval(() => {
@@ -370,16 +409,36 @@
     }, 1000);
   }
 
-  function renderNav() {
-    const navContainer = document.getElementById('question-nav');
+  function renderNav(containerId = 'question-nav') {
+    const navContainer = document.getElementById(containerId);
+    if (!navContainer) return;
     navContainer.innerHTML = '';
-    questionsRT1.forEach((_, idx) => {
+
+    questionsRT1.forEach((q, idx) => {
       const btn = document.createElement('button');
       btn.className = 'nav-btn';
-      if (userAnswers[idx] !== null) btn.classList.add('answered');
-      if (idx === currentIndex) btn.classList.add('active');
+
+      if (isEvaluated) {
+        // Zafarbenie po vyhodnotení: zelená ak správne, červená ak nesprávne/nezodpovedané
+        if (userAnswers[idx] === q.correct) {
+          btn.classList.add('nav-correct');
+        } else {
+          btn.classList.add('nav-incorrect');
+        }
+      } else {
+        if (userAnswers[idx] !== null) btn.classList.add('answered');
+        if (idx === currentIndex) btn.classList.add('active');
+      }
+
       btn.innerText = idx + 1;
-      btn.onclick = () => goToQuestion(idx);
+      btn.onclick = () => {
+        if (!isEvaluated) {
+          goToQuestion(idx);
+        } else {
+          const el = document.getElementById(`review-item-${idx}`);
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }
+      };
       navContainer.appendChild(btn);
     });
   }
@@ -422,10 +481,11 @@
     const progress = ((currentIndex + 1) / questionsRT1.length) * 100;
     document.getElementById('progress-bar').style.width = `${progress}%`;
 
-    renderNav();
+    renderNav('question-nav');
   }
 
   function selectOption(val) {
+    if (isEvaluated) return;
     userAnswers[currentIndex] = val;
     loadQuestion();
   }
@@ -451,6 +511,8 @@
 
   function submitQuiz() {
     clearInterval(timerInterval);
+    isEvaluated = true;
+
     document.getElementById('quiz-screen').style.display = 'none';
     document.getElementById('results-screen').style.display = 'block';
 
@@ -463,19 +525,40 @@
       const isCorrect = uAns === q.correct;
       if (isCorrect) score++;
 
-      const optsText = [q.a, q.b, q.c];
-      const userText = uAns !== null ? `${['A','B','C'][uAns]}: ${optsText[uAns]}` : "Nezodpovedané";
-      const correctText = `${['A','B','C'][q.correct]}: ${optsText[q.correct]}`;
+      const opts = [
+        { text: q.a, label: 'A', val: 0 },
+        { text: q.b, label: 'B', val: 1 },
+        { text: q.c, label: 'C', val: 2 }
+      ];
 
       const item = document.createElement('div');
+      item.id = `review-item-${idx}`;
       item.className = `review-item ${isCorrect ? 'correct-bg' : 'incorrect-bg'}`;
+
+      let optionsHTML = '';
+      opts.forEach(opt => {
+        let optClass = 'review-opt';
+        if (opt.val === q.correct) {
+          optClass += ' opt-correct'; // Vždy vysvietená správna odpoveď na zeleno
+        } else if (opt.val === uAns && !isCorrect) {
+          optClass += ' opt-incorrect'; // Nesprávne zvolená odpoveď na červeno
+        }
+
+        optionsHTML += `
+          <div class="${optClass}">
+            <strong>${opt.label}:</strong> ${opt.text}
+            ${opt.val === q.correct ? ' ✓ (Správna odpoveď)' : ''}
+            ${opt.val === uAns && !isCorrect ? ' ✗ (Tvoja odpoveď)' : ''}
+          </div>
+        `;
+      });
+
       item.innerHTML = `
         <div class="norm-tag">${q.norm}</div>
-        <div style="font-weight:600;">${idx + 1}. ${q.q}</div>
-        <div class="answer-status ${isCorrect ? 'correct-text' : 'incorrect-text'}">
-          Tvoja odpoveď: ${userText}
+        <div style="font-weight:600; font-size: 1.05rem;">${idx + 1}. ${q.q}</div>
+        <div class="review-options">
+          ${optionsHTML}
         </div>
-        ${!isCorrect ? `<div class="answer-status correct-text">Správna odpoveď: ${correctText}</div>` : ''}
       `;
       reviewContainer.appendChild(item);
     });
@@ -487,6 +570,9 @@
     const mins = Math.floor(secondsElapsed / 60);
     const secs = secondsElapsed % 60;
     document.getElementById('time-spent-text').innerText = `Celkový čas: ${mins} min ${secs} s`;
+
+    // Vykresliť zafarbenú mriežku (1-40) v hornej časti výsledkov
+    renderNav('results-question-nav');
   }
 
   function downloadPDF() {
@@ -517,7 +603,6 @@
       }
       const uAns = userAnswers[idx];
       const isCorrect = uAns === q.correct;
-      const optsText = [q.a, q.b, q.c];
       const statusText = isCorrect ? "SPRAVNE" : `NESPRAVNE (Spravne: ${['A','B','C'][q.correct]})`;
 
       doc.setFont("Helvetica", "bold");
