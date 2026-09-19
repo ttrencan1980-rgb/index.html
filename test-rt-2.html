@@ -3,22 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Test RT1 - Elektrotechnické predpisy a normy</title>
-  <!-- jsPDF pre generovanie PDF -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <title>Test RT2 - Elektrotechnická spôsobilosť</title>
   <style>
     :root {
-      --primary: #2563eb;
-      --primary-hover: #1d4ed8;
-      --bg: #f8fafc;
+      --primary: #1d4ed8;
+      --primary-hover: #1e40af;
+      --bg-color: #f3f4f6;
       --card-bg: #ffffff;
-      --text: #0f172a;
-      --text-muted: #64748b;
-      --border: #e2e8f0;
-      --success: #22c55e;
-      --success-bg: #dcfce7;
-      --danger: #ef4444;
-      --danger-bg: #fee2e2;
+      --text-color: #1f2937;
+      --subtext-color: #6b7280;
+      --correct-bg: #dcfce7;
+      --correct-border: #22c55e;
+      --correct-text: #15803d;
+      --incorrect-bg: #fee2e2;
+      --incorrect-border: #ef4444;
+      --incorrect-text: #b91c1c;
+      --border-color: #e5e7eb;
     }
 
     * {
@@ -29,149 +29,133 @@
     }
 
     body {
-      background-color: var(--bg);
-      color: var(--text);
-      line-height: 1.5;
-      padding: 20px 12px;
+      background-color: var(--bg-color);
+      color: var(--text-color);
       display: flex;
       justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
     }
 
-    .container {
+    .quiz-container {
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
       width: 100%;
       max-width: 800px;
-      background: var(--card-bg);
-      border-radius: 12px;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-      padding: 24px;
+      padding: 30px;
     }
 
-    header {
-      border-bottom: 2px solid var(--border);
-      padding-bottom: 16px;
-      margin-bottom: 24px;
+    .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid var(--bg-color);
     }
 
-    h1 {
+    .title {
       font-size: 1.25rem;
       font-weight: 700;
-      color: var(--text);
-    }
-
-    .timer-box {
-      background: #eff6ff;
       color: var(--primary);
-      padding: 6px 14px;
-      border-radius: 20px;
+    }
+
+    .progress {
       font-weight: 600;
-      font-size: 0.95rem;
-      border: 1px solid #bfdbfe;
-    }
-
-    .progress-bar-container {
-      width: 100%;
-      height: 8px;
-      background-color: var(--border);
-      border-radius: 4px;
-      margin-bottom: 20px;
-      overflow: hidden;
-    }
-
-    .progress-bar {
-      height: 100%;
-      background-color: var(--primary);
-      width: 0%;
-      transition: width 0.3s ease;
-    }
-
-    .question-box {
-      margin-bottom: 24px;
-    }
-
-    .norm-tag {
-      display: inline-block;
-      background: #f1f5f9;
-      color: var(--text-muted);
-      font-size: 0.8rem;
-      padding: 2px 8px;
-      border-radius: 4px;
-      margin-bottom: 8px;
-      font-weight: 500;
+      color: var(--subtext-color);
     }
 
     .question-title {
-      font-size: 1.1rem;
+      font-size: 1.35rem;
       font-weight: 600;
-      margin-bottom: 16px;
+      margin-bottom: 6px;
+      line-height: 1.4;
     }
 
-    .options {
+    .question-norm {
+      font-size: 0.9rem;
+      color: var(--subtext-color);
+      margin-bottom: 24px;
+      font-weight: 500;
+    }
+
+    .options-container {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
+      margin-bottom: 30px;
     }
 
-    .option {
+    .option-btn {
+      background-color: var(--card-bg);
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px 20px;
+      text-align: left;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
       display: flex;
       align-items: flex-start;
-      padding: 12px 16px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.2s, border-color 0.2s;
+      gap: 12px;
+      line-height: 1.4;
     }
 
-    .option:hover {
-      background-color: #f8fafc;
-      border-color: #cbd5e1;
+    .option-btn:hover:not(:disabled) {
+      border-color: var(--primary);
+      background-color: #eff6ff;
     }
 
-    /* Zafarbenie možností po kliknutí */
-    .option.opt-correct {
-      background-color: var(--success-bg) !important;
-      border-color: var(--success) !important;
-      color: #14532d !important;
+    .option-btn .prefix {
+      font-weight: 700;
+      min-width: 24px;
+    }
+
+    .option-btn.correct {
+      background-color: var(--correct-bg);
+      border-color: var(--correct-border);
+      color: var(--correct-text);
       font-weight: 600;
     }
 
-    .option.opt-incorrect {
-      background-color: var(--danger-bg) !important;
-      border-color: var(--danger) !important;
-      color: #7f1d1d !important;
+    .option-btn.incorrect {
+      background-color: var(--incorrect-bg);
+      border-color: var(--incorrect-border);
+      color: var(--incorrect-text);
       font-weight: 600;
     }
 
     .controls {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       gap: 12px;
-      margin-top: 24px;
-      border-top: 1px solid var(--border);
-      padding-top: 20px;
+      flex-wrap: wrap;
     }
 
     .btn {
-      padding: 10px 20px;
-      border-radius: 6px;
+      padding: 12px 24px;
+      border-radius: 8px;
       border: none;
-      font-size: 0.95rem;
       font-weight: 600;
+      font-size: 0.95rem;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: background-color 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .btn-secondary {
-      background-color: #e2e8f0;
-      color: var(--text);
+      background-color: #ffffff;
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
     }
 
-    .btn-secondary:hover {
-      background-color: #cbd5e1;
+    .btn-secondary:hover:not(:disabled) {
+      background-color: #f9fafb;
     }
 
     .btn-primary {
@@ -179,282 +163,654 @@
       color: white;
     }
 
-    .btn-primary:hover {
+    .btn-primary:hover:not(:disabled) {
       background-color: var(--primary-hover);
     }
 
-    .btn-success {
-      background-color: var(--success);
-      color: white;
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
 
-    .btn-success:hover {
-      background-color: #16a34a;
-    }
-
-    /* Výsledky */
     .results-container {
       display: none;
-    }
-
-    .score-card {
       text-align: center;
-      padding: 32px 24px;
-      background: #f8fafc;
-      border-radius: 8px;
-      border: 1px solid var(--border);
     }
 
-    .score-val {
-      font-size: 3.5rem;
+    .results-score {
+      font-size: 3rem;
       font-weight: 800;
       color: var(--primary);
-      margin: 12px 0;
+      margin: 20px 0;
     }
 
-    .pdf-btn {
-      margin-top: 20px;
-      width: 100%;
+    .results-summary {
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+      color: var(--subtext-color);
+    }
+
+    .review-list {
+      text-align: left;
+      margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .review-item {
+      padding: 16px;
+      border-radius: 8px;
+      background-color: #f9fafb;
+      border-left: 4px solid var(--border-color);
+    }
+
+    .review-item.correct {
+      border-left-color: var(--correct-border);
+    }
+
+    .review-item.incorrect {
+      border-left-color: var(--incorrect-border);
+    }
+
+    .review-q {
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .review-norm {
+      font-size: 0.85rem;
+      color: var(--subtext-color);
+      margin-bottom: 8px;
+    }
+
+    .review-ans {
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 600px) {
+      .quiz-container {
+        padding: 20px;
+      }
+      .controls {
+        flex-direction: column;
+      }
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
     }
   </style>
 </head>
 <body>
 
-<div class="container">
-  <header>
-    <h1>Test RT1 (40 Otázok)</h1>
-    <div class="timer-box" id="timer">Čas: 00:00</div>
-  </header>
-
+<div class="quiz-container">
+  <!-- Kvízové rozhranie -->
   <div id="quiz-screen">
-    <div class="progress-bar-container">
-      <div class="progress-bar" id="progress-bar"></div>
+    <div class="header">
+      <div class="title">Test RT2 - Elektrotechnická spôsobilosť</div>
+      <div class="progress" id="progress-text">Otázka 1 z 29</div>
     </div>
 
-    <div class="question-box">
-      <div class="norm-tag" id="norm-tag">STN --</div>
-      <div class="question-title" id="question-text">Loading...</div>
-      <div class="options" id="options-container"></div>
+    <div class="question-title" id="question-text">Loading question...</div>
+    <div class="question-norm" id="norm-text">STN ...</div>
+
+    <div class="options-container" id="options-container">
+      <!-- Tlačidlá odpovedí sa generujú cez JS -->
     </div>
 
     <div class="controls">
-      <button class="btn btn-secondary" id="prev-btn" onclick="prevQuestion()">Späť</button>
-      <button class="btn btn-primary" id="next-btn" onclick="nextQuestion()">Ďalej</button>
-      <button class="btn btn-success" id="submit-btn" style="display: none;" onclick="submitQuiz()">Vyhodnotiť test</button>
+      <button class="btn btn-secondary" id="prev-btn" onclick="prevQuestion()">
+        &lt; Predchádzajúca
+      </button>
+      <button class="btn btn-primary" id="next-btn" onclick="nextQuestion()">
+        Nasledujúca &gt;
+      </button>
+      <button class="btn btn-secondary" id="finish-btn" onclick="showResults()" style="margin-left: auto;">
+        Zobraziť celý výsledok
+      </button>
     </div>
   </div>
 
+  <!-- Výsledková obrazovka -->
   <div id="results-screen" class="results-container">
-    <div class="score-card">
-      <h2>Celkové vyhodnotenie testu</h2>
-      <div class="score-val" id="score-val">0%</div>
-      <p id="score-text" style="font-size: 1.2rem; font-weight: 600;">0 zo 40 správne</p>
-      <p id="time-spent-text" style="margin-top: 8px; color: var(--text-muted); font-size: 1rem;"></p>
-      <button class="btn btn-primary pdf-btn" onclick="downloadPDF()">Stiahnuť PDF Protokol</button>
+    <h2>Výsledok testu</h2>
+    <div class="results-score" id="score-text">0 / 0</div>
+    <p class="results-summary" id="summary-text">Úspešnosť: 0%</p>
+
+    <button class="btn btn-primary" onclick="restartQuiz()">Opraviť test / Skúsiť znova</button>
+
+    <div class="review-list" id="review-list">
+      <!-- Prehľad otázok sa vygeneruje sem -->
     </div>
   </div>
 </div>
 
 <script>
-  const questionsRT1 = [
-    { q: "B príkaz sa vydáva", norm: "STN 34 3100:2001", a: "ak je nutné aj pre viac pracovných skupín ak pracujú pod jedným dozorom", b: "na jedno pracovisko a pre jednu pracovnú skupinu", c: "na jedno pracovisko ak je nutné aj pre viac pracovných skupín ak pracujú pod jedným dozorom", correct: 1 },
-    { q: "B príkaz sa vydáva na dobu", norm: "STN 34 3100:2001", a: "max. 24 hod.", b: "na dobu určitú max. 48 hod.", c: "na dobu určitú max. 7 dni", correct: 0 },
-    { q: "Akú základnú podmienku musí u sietí TN spĺňať impedancia slučky", norm: "STN 33 2000-4-41:2019", a: "Zs ≤ U0 x Ia", b: "Zs ≤ U0/Ia", c: "Zs ≥ U0/Ia", correct: 1 },
-    { q: "Môže byť vynechané ochranné opatrenie pri poruche u skrutiek s maticami, nitov, štítkov a káblových príchytiek", norm: "STN 33 2000-4-41:2019", a: "áno ak sú vyhotovené z izolačného materiálu", b: "áno", c: "nie", correct: 1 },
-    { q: "Ako musia byť prepojené vodivé časti uzatvorené v izolačnom kryte, použitého pri ochrannom opatrení dvojitou alebo zosilnenou izoláciou", norm: "STN 33 2000-4-41:2019", a: "môžu byť spojené s ochranným vodičom", b: "nesmú byť spojené s ochranným vodičom", c: "musia byť spojené s ochranným vodičom", correct: 1 },
-    { q: "Ako sa dá definovať základné pravidlo ochrany pred úrazom elektrickým prúdom", norm: "STN EN 61140:2018", a: "nebezpečné živé časti nesmú byť prístupné a prístupné vodivé časti nesmú byť nebezpečnými živými časťami, buď pri normálnych podmienkach, alebo v stave s jednou poruchou", b: "nebezpečné živé časti smú byť prístupné a prístupné vodivé časti smú byť nebezpečnými živými časťami, buď pri normálnych podmienkach, alebo v stave s jednou poruchou", c: "bezpečné neživé časti nesmú byť prístupné a prístupné nevodivé časti nesmú byť nebezpečnými živými časťami", correct: 0 },
-    { q: "Musí mať obvod napájajúci jednotlivé zariadenia triedy ochrany II ochranný vodič vedený ku každému bodu inštalácie a každému bodu pripojenia", norm: "STN 33 2000-4-41:2019", a: "nie", b: "nie ak zariadenia triedy ochrany II sú pripojené na obvod cez zásuvku", c: "áno", correct: 2 },
-    { q: "Akým spôsobom môže byť dosiahnutá ochrana pri jednej poruche", norm: "STN EN 61140:2018", a: "ochranným prostriedkom nezávislým od základnej ochrany", b: "ochranným prostriedkom nezávislým od ochrany pred preťažením", c: "ochranným prostriedkom nezávislým od ochrany RCD", correct: 0 },
-    { q: "Aké sú hranice bezpečného malého napätia krytov izolovaných od živých častí, v priestoroch zvlášť nebezpečných, ak dochádza pri obsluhe k dotyku častí zariadenia", norm: "STN 33 2000-4-41:2019", a: "30 V striedavé a 50 V jednosmerné napätie", b: "12 V striedavé a 25 V jednosmerné napätie", c: "20 V striedavé a 60 V jednosmerné napätie", correct: 1 },
-    { q: "Ak sa pre ochranu pri poruche použité prúdové chrániče v sieťach TT, je nutné používať ďalšie ochranné zariadenia", norm: "STN 33 2000-4-41:2019", a: "áno", b: "nie ak U0 ≤ 120V", c: "nie", correct: 0 },
-    { q: "Úbytok napätia pre svetelný odber resp. svetelný a zmiešaný odber v rozvode medzi prípojkovou skriňou a rozvádzačom za elektromerom nesmie byť väčší ako", norm: "STN 33 2130:1983", a: "3%", b: "2%", c: "4%", correct: 1 },
-    { q: "Vodorovná inštalačná zóna šírky 300 mm zóna vodorovná stredná (ZV-s) je", norm: "STN 33 2130:1983", a: "od 900 mm do 1200 mm nad dokončenou dlážkou", b: "od 800 mm do 1100 mm nad dokončenou dlážkou", c: "od 1000 mm do 1300 mm nad dokončenou dlážkou", correct: 0 },
-    { q: "Ako musia byť istené všetky neuzemnené vodiče obvodov miestneho osvetlenia na pracovnom stroji", norm: "STN EN 60204-1:2019", a: "zariadeniami na ochranu pred nadprúdom, oddelenými od zariadení, ktoré chránia ostatné obvody", b: "zariadeniami na ochranu pred nadprúdom, spolu so zariadeniami pre ostatné obvody", c: "zariadeniami na ochranu pred skratom, oddelenými od zariadení, ktoré chránia ostatné obvody", correct: 0 },
-    { q: "Čo nie je potrebné vykonávať pri kusovej skúške rozvádzača", norm: "STN EN 61439-1:2012", a: "nevyžaduje sa preverovanie pre prístroje a samostatné časti vstavané do rozvádzača", b: "detegovanie chýb materiálov, ľudskej práce a určenie správneho fungovania rozvádzača", c: "vždy je potrebné vykonávať na všetky časti rozvádzača", correct: 0 },
-    { q: "Čo má obsahovať návod pre údržbu obsiahnutý v technickej dokumentácii", norm: "STN EN 60204-1:2019", a: "postupu pre programovanie alebo konfiguráciu", b: "napr. pokyny a postupy na bežnú údržbu a frekvencia a spôsob funkčných skúšok", c: "opis inštalácie a montáž elektrického vybavenia", correct: 1 },
-    { q: "Ako musia byť usporiadané snímače polohy (napr. koncové snímače, bezdotykové spínače)", norm: "STN EN 60204-1:2019", a: "tak aby sa nemohli poškodiť v prípade presahu", b: "sa používajú len v nebezpečných prípadoch", c: "na bezpečné zastavenie ich nemožno použiť", correct: 0 },
-    { q: "Ktoré motory pracovných strojov musia byť istené proti preťaženiu", norm: "STN EN 60204-1:2019", a: "ktoré môžu byť preťažené a nie sú mechanicky chránené proti preťaženiu", b: "motory s menovitým výkonom nad 0,5 kW", c: "motory s menovitým výkonom nad 1 kW", correct: 0 },
-    { q: "Vypínač je možné inštalovať vedľa umývacej zóny", norm: "STN 33 2000-7-701:2007", a: "vo výške 120 cm tesne vedľa zóny", b: "vo výške 120 cm min. 30 cm vedľa zóny", c: "vo výške 120 cm min. 20 cm vedľa zóny", correct: 0 },
-    { q: "Zvodová sieť elektrostaticky vodivej podlahy v zdravotníckych priestoroch", norm: "STN 33 2000-7-710:2013", a: "sa musí spojiť s prípojnicou pospájania", b: "musí byť izolovaná od ostatných zariadení", c: "nesmie sa spojiť s prípojnicou pospájania", correct: 0 },
-    { q: "Minimálny prierez vodičov vedenia v stánkoch z Cu je", norm: "STN 33 2000-7-704:2019", a: "0,75 mm²", b: "1,5 mm²", c: "2,5 mm²", correct: 1 },
-    { q: "V poľnohospodárskych alebo záhradníckych prevádzkarňach musí mať elektrické zariadenie ak sa používa v normálnych podmienkach minimálny stupeň ochrany,", norm: "STN 33 2000-7-705:2007", a: "IP 44", b: "IP 2X", c: "IP 43", correct: 0 },
-    { q: "Pri vedeniach do 1 kV vzdialenosť živej časti holého vedenia od stabilného vodivého plota je min.", norm: "STN 33 3300:1983", a: "2 m", b: "4 m", c: "3 m", correct: 0 },
-    { q: "V distribučných sieťach TN je dovolený čas odpojenia vo výnimočných prípadoch nepresahujúci", norm: "STN 33 2000-4-41:2019", a: "2 s", b: "5 s", c: "30 s", correct: 2 },
-    { q: "Pri prípojkách do 1 kV vzdialenosť závesného kábla od stabilného vodivého plota je min.", norm: "STN 33 3300:1983", a: "3 m", b: "1 m", c: "2 m", correct: 1 },
-    { q: "Každý PV reťazec (string) je potrebné chrániť istiacim prístrojom ak", norm: "STN 33 2000-7-712:2022", a: "každý PV reťazec je potrebné chrániť istiacim prístrojom bez ohľadu na počet PV reťazcov pripojených k striedaču", b: "počet PV reťazcov pripojených k striedaču je väčší ako 2", c: "počet PV reťazcov pripojených k striedaču je väčší alebo rovný 2", correct: 1 },
-    { q: "Čo je to prípustné riziko (RT) určované vo výpočtoch", norm: "STN EN 62305-1:2012", a: "Hodnota rizika ktorá sa môže pripustiť pri chránenej stavbe", b: "Maximálna hodnota rizika ktorá sa môže pripustiť pri chránenej stavbe", c: "Minimálna hodnota rizika ktorá sa môže pripustiť pri chránenej stavbe", correct: 1 },
-    { q: "U stavieb zo železobetónu musí byť elektrické prepojenie armovanie stanovené skúškou medzi najvyšším dielom a úrovňou zemi. Aká má byť hodnota elektrického odporu, aby mohlo byť použité oceľové armovanie ako náhodný zvod", norm: "STN EN 62305-3:2012", a: "max 0,5 Ω", b: "max 0,2 Ω", c: "max 0,1 Ω", correct: 1 },
-    { q: "Aké časti môže obsahovať zachytávacia sústava", norm: "STN EN 62305-3:2012", a: "komíny, antény", b: "betónový skelet budovy", c: "zachytávacie tyče, závesné lana, mriežová sieť vodičov", correct: 2 },
-    { q: "Aký má byť uhol medzi susednými lúčmi v prípade, že sa páskové alebo drôtové zemniče ukladajú lúčovite", norm: "STN 33 2000-5-54:2012", a: "80°", b: "60°", c: "50°", correct: 1 },
-    { q: "Čo predstavuje skratka LPS v zmysle STN EN 62305", norm: "STN EN 62305-3:2012", a: "Úroveň ochrany pred bleskom", b: "Zóna ochrany pred bleskom", c: "systém používaný na zníženie hmotnej škody spôsobenej zásahom blesku do stavby", correct: 2 },
-    { q: "Pravidelná revízia elektrických spotrebičov okrem spotrebičov držaných v ruke zaradených do skupiny D podľa oblasti ich používania sa vykonáva", norm: "STN 33 1630:2025", a: "1 x za 6 mesiacov", b: "1 x za 12 mesiacov", c: "1 x za 24 mesiacov", correct: 1 },
-    { q: "Skúšobné napätie el. inštalácie s menovitým napätím PELV je", norm: "STN 33 2000-6:2018", a: "500 V DC", b: "250 V DC", c: "250 V AC", correct: 1 },
-    { q: "Pravidelná revízia elektrických spotrebičov okrem spotrebičov držaných v ruke zaradených do skupiny C podľa oblasti ich používania sa vykonáva", norm: "STN 33 1630:2025", a: "1 x za 12 mesiacov", b: "1 x za 6 mesiacov", c: "1 x za 24 mesiacov", correct: 0 },
-    { q: "Hodnota izolačného odporu spotrebiča s triedou ochrany I držaných počas prevádzky v ruke musí byť minimálne", norm: "STN EN 50699:2022", a: "1 MΩ", b: "2 MΩ", c: "1,5 MΩ", correct: 1 },
-    { q: "Minimálny požadovaný izolačný odpor el. inštalácie s napätím FELV je", norm: "STN 33 2000-6:2018", a: "≥ 1 MΩ", b: "≥ 0,5 MΩ", c: "≥ 1,5 MΩ", correct: 0 },
-    { q: "Overenie účinnosti opatrení na ochranu samočinným odpojením napájania pri sieťach TT", norm: "STN 33 2000-6:2018", a: "sa musí overiť meraním odporu uzemňovača neživých častí el. inštalácie", b: "sa musí overiť meraním impedancie poruchovej slučky", c: "sa musí overiť meraním menovitého napätia", correct: 0 },
-    { q: "Odpor ochranného pospájania pre skúšané zariadenie s dĺžkou káblov 10 m", norm: "STN EN 50699:2022", a: "nesmie presiahnuť 0,4 Ω", b: "nesmie presiahnuť 0,3 Ω", c: "môže byť väčší ako 0,4 Ω", correct: 2 },
-    { q: "Izolačný odpor náradia so zosilnenou izoláciou nesmie byť menší ako", norm: "STN EN 50699:2022", a: "menší ako 5 MΩ", b: "menší ako 7 MΩ", c: "menší ako 2 MΩ", correct: 2 },
-    { q: "Aké sú minimálne intervaly medzi revíziami LPS hladiny I a II", norm: "STN EN 62305-3:2012", a: "4 roky", b: "2 roky", c: "3 roky", correct: 1 },
-    { q: "Na základe akých údajov sa rozhoduje o ochrane stavby alebo inžinierskych sietí pred bleskom, rovnako ako o výberu ochranných opatrení", norm: "STN EN 62305-1:2012", a: "strata alebo úraz ľudského života, strata služieb pre verejnosť, strata kultúrneho dedičstva", b: "hodnoty investície", c: "vzdialenosť objektu od okolitých stavieb", correct: 0 }
+  const questions = [
+    {
+      q: "Práca pod dohľadom je",
+      norm: "STN 34 3100:2001",
+      options: [
+        "práca, podľa podrobnejších pokynov, za bezpečnosť práce zodpovedá osoba vykonávajúca dohľad",
+        "práca, podľa podrobnejších pokynov, za bezpečnosť práce zodpovedá pracovník riadiaci prevádzku",
+        "práca, podľa podrobnejších pokynov, za bezpečnosť práce zodpovedajú pracovníci vykonávajúci prácu"
+      ],
+      correct: 2 // C[cite: 5]
+    },
+    {
+      q: "Podnikateľ ktorý je zamestnávateľom môže vykonávať odborné prehliadky a odborné skúšky a opravy vyhradeného technického zariadenia na základe",
+      norm: "zákon 124/2006 Z. z.",
+      options: [
+        "oprávnenia na činnosť vydaného inšpektorátom práce",
+        "oprávnenia na činnosť vydaného oprávnenou právnickou osobou",
+        "dokladu o odbornej spôsobilosti fyzickej osoby"
+      ],
+      correct: 1 // B[cite: 5]
+    },
+    {
+      q: "Môžu byť pri ochrane zábranami odstránené prekážky bez použitia kľúča",
+      norm: "STN 33 2000-4-41:2019",
+      options: [
+        "áno, ak medziľahlá zábrana, zaisťujúca stupeň ochrany aspoň IP1X zabraňuje dotyku so živými časťami, táto zábrana sa smie odstrániť iba použitím kľúča alebo nástroja",
+        "áno, napr. po odpojení napájania živých častí, pred dotykom ktorých chránia zábrany alebo kryty, obnovenie napájania smie byť možné až po opätovnom nasadení alebo uzavretí zábran alebo krytov,",
+        "áno ak zábrany nie sú upevnené pomocou skrutiek"
+      ],
+      correct: 1 // B[cite: 5]
+    },
+    {
+      q: "Ako je špecifikovaná doplnková ochrana",
+      norm: "STN 33 2000-4-41:2019",
+      options: [
+        "ako zvýšená ochrana živej časti",
+        "ako kombinácia opatrenia na ochranu pred nebezpečným dotykovým napätím a nezávislého opatrenia na ochranu pri poruche",
+        "časť ochranného opatrenia za určitých podmienok vonkajších vplyvov a v určitých osobitných priestoroch"
+      ],
+      correct: 2 // C[cite: 5]
+    },
+    {
+      q: "Aká je maximálna vzdialenosť dvoch častí, o ktorých sa predpokladá, že sú súčasne prípustné dotyku",
+      norm: "STN 33 2000-4-41:2019",
+      options: [
+        "2 m",
+        "1,8 m",
+        "2,5 m"
+      ],
+      correct: 2 // C[cite: 5]
+    },
+    {
+      q: "Čomu musí u nízkonapäťových inštaláciách obvykle odpovedať základná ochrana pred dotykom",
+      norm: "STN EN 61140:2018",
+      options: [
+        "ochrane pred priamym dotykom",
+        "ochrane pomocou ochranného vodiča",
+        "ochrane pred poškodením spotrebiča"
+      ],
+      correct: 0 // A[cite: 5]
+    },
+    {
+      q: "Ako sa kladú uzemňovač do káblových rýh",
+      norm: "STN 33 2000-5-54:2012",
+      options: [
+        "na vrch výkopu a najmenej 5 cm pod kábel alebo vedľa neho",
+        "na dno výkopu a najmenej 10 cm pod kábel alebo vedľa neho",
+        "na stred výkopu a najmenej 10 cm pod kábel alebo vedľa neho"
+      ],
+      correct: 1 // B[cite: 5]
+    },
+    {
+      q: "Ochrana pri poruche musí byť tvorená jedným alebo viacerými prostriedkami, ktoré na základnej ochrane nezávisia ani ju nedopĺňajú. Akými prostriedkami musí byť tvorená táto ochrana",
+      norm: "STN EN 61140:2018",
+      options: [
+        "nezávislými ochrannými prostriedkami, ktoré sa nesmú navzájom ovplyvňovať",
+        "izoláciou",
+        "ochrannými prostriedkami, ktoré sa musia navzájom ovplyvňovať"
+      ],
+      correct: 0 // A[cite: 5]
+    },
+    {
+      q: "Musia byť oddelené živé časti obvodov SELV a PELV",
+      norm: "STN 33 2000-4-41:2019",
+      options: [
+        "nie",
+        "áno",
+        "áno u SELV"
+      ],
+      correct: 1 // B[cite: 5]
+    },
+    {
+      q: "Môžu byť živé časti elektricky oddeleného obvodu spojené s iným obvodom alebo so zemou",
+      norm: "STN 33 2000-4-41:2019",
+      options: [
+        "môžu",
+        "nesmú",
+        "môžu ak sa nespoja s PE vodičom"
+      ],
+      correct: 1 // B[cite: 5]
+    },
+    {
+      q: "Minimálny menovitý prúd trojfázového istenia pred elektromerom pri stupni elektrifikácie bytu B je",
+      norm: "STN 33 2130:1983",
+      options: [
+        "20 A pri súdobom príkone 9 kW",
+        "25 A pri súdobom príkone 8 kW",
+        "25 A pri súdobom príkone 11 kW"
+      ],
+      correct: 2 // C[cite: 5]
+    },
+    {
+      q: "Vodorovná inštalačná zóna šírky 300 mm zóna vodorovná stredná (ZV-s) je",
+      norm: "STN 33 2130:1983",
+      options: [
+        "od 800 mm do 1100 mm nad dokončenou dlážkou",
+        "od 900 mm do 1200 mm nad dokončenou dlážkou",
+        "od 1000 mm do 1300 mm nad dokončenou dlážkou"
+      ],
+      correct: 1 // B[cite: 5]
+    },
+    {
+      q: "Ako nemôže byť na stroji umiestnený prístroj pre núdzové vypnutie",
+      norm: "STN EN 60204-1:2019",
+      options: [
+        "pedálový spínač",
+        "spínač ovládaný tlačidlom prispôsobený tvaru dlane alebo hríba",
+        "spínač ovládaný ťažným lankom"
+      ],
+      correct: 0 // A[cite: 5]
+    },
+    {
+      q: "Je možné u rozvádzača nn používať medzi dvoma pripojovacími zariadeniami kabely so spletenými alebo spájkovanými spojmi",
+      norm: "STN EN 61439-1:2012",
+      options: [
+        "áno",
+        "nie",
+        "určí prevádzkovateľ"
+      ],
+      correct: 1 // B[cite: 5]
+    },
+    {
+      q: "Ktoré časti nemusia byť pripojené k ochrannému obvodu pracovného stroja",
+      norm: "STN EN 60204-1:2019",
+      options: [
+        "všetky časti musia byť pripojené",
+        "pokiaľ tieto časti sú namontované tak, že nevzniká nebezpečenstvo (ak sú malej veľkosti alebo ich dotyk je nepravdepodobný)",
+        "ak sa tieto časti bežne nepoužívajú"
+      ],
+      correct: 1 // B[cite: 5]
+    },
+    {
+      q: "Aké opatrenia je nutné prekontrolovať u rozvádzača vonkajšieho prevedenia alebo krytého rozvádzača vnútorného prevedenia v miestach s vysokou vlhkosťou a s teplotami meňacich sa v širokých medziach",
+      norm: "STN EN 61439-1:2012",
+      options: [
+        "na zabránenie účinkov vysokých teplôt",
+        "na zabránenie účinkov nízkych teplôt",
+        "na zabránenie škodlivej kondenzácie"
+      ],
+      correct: 2 // C[cite: 5]
+    },
+    {
+      q: "Kde môže byť umiestnený štítok u rozvádzača pre inštaláciu do miest prípustných laickej obsluhe",
+      norm: "STN EN 61439-1:2012",
+      options: [
+        "na spodnej časti rozvádzača",
+        "na vnútornej strane",
+        "na mieste, kde bude viditeľný a čitateľný"
+      ],
+      correct: 2 // C[cite: 5]
+    },
+    {
+      q: "Zóna 0 pri sprche bez vane je",
+      norm: "STN 33 2000-7-701:2007",
+      options: [
+        "výška zóny 0 je 15cm od podlahy",
+        "výška zóny 0 je 20cm od podlahy",
+        "výška zóny 0 je 10cm od podlahy"
+      ],
+      correct: 2 // C[cite: 5]
+    },
+    {
+      q: "V zdravotníckych priestoroch skupiny 1 a 2 na Slovensku, odpor ochranných vodičov medzi zásuvkami, svorkami pevne inštalovaných zariadení, akýchkoľvek cudzích vodivých častí a prípojnicou ochranného pospájania",
+      norm: "STN 33 2000-7-710:2013",
+      options: [
+        "nesmie prevýšiť 0,5 Ω",
+        "nesmie prevýšiť 0,2 Ω",
+        "nesmie prevýšiť 0,7 Ω"
+      ],
+      correct: 1 // B[cite: 5]
+    },
+    {
+      q: "Obvody so zásuvkami do 32 A na staveniskách",
+      norm: "STN 33 2000-7-704:2019",
+      options: [
+        "sa musia chrániť prúdovým chráničom s vypínacím prúdom do 30 mA len v prípade ak nie je možné dosiahnuť dotykové napätie 25 V",
+        "sa nemusia chrániť prúdovým chráničom s vypínacím prúdom do 30 mA ak je použitá ochrana SELV",
+        "sa musia chrániť prúdovým chráničom s vypínacím prúdom do 30 mA len v prípade ak nie je možné dosiahnuť dotykové napätie 60 V"
+      ],
+      correct: 1 // B[cite: 5]
+    },
+    {
+      q: "Doplňková ochrana pospájaním v poľnohospodárskych objektoch pre hospodárske zvieratá je",
+      norm: "STN 33 2000-7-705:2007",
+      options: [
+        "nie je nutná",
+        "je nutná pre všetky neživé časti",
+        "nutná pre všetky neživé časti ktorých sa môžu dotknúť zvieratá"
+      ],
+      correct: 2 // C[cite: 5]
+    },
+    {
+      q: "Pri vedeniach do 1 kV vzdialenosť živej časti vedenia od nádvoria, skladovacej plochy je min.",
+      norm: "STN 33 3300:1983",
+      options: [
+        "6 m",
+        "5 m",
+        "7 m"
+      ],
+      correct: 1 // B[cite: 5]
+    },
+    {
+      q: "Vodiče PEN a PE vo vonkajších vedeniach (distribučných rozvodov) sa musia uzemniť na trase vedenia každých",
+      norm: "STN 33 2000-4-41:2019",
+      options: [
+        "200 m",
+        "100 m",
+        "500 m"
+      ],
+      correct: 2 // C[cite: 5]
+    },
+    {
+      q: "Pri prípojkách s holými vodičmi do 1 kV vzdialenosť živej časti vedenia pod schodnou časťou budovy je min.",
+      norm: "STN 33 3300:1983",
+      options: [
+        "1 m",
+        "3 m",
+        "2 m"
+      ],
+      correct: 2 // C[cite: 5]
+    },
+    {
+      q: "Ak sa na ochranu PV striedavého napájacieho obvodu používa prúdový chránič, tak musí byť typu",
+      norm: "STN 33 2000-7-712:2022",
+      options: [
+        "B",
+        "AC",
+        "A"
+      ],
+      correct: 0 // A[cite: 5]
+    },
+    {
+      q: "Ako sú označované základné typy škôd pri výpočtoch",
+      norm: "STN EN 62305-2:2013",
+      options: [
+        "D1 ľudské životy , D2 verejné služby , D3 porucha elektrických a elektronických systémov",
+        "D1 úraz živých bytostí , D2 hmotná škoda , D3 porucha elektrických a elektronických systémov",
+        "D1 ľudské životy , D2 verejné služby , D3 kultúrne dedičstvo , D4 ekonomické"
+      ],
+      correct: 1 // B[cite: 5]
+    },
+    {
+      q: "Čo je to prípustné riziko (RT) určované vo výpočtoch",
+      norm: "STN EN 62305-1:2012",
+      options: [
+        "Maximálna hodnota rizika ktorá sa môže pripustiť pri chránenej stavbe",
+        "Minimálna hodnota rizika ktorá sa môže pripustiť pri chránenej stavbe",
+        "Hodnota rizika ktorá sa môže pripustiť pri chránenej stavbe"
+      ],
+      correct: 0 // A[cite: 5]
+    },
+    {
+      q: "Normy rady STN EN 62305 využívajú v celom rozsahu skrátené názvy. Čo znamená označenie LPL",
+      norm: "STN EN 62305-1:2012",
+      options: [
+        "Zóna ochrany pred bleskom",
+        "Systém ochrany pred bleskom",
+        "Úroveň ochrany pred bleskom"
+      ],
+      correct: 2 // C[cite: 5]
+    },
+    {
+      q: "Čo je ekvipotenciálne pospájanie proti blesku ( vyrovnanie potenciálov pri pôsobení blesku) označovaný EB",
+      norm: "STN EN 62305-3:2012",
+      options: [
+        "pospájanie k SPD oddelených kovových častí priamym vodivým spojením alebo pripojením cez prepäťové ochranné zariadenia na zníženie rozdielov potenciálov spôsobených bleskovým prúdom",
+        "pospájanie k LEMP oddelených kovových častí priamym vodivým spojením alebo pripojením cez prepäťové ochranné zariadenia na zníženie rozdielov potenciálov spôsobených bleskovým prúdom",
+        "pospájanie k LPS oddelených kovových častí priamym vodivým spojením alebo pripojením cez prepäťové ochranné zariadenia na zníženie rozdielov potenciálov spôsobených bleskovým prúdom"
+      ],
+      correct: 2 // C[cite: 5]
+    },
+    {
+      q: "Normy rady STN EN 62305 využívajú v celom rozsahu skrátené názvy. Čo znamená označenie LPZ",
+      norm: "STN EN 62305-1:2012",
+      options: [
+        "Úroveň ochrany pred bleskom",
+        "Systém ochrany pred bleskom",
+        "Zóna ochrany pred bleskom"
+      ],
+      correct: 2 // C[cite: 5]
+    },
+    {
+      q: "Spojitosť ochranného vodiča sa meria:",
+      norm: "STN EN 50699:2022",
+      options: [
+        "Medzi svorkou prívodu stredného vodiča spotrebiča (prípadne kontaktu v sieťovej vidlici) a každou fázou spotrebiča.",
+        "Medzi ochrannou uzemňovacou svorkou zariadenia (prípadne kontaktu v sieťovej vidlici) a každou prístupnou vodivou časťou, ktorá je priamo pripojená k ochrannej zemi.",
+        "Medzi svorkou prívodu fázy zariadenia (prípadne kontaktu v sieťovej vidlici) a každou prístupnou vodivou časťou, ktorá je priamo pripojená k ochrannej zemi."
+      ],
+      correct: 1 // B[cite: 5]
+    },
+    {
+      q: "Elektrické spotrebiče, alebo predlžovacie prívody zaradené do skupiny A podľa oblasti ich používania sú:",
+      norm: "STN 33 1630:2025",
+      options: [
+        "Spotrebiče a/alebo predlžovacie prívody poskytované formou prenájmu ďalšiemu používateľovi elektrického spotrebiča",
+        "Spotrebiče a/alebo predlžovacie prívody používané vo vnútorných verejne prístupných priestoroch (napr. zdravotnícke objekty, objekty sociálnych služieb)",
+        "Spotrebiče a/alebo predlžovacie prívody používané vo vnútornom prostredí s vonkajším vplyvom vody AD3 a vyšším"
+      ],
+      correct: 0 // A[cite: 5]
+    },
+    {
+      q: "Skúšobné napätie el. inštalácie s menovitým napätím od 500 V do 1 000 V je",
+      norm: "STN 33 2000-6:2018",
+      options: [
+        "1000 V DC",
+        "1000 V AC",
+        "500 V DC"
+      ],
+      correct: 0 // A[cite: 5]
+    },
+    {
+      q: "Skúšobné napätie el. inštalácie s menovitým napätím FELV je",
+      norm: "STN 33 2000-6:2018",
+      options: [
+        "250 V AC",
+        "250 V DC",
+        "500 V DC"
+      ],
+      correct: 2 // C[cite: 5]
+    },
+    {
+      q: "Skúšanie (testing) je",
+      norm: "STN 33 2000-6:2018",
+      options: [
+        "realizácia opatrení v el. inštalácii, ktoré preukážu jej spôsobilosť, zahŕňa to zisťovanie hodnôt vhodnými meracími prístrojmi",
+        "súbor všetkých opatrení ktorými sa kontroluje súlad kompletnej el. inštalácie s harmonizačnými dokumentami",
+        "súbor kontrola el.inštalácie použitím všetkých zmyslov potrebných na zistenie správnosti výberu a zhotovenia el. inštalácie"
+      ],
+      correct: 0 // A[cite: 5]
+    },
+    {
+      q: "Elektrické spotrebiče, alebo predlžovacie prívody zaradené do skupiny B podľa oblasti ich používania sú:",
+      norm: "STN 33 1630:2025",
+      options: [
+        "Spotrebiče a/alebo predlžovacie prívody používané vo vnútorných priestoroch (napr. obchodnej činnosti, spotrebiče v kuchynkách a pod.)",
+        "Spotrebiče a/alebo predlžovacie prívody používané vo vnútorných verejne prístupných priestoroch (napr. zdravotnícke objekty, objekty sociálnych služieb)",
+        "Spotrebiče a/alebo predlžovacie prívody používané vo vnútornom prostredí s vonkajším vplyvom vody AD3 a vyšším"
+      ],
+      correct: 2 // C[cite: 5]
+    },
+    {
+      q: "Vizuálna prehliadka",
+      norm: "STN 33 2000-6:2018",
+      options: [
+        "je určená aj na kontrolu, že inštalácia zariadení nie je viditeľne poškodená tak, aby zhoršila bezpečnosť",
+        "porovnáva meranie a stav el. inštalácie s harmonizovanými predpismi",
+        "vyhodnocuje meranie s dovolenými hodnotami podľa harmonizovaných predpisov"
+      ],
+      correct: 0 // A[cite: 5]
+    },
+    {
+      q: "Pravidelná revízia predlžovacieho prívodu bez mechanického namáhania zaradeného do skupiny E podľa oblasti jeho používania sa vykonáva",
+      norm: "STN 33 1630:2025",
+      options: [
+        "1 x za 24 mesiacov",
+        "1 x za 6 mesiacov",
+        "1 x za 12 mesiacov"
+      ],
+      correct: 0 // A[cite: 5]
+    },
+    {
+      q: "Aký je účel revízií LPS",
+      norm: "STN EN 62305-3:2012",
+      options: [
+        "zistiť či LPS vyhovuje projektu podľa tejto normy, či sú všetky súčasti LPS v dobrom technickom stave, či sú všetky nové pridané inžinierske siete alebo konštrukcie začlenené do LPS",
+        "či sú všetky nové pridané inžinierske siete alebo konštrukcie začlenené do LPS, ktorý nemusí vyhovovať tejto norme",
+        "zistiť či LPS vyhovuje projektu podľa tejto normy, súčasti LPS nemusia byť v dobrom technickom stave"
+      ],
+      correct: 0 // A[cite: 5]
+    },
+    {
+      q: "Na základe akých údajov sa rozhoduje o ochrane stavby alebo inžinierskych sietí pred bleskom, rovnak ako o výberu ochranných opatrení",
+      norm: "STN EN 62305-1:2012",
+      options: [
+        "strata alebo úraz ľudského života, strata služieb pre verejnosť, strata kultúrneho dedičstva",
+        "vzdialenosť objektu od okolitých stavieb",
+        "hodnoty investície"
+      ],
+      correct: 0 // A[cite: 5]
+    }
   ];
 
-  let currentIndex = 0;
-  let userAnswers = new Array(questionsRT1.length).fill(null);
-  let secondsElapsed = 0;
-  let timerInterval = null;
+  let currentQuestionIndex = 0;
+  let userAnswers = new Array(questions.length).fill(null);
 
-  function startTimer() {
-    timerInterval = setInterval(() => {
-      secondsElapsed++;
-      const mins = Math.floor(secondsElapsed / 60).toString().padStart(2, '0');
-      const secs = (secondsElapsed % 60).toString().padStart(2, '0');
-      document.getElementById('timer').innerText = `Čas: ${mins}:${secs}`;
-    }, 1000);
-  }
+  const questionTextEl = document.getElementById("question-text");
+  const normTextEl = document.getElementById("norm-text");
+  const optionsContainerEl = document.getElementById("options-container");
+  const progressTextEl = document.getElementById("progress-text");
+  const prevBtn = document.getElementById("prev-btn");
+  const nextBtn = document.getElementById("next-btn");
 
   function loadQuestion() {
-    const q = questionsRT1[currentIndex];
-    document.getElementById('norm-tag').innerText = q.norm;
-    document.getElementById('question-text').innerText = `${currentIndex + 1}. ${q.q}`;
+    const qData = questions[currentQuestionIndex];
+    questionTextEl.textContent = `${currentQuestionIndex + 1}. ${qData.q}`;
+    normTextEl.textContent = qData.norm;
+    progressTextEl.textContent = `Otázka ${currentQuestionIndex + 1} z ${questions.length}`;
 
-    const optionsContainer = document.getElementById('options-container');
-    optionsContainer.innerHTML = '';
+    optionsContainerEl.innerHTML = "";
 
-    const options = [
-      { text: q.a, val: 0, label: 'A' },
-      { text: q.b, val: 1, label: 'B' },
-      { text: q.c, val: 2, label: 'C' }
-    ];
+    const prefixes = ["A)", "B)", "C)", "D)"];
+    const hasAnswered = userAnswers[currentQuestionIndex] !== null;
 
-    const selectedVal = userAnswers[currentIndex];
-
-    options.forEach(opt => {
-      const div = document.createElement('div');
-      let optClass = 'option';
-
-      if (selectedVal !== null) {
-        if (opt.val === q.correct) {
-          optClass += ' opt-correct'; // Správna odpoveď bude vždy zelená po výbere
-        } else if (opt.val === selectedVal && selectedVal !== q.correct) {
-          optClass += ' opt-incorrect'; // Zvolená nesprávna odpoveď bude červená
+    qData.options.forEach((opt, index) => {
+      const btn = document.createElement("button");
+      btn.className = "option-btn";
+      
+      if (hasAnswered) {
+        btn.disabled = true;
+        const selected = userAnswers[currentQuestionIndex];
+        if (index === qData.correct) {
+          btn.classList.add("correct");
+        }
+        if (selected === index && selected !== qData.correct) {
+          btn.classList.add("incorrect");
         }
       }
 
-      div.className = optClass;
-      div.onclick = () => selectOption(opt.val);
-
-      div.innerHTML = `
-        <input type="radio" name="q_opt" ${selectedVal === opt.val ? 'checked' : ''} ${selectedVal !== null ? 'disabled' : ''}>
-        <div><strong>${opt.label}:</strong> ${opt.text}</div>
-      `;
-      optionsContainer.appendChild(div);
+      btn.innerHTML = `<span class="prefix">${prefixes[index]}</span> <span>${opt}</span>`;
+      btn.onclick = () => selectOption(index);
+      optionsContainerEl.appendChild(btn);
     });
 
-    document.getElementById('prev-btn').style.visibility = currentIndex === 0 ? 'hidden' : 'visible';
-    if (currentIndex === questionsRT1.length - 1) {
-      document.getElementById('next-btn').style.display = 'none';
-      document.getElementById('submit-btn').style.display = 'block';
+    prevBtn.disabled = currentQuestionIndex === 0;
+    
+    if (currentQuestionIndex === questions.length - 1) {
+      nextBtn.textContent = "Dokončiť test";
     } else {
-      document.getElementById('next-btn').style.display = 'block';
-      document.getElementById('submit-btn').style.display = 'none';
+      nextBtn.textContent = "Nasledujúca >";
     }
-
-    const progress = ((currentIndex + 1) / questionsRT1.length) * 100;
-    document.getElementById('progress-bar').style.width = `${progress}%`;
   }
 
-  function selectOption(val) {
-    if (userAnswers[currentIndex] !== null) return; // Zabráni zmene po výbere
-    userAnswers[currentIndex] = val;
+  function selectOption(optionIndex) {
+    if (userAnswers[currentQuestionIndex] !== null) return;
+    
+    userAnswers[currentQuestionIndex] = optionIndex;
     loadQuestion();
   }
 
   function nextQuestion() {
-    if (currentIndex < questionsRT1.length - 1) {
-      currentIndex++;
+    if (currentQuestionIndex < questions.length - 1) {
+      currentQuestionIndex++;
       loadQuestion();
+    } else {
+      showResults();
     }
   }
 
   function prevQuestion() {
-    if (currentIndex > 0) {
-      currentIndex--;
+    if (currentQuestionIndex > 0) {
+      currentQuestionIndex--;
       loadQuestion();
     }
   }
 
-  function submitQuiz() {
-    clearInterval(timerInterval);
-
-    document.getElementById('quiz-screen').style.display = 'none';
-    document.getElementById('results-screen').style.display = 'block';
+  function showResults() {
+    document.getElementById("quiz-screen").style.display = "none";
+    document.getElementById("results-screen").style.display = "block";
 
     let score = 0;
-    userAnswers.forEach((ans, idx) => {
-      if (ans === questionsRT1[idx].correct) score++;
+    const reviewListEl = document.getElementById("review-list");
+    reviewListEl.innerHTML = "";
+
+    const prefixes = ["A", "B", "C", "D"];
+
+    questions.forEach((qData, index) => {
+      const userAns = userAnswers[index];
+      const isCorrect = userAns === qData.correct;
+      if (isCorrect) score++;
+
+      const reviewItem = document.createElement("div");
+      reviewItem.className = `review-item ${isCorrect ? 'correct' : 'incorrect'}`;
+
+      let userAnsText = userAns !== null ? `${prefixes[userAns]}) ${qData.options[userAns]}` : "Nezodpovedané";
+      let correctAnsText = `${prefixes[qData.correct]}) ${qData.options[qData.correct]}`;
+
+      reviewItem.innerHTML = `
+        <div class="review-q">${index + 1}. ${qData.q}</div>
+        <div class="review-norm">${qData.norm}</div>
+        <div class="review-ans">
+          <strong>Vaša odpoveď:</strong> ${userAnsText}<br>
+          ${!isCorrect ? `<strong>Správna odpoveď:</strong> ${correctAnsText}` : ""}
+        </div>
+      `;
+      reviewListEl.appendChild(reviewItem);
     });
 
-    const percent = Math.round((score / questionsRT1.length) * 100);
-    document.getElementById('score-val').innerText = `${percent}%`;
-    document.getElementById('score-text').innerText = `${score} zo ${questionsRT1.length} správne`;
-    
-    const mins = Math.floor(secondsElapsed / 60);
-    const secs = secondsElapsed % 60;
-    document.getElementById('time-spent-text').innerText = `Celkový čas riešenia: ${mins} min ${secs} s`;
+    const percentage = Math.round((score / questions.length) * 100);
+    document.getElementById("score-text").textContent = `${score} / ${questions.length}`;
+    document.getElementById("summary-text").textContent = `Úspešnosť: ${percentage}%`;
   }
 
-  function downloadPDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-
-    doc.setFont("Helvetica", "bold");
-    doc.setFontSize(16);
-    doc.text("Protokol z testu RT1", 14, 20);
-
-    doc.setFontSize(10);
-    doc.setFont("Helvetica", "normal");
-    
-    const mins = Math.floor(secondsElapsed / 60);
-    const secs = secondsElapsed % 60;
-    let score = 0;
-    userAnswers.forEach((ans, i) => { if (ans === questionsRT1[i].correct) score++; });
-    const percent = Math.round((score / questionsRT1.length) * 100);
-
-    doc.text(`Vyhodnotenie: ${score} / ${questionsRT1.length} (${percent}%)`, 14, 28);
-    doc.text(`Cas riesenia: ${mins} min ${secs} s`, 14, 34);
-
-    let y = 44;
-    questionsRT1.forEach((q, idx) => {
-      if (y > 270) {
-        doc.addPage();
-        y = 20;
-      }
-      const uAns = userAnswers[idx];
-      const isCorrect = uAns === q.correct;
-      const statusText = isCorrect ? "SPRAVNE" : `NESPRAVNE (Spravne: ${['A','B','C'][q.correct]})`;
-
-      doc.setFont("Helvetica", "bold");
-      doc.text(`${idx + 1}. [${q.norm}]`, 14, y);
-      y += 5;
-
-      doc.setFont("Helvetica", "normal");
-      const splitQ = doc.splitTextToSize(q.q, 180);
-      doc.text(splitQ, 14, y);
-      y += (splitQ.length * 4) + 1;
-
-      doc.text(`Vasa odpoved: ${uAns !== null ? ['A','B','C'][uAns] : 'Nezodpovedane'} - Status: ${statusText}`, 14, y);
-      y += 8;
-    });
-
-    doc.save("Vysledok_Test_RT1.pdf");
-  }
-
-  // Inicializácia
-  window.onload = () => {
+  function restartQuiz() {
+    userAnswers = new Array(questions.length).fill(null);
+    currentQuestionIndex = 0;
+    document.getElementById("results-screen").style.display = "none";
+    document.getElementById("quiz-screen").style.display = "block";
     loadQuestion();
-    startTimer();
-  };
+  }
+
+  // Inicializácia pri načítaní stránky
+  loadQuestion();
 </script>
+
 </body>
 </html>
