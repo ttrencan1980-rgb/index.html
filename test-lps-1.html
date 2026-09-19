@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test TSLPS1 - Ochrana pred bleskom a elektrotechnika</title>
+    <style>
+        :root {
+            --primary: #1e40af;
+            --primary-hover: #1d4ed8;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #0f172a;
+            --border: #e2e8f0;
+            --correct: #22c55e;
+            --incorrect: #ef4444;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin: 0;
+            color: var(--primary);
+        }
+
+        .timer {
+            font-weight: bold;
+            font-size: 1.1rem;
+            background: #e0e7ff;
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 6px;
+        }
+
+        .question-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid var(--border);
+        }
+
+        .question-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .question-norm {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 16px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            display: flex;
+            align-items: flex-start;
+            padding: 14px 16px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            text-align: left;
+            font-size: 1rem;
+            transition: all 0.2s;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .option-btn:hover:not(.disabled) {
+            border-color: var(--primary);
+            background-color: #f0f9ff;
+        }
+
+        .option-letter {
+            font-weight: bold;
+            margin-right: 12px;
+            min-width: 24px;
+        }
+
+        .option-btn.correct {
+            border-color: var(--correct);
+            background-color: #dcfce7;
+            color: #14532d;
+        }
+
+        .option-btn.incorrect {
+            border-color: var(--incorrect);
+            background-color: #fee2e2;
+            color: #7f1d1d;
+        }
+
+        .option-btn.disabled {
+            cursor: default;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background-color: #ffffff;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background-color: #f1f5f9;
+        }
+
+        .result-screen {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #e0e7ff;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 20px auto;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Test TSLPS1</h1>
+        <div class="timer" id="timer">00:00</div>
+    </header>
+
+    <main id="quiz-container">
+        <!-- Otázka sa nacita sem -->
+    </main>
+
+    <div class="navigation" id="nav-container">
+        <button class="btn btn-secondary" id="prev-btn" onclick="prevQuestion()">Predchádzajúca</button>
+        <button class="btn" id="next-btn" onclick="nextQuestion()">Nasledujúca &gt;</button>
+    </div>
+
+    <div id="result-container" class="result-screen hidden">
+        <h2>Výsledok testu</h2>
+        <div class="score-circle" id="score-display">0%</div>
+        <p id="score-text"></p>
+        <button class="btn" onclick="restartQuiz()">Opakovať test</button>
+    </div>
+</div>
+
+<script>
+const quizData = [
+    {
+        question: "Označenie rozvodnej siete TT znamená",
+        norm: "STN 33 2000-1:2009",
+        options: [
+            "elektrická sieť, ktorá má iba jeden priamo uzemnený bod zdroja a neživé časti inštalácie sú spojené s uzemňovačmi, ktoré sú elektricky nezávislé od uzemňovača napájacej siete.",
+            "elektrická striedavá sieť s neuzemneným bodom zdroja. Neživé časti el. spotrebičov sú spojené so samostatnými uzemňovačmi nezávislými od zdroja",
+            "elektrická striedavá sieť s uzemneným bodom zdroja, pričom jeden bod je priamo uzemnený pri zdroji a neživé časti inštalácie sú spojené s týmto bodom prostredníctvom ochranných vodičov"
+        ],
+        correct: 0
+    },
+    {
+        question: "Zariadenie s impulzným výdržným napätím zodpovedajúcim kategórii prepätia IV je zariadenie",
+        norm: "STN 33 2000-4-443:2017",
+        options: [
+            "vhodné na použitie v napájacom bode elektrických inštalácií alebo v jeho blízkosti, napríklad pred hlavným domovým rozvádzačom",
+            "určené na použitie v pevných elektrických inštaláciách v hlavnom domovom rozvádzači a za ním, s vysokým stupňom pohotovosti",
+            "vhodné na pripojenie na pevné elektrické inštalácie zabezpečujúce normálny stupeň pohotovosti zvyčajne vyžadovaný pre elektrické spotrebiče"
+        ],
+        correct: 0
+    },
+    {
+        question: "Obsah projektovej dokumentácie ktorá sa predkladá k stavebnému konaniu určuje",
+        norm: "vyhláška 453/2000 Z. z.",
+        options: [
+            "vyhláška č. 508/2009 Z. z.",
+            "zákon č. 124/2006 Z. z.",
+            "vyhláška č. 453/2000 Z. z."
+        ],
+        correct: 2
+    },
+    {
+        question: "VTZ elektrické zaradené do skupiny A je",
+        norm: "vyhláška 508/2009 Z. z.",
+        options: [
+            "elektrická inštalácia v priestore s vonkajším vplyvom vody AD3 až AD8 vrátane ochrany pred účinkami atmosférickej elektriny",
+            "elektrická inštalácia v priestore s vonkajším vplyvom vody z iného zdroja ako z dažďa AD2 až AD8 vrátane ochrany pred účinkami atmosférickej elektriny",
+            "elektrická inštalácia v priestore s vonkajším vplyvom vody z iného zdroja ako z dažďa AD3 až AD8 vrátane ochrany pred účinkami atmosférickej elektriny"
+        ],
+        correct: 2
+    },
+    {
+        question: "Elektrické zariadenia v priestoroch prístupných laikom a osobám poučeným musia mať vo všeobecnosti stupeň ochrany krytom aspoň",
+        norm: "STN 33 2000-4-41:2019",
+        options: [
+            "IP3X",
+            "IP2X",
+            "IP4X"
+        ],
+        correct: 1
+    },
+    {
+        question: "Vyrábať, montovať na mieste budúcej prevádzky a rekonštruovať vyhradené technické zariadenie možno iba podľa konštrukčnej dokumentácie, ku ktorej bolo vydané odborné stanovisko OPOm podľa § 14 ods. 1 písm. d) zákona, ktorým sa posudzuje konštrukčná dokumentácia",
+        norm: "vyhláška 508/2009 Z. z.",
+        options: [
+            "pri VTZ elektrickom sa odborné stanovisko k dokumentácii vyžaduje okrem skupiny C",
+            "pri VTZ elektrickom sa odborné stanovisko k dokumentácii nevyžaduje",
+            "pri VTZ elektrickom sa odborné stanovisko k dokumentácii vyžaduje iba na technické zariadenie skupiny A"
+        ],
+        correct: 2
+    },
+    {
+        question: "Označenie rozvodnej siete TN znamená",
+        norm: "STN 33 2000-1:2009",
+        options: [
+            "elektrická striedavá sieť s uzemneným bodom zdroja. Jeden bod priamo uzemnený pri zdroji neživé časti el. spotrebičov sú spojené s uzemňovačmi elektricky nezávislými od uzemňovacej siete",
+            "elektrická striedavá sieť s uzemneným bodom zdroja. Má iba jeden bod priamo uzemnený pri zdroji, neživé časti inštalácie sú spojené s týmto bodom prostredníctvom ochranných vodičov",
+            "elektrická striedavá sieť s uzemneným bodom zdroja. Jeden bod priamo uzemnený pri zdroji neživé časti el. spotrebičov sú spojené so samostatnými uzemňovačmi nezávislými od zdroja"
+        ],
+        correct: 1
+    },
+    {
+        question: "V jednosmerných obvodoch vodiče",
+        norm: "STN 33 2000-1:2009",
+        options: [
+            "PEL resp. PEM nie sú živými vodičmi aj keď prenášajú pracovný prúd",
+            "PEL resp. PEM nie sú živými vodičmi neprenášajú pracovný prúd",
+            "PEL resp. PEM sú živými vodičmi, prenášajú pracovný prúd"
+        ],
+        correct: 0
+    },
+    {
+        question: "Symbolom U0 pri vyhodnocovaní impedančnej slučky označujeme",
+        norm: "STN 33 2000-4-41:2019",
+        options: [
+            "menovité združené napätie medzi krajnými vodičmi vo voltoch (V)",
+            "menovité napätie krajného vodiča proti zemi vo voltoch (V)",
+            "menovité napätie krajného vodiča proti zemi vo voltoch (V) namerané pri zdroji v čase merania impedančnej slučky"
+        ],
+        correct: 1
+    },
+    {
+        question: "Signálne svietidlo červené znamená",
+        norm: "STN EN 60204-1:2019",
+        options: [
+            "príkaz na činnosť",
+            "nebezpečenstvo",
+            "výstrahu - varovanie"
+        ],
+        correct: 1
+    },
+    {
+        question: "Normy rady STN EN 62305 využívajú v celom rozsahu skrátené názvy. Čo znamená označenie LPL",
+        norm: "STN EN 62305-1:2012",
+        options: [
+            "Zóna ochrany pred bleskom",
+            "Systém ochrany pred bleskom",
+            "Úroveň ochrany pred bleskom"
+        ],
+        correct: 2
+    },
+    {
+        question: "Normy rady STN EN 62305 využívajú v celom rozsahu skrátené názvy. Čo znamená označenie LEMP",
+        norm: "STN EN 62305-1:2012",
+        options: [
+            "Elektromagnetický impulz vyvolaný bleskom",
+            "Úroveň ochrany pred bleskom",
+            "Zóna ochrany pred bleskom"
+        ],
+        correct: 0
+    },
+    {
+        question: "Ako je charakterizovaný čas trvania blesku T",
+        norm: "STN EN 62305-1:2012",
+        options: [
+            "čas, za ktorý v bode zásahu tečie bleskový prúd",
+            "čas, za ktorý bleskový prúd preteká do zeme",
+            "čas za ktorý trvá bleskový prúd"
+        ],
+        correct: 0
+    },
+    {
+        question: "Normy rady STN EN 62305 využívajú v celom rozsahu skrátené názvy. Čo znamená označenie LPZ",
+        norm: "STN EN 62305-1:2012",
+        options: [
+            "Zóna ochrany pred bleskom",
+            "Systém ochrany pred bleskom",
+            "Úroveň ochrany pred bleskom"
+        ],
+        correct: 0
+    },
+    {
+        question: "Ako sú označované základné typy škôd pri výpočtoch",
+        norm: "STN EN 62305-2:2013",
+        options: [
+            "D1 ľudské životy , D2 verejné služby , D3 porucha elektrických a elektronických systémov",
+            "D1 ľudské životy , D2 verejné služby , D3 kultúrne dedičstvo , D4 ekonomické",
+            "D1 úraz živých bytostí , D2 hmotná škoda , D3 porucha elektrických a elektronických systémov"
+        ],
+        correct: 2
+    },
+    {
+        question: "Aké riziko je povolené tam, kde údery blesku zahrňujú straty na ľudských životoch",
+        norm: "STN EN 62305-2:2013",
+        options: [
+            "10⁻⁵",
+            "10⁻⁴",
+            "10⁻³"
+        ],
+        correct: 0
+    },
+    {
+        question: "Ako je definované riziko R a čo táto hodnota predstavuje",
+        norm: "STN EN 62305-2:2013",
+        options: [
+            "Pravdepodobné priemerné ročné straty",
+            "Pravdepodobné priemerné straty po dobu životnosti",
+            "Pravdepodobné priemerné straty za 100 rokov"
+        ],
+        correct: 0
+    },
+    {
+        question: "Aké základné typy strát rozoznávame na chránenom objekte",
+        norm: "STN EN 62305-2:2013",
+        options: [
+            "L1 úraz živých bytostí , L2 hmotná škoda , L3 porucha elektrických a elektronických systémov",
+            "L1 strata ľudských životov , L2 strata služby pre verejnosť , L3 strata kultúrneho dedičstva , L4 strata ekonomickej hodnoty",
+            "L1 strata ľudských životov , L2 strata služby pre verejnosť , L3 strata kultúrneho dedičstva , L4 strata elektrických a elektronických systémov"
+        ],
+        correct: 1
+    },
+    {
+        question: "Aké sú prípustné metódy pre stanovenie umiestnenia zachytávacej sústavy",
+        norm: "STN EN 62305-3:2012",
+        options: [
+            "metóda výšky budovy a jej umiestnenia",
+            "metóda valivej gule, ochranného uhla, mriežkovej sústavy",
+            "iba metóda valivej gule"
+        ],
+        correct: 1
+    },
+    {
+        question: "Koľko zvodov je nutné inštalovať u neizolovaného (neoddialeného) LPS triedy III",
+        norm: "STN EN 62305-3:2012",
+        options: [
+            "na každých 10m",
+            "na každých 15m",
+            "na každých 20m"
+        ],
+        correct: 1
+    },
+    {
+        question: "Pre aké prípady je vhodný návrh umiestnenia zachytávacej sústavy metódou mriežkovej sústavy",
+        norm: "STN EN 62305-3:2012",
+        options: [
+            "pre všetky",
+            "pre rovinné plochy",
+            "pre jednoduché tvary budov obmedzených výškou budovy určovaných triedou LPS"
+        ],
+        correct: 1
+    },
+    {
+        question: "Kde sa vykoná ekvipotenciálne pospájanie proti blesku vonkajších vodivých častí stavby",
+        norm: "STN EN 62305-3:2012",
+        options: [
+            "sa musí urobiť pri vonkajších kovových častiach čo najbližšie k vstupu chránenej stavby",
+            "sa doporučuje urobiť pri vonkajších kovových častiach čo najďalej od vstupu chránenej stavby",
+            "sa musí urobiť pri vonkajších kovových častiach čo najďalej od vstupu chránenej stavby"
+        ],
+        correct: 0
+    },
+    {
+        question: "K zabráneniu nebezpečných rozdielov potenciálov medzi všetkými zariadeniami vo vnútri vnútorných LPZ je využívaná mriežková sústava. Aká je typická šírka ôk tejto mriežkovej sústavy",
+        norm: "STN EN 62305-4:2013",
+        options: [
+            "5 m",
+            "15 m",
+            "10 m"
+        ],
+        correct: 0
+    },
+    {
+        question: "Vhodné uzemnenie a pospájanie je založené na kompletnom systéme uzemnení. Čo tento systém zahrňuje",
+        norm: "STN EN 62305-4:2013",
+        options: [
+            "kompletný systém spája uzemňovaciu sústavu a zachytávaciu sústavu",
+            "kompletný systém spája uzemňovaciu sústavu a sieť pospájania",
+            "kompletný systém spája uzemňovaciu sústavu a zvodovú sústavu"
+        ],
+        correct: 1
+    },
+    {
+        question: "Ako musí byť vykonané ekvipotenciálne pospájanie tam, kde je definovaná zóna ochrany (LPZ) pred bleskom",
+        norm: "STN EN 62305-4:2013",
+        options: [
+            "nemusí sa vykonať",
+            "cez prípojnice vyrovnania potenciálov čo najbližšie k vstupnému bodu LPZ",
+            "cez prípojnice vyrovnania potenciálov čo najďalej od vstupného bodu LPZ"
+        ],
+        correct: 1
+    },
+    {
+        question: "Aké základné ochranné opatrenia v LPMS sa dajú zahrnúť medzi základné opatrenia proti LEMP",
+        norm: "STN EN 62305-4:2013",
+        options: [
+            "uzemnenie a pospájanie, magnetické tienenie a trasy vedení, koordinovaná LPS ochrana",
+            "uzemnenie a pospájanie, magnetické tienenie a trasy vedení, koordinovaná SPD ochrana",
+            "uzemnenie a pospájanie, magnetické tienenie a trasy vedení, koordinovaná LPL ochrana"
+        ],
+        correct: 1
+    },
+    {
+        question: "Po akých úsekoch by mali byť uzemnené alebo spojené s povrchovým alebo tyčovým zemničom nadzemné kovové potrubia mimo technologických zariadení",
+        norm: "STN EN 62305-3:2012",
+        options: [
+            "20 m",
+            "40 m",
+            "30 m"
+        ],
+        correct: 2
+    },
+    {
+        question: "Akú metódu možno použiť pre stanovenie umiestnenia zachytávacej sústavy u stavieb s nebezpečenstvom výbuchu",
+        norm: "STN EN 62305-3:2012",
+        options: [
+            "metóda valivej gule",
+            "metóda oddialeného LPS",
+            "metóda mriežkovej sústavy"
+        ],
+        correct: 0
+    },
+    {
+        question: "Vyžadujú nádrže a potrubia uložené v zemi inštaláciu zachytávacej sústavy",
+        norm: "STN EN 62305-3:2012",
+        options: [
+            "nie ak plášť nádrže z ocele hrúbky min 5 mm",
+            "nie ak plášť nádrže z hliníka hrúbky min 5 mm",
+            "nie ak plášť nádrže z medi hrúbky min 5 mm"
+        ],
+        correct: 0
+    },
+    {
+        question: "Aké ďalšie dodatočné ochranné opatrenia sú nutné pri stavbách, ktoré majú definované priestory so zónami 2 a 22",
+        norm: "STN EN 62305-3:2012",
+        options: [
+            "nie sú nevyhnutné žiadne ďalšie dodatočné ochranné opatrenia",
+            "je potrebná inštalácia oddeľovacích iskrisk",
+            "je potrebná inštalácia oddeľovacích iskrisk a SPD"
+        ],
+        correct: 0
+    }
+];
+
+let currentQuestion = 0;
+let userAnswers = new Array(quizData.length).fill(null);
+let secondsElapsed = 0;
+let timerInterval;
+
+function startTimer() {
+    timerInterval = setInterval(() => {
+        secondsElapsed++;
+        const mins = Math.floor(secondsElapsed / 60).toString().padStart(2, '0');
+        const secs = (secondsElapsed % 60).toString().padStart(2, '0');
+        document.getElementById('timer').innerText = `${mins}:${secs}`;
+    }, 1000);
+}
+
+function renderQuestion() {
+    const quizContainer = document.getElementById('quiz-container');
+    const q = quizData[currentQuestion];
+    
+    let html = `
+        <div class="question-card">
+            <div class="question-title">${currentQuestion + 1}. ${q.question}</div>
+            <div class="question-norm">${q.norm}</div>
+            <div class="options">
+    `;
+
+    q.options.forEach((opt, idx) => {
+        const letter = String.fromCharCode(65 + idx);
+        let statusClass = '';
+        
+        if (userAnswers[currentQuestion] !== null) {
+            statusClass = 'disabled ';
+            if (idx === q.correct) {
+                statusClass += 'correct';
+            } else if (idx === userAnswers[currentQuestion]) {
+                statusClass += 'incorrect';
+            }
+        }
+
+        html += `
+            <button class="option-btn ${statusClass}" onclick="selectAnswer(${idx})" ${userAnswers[currentQuestion] !== null ? 'disabled' : ''}>
+                <span class="option-letter">${letter})</span>
+                <span>${opt}</span>
+            </button>
+        `;
+    });
+
+    html += `
+            </div>
+        </div>
+    `;
+
+    quizContainer.innerHTML = html;
+
+    document.getElementById('prev-btn').style.visibility = currentQuestion === 0 ? 'hidden' : 'visible';
+    
+    if (currentQuestion === quizData.length - 1) {
+        document.getElementById('next-btn').innerText = 'Vyhodnotiť test';
+    } else {
+        document.getElementById('next-btn').innerText = 'Nasledujúca >';
+    }
+}
+
+function selectAnswer(index) {
+    if (userAnswers[currentQuestion] === null) {
+        userAnswers[currentQuestion] = index;
+        renderQuestion();
+    }
+}
+
+function nextQuestion() {
+    if (currentQuestion < quizData.length - 1) {
+        currentQuestion++;
+        renderQuestion();
+    } else {
+        showResults();
+    }
+}
+
+function prevQuestion() {
+    if (currentQuestion > 0) {
+        currentQuestion--;
+        renderQuestion();
+    }
+}
+
+function showResults() {
+    clearInterval(timerInterval);
+    document.getElementById('quiz-container').classList.add('hidden');
+    document.getElementById('nav-container').classList.add('hidden');
+    
+    let correctCount = 0;
+    userAnswers.forEach((ans, idx) => {
+        if (ans === quizData[idx].correct) {
+            correctCount++;
+        }
+    });
+
+    const scorePct = Math.round((correctCount / quizData.length) * 100);
+    const resultScreen = document.getElementById('result-container');
+    
+    document.getElementById('score-display').innerText = `${scorePct}%`;
+    document.getElementById('score-text').innerText = `Správne ste odpovedali na ${correctCount} z ${quizData.length} otázok.`;
+    
+    resultScreen.classList.remove('hidden');
+}
+
+function restartQuiz() {
+    currentQuestion = 0;
+    userAnswers = new Array(quizData.length).fill(null);
+    secondsElapsed = 0;
+    
+    document.getElementById('result-container').classList.add('hidden');
+    document.getElementById('quiz-container').classList.remove('hidden');
+    document.getElementById('nav-container').classList.remove('hidden');
+    
+    clearInterval(timerInterval);
+    startTimer();
+    renderQuestion();
+}
+
+// Inicializácia
+startTimer();
+renderQuestion();
+</script>
+
+</body>
+</html>
