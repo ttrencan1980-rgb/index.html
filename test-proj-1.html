@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test_proj_1 - Projektovanie a elektrotechnika</title>
+    <style>
+        :root {
+            --primary: #1e40af;
+            --primary-hover: #1d4ed8;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #0f172a;
+            --border: #e2e8f0;
+            --correct: #22c55e;
+            --incorrect: #ef4444;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn-back {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-back:hover {
+            background-color: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+
+        h1 {
+            font-size: 1.4rem;
+            margin: 0;
+            color: var(--primary);
+        }
+
+        .timer {
+            font-weight: bold;
+            font-size: 1.1rem;
+            background: #e0e7ff;
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 6px;
+            white-space: nowrap;
+        }
+
+        .question-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid var(--border);
+        }
+
+        .question-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .question-norm {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 16px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            display: flex;
+            align-items: flex-start;
+            padding: 14px 16px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            text-align: left;
+            font-size: 1rem;
+            transition: all 0.2s;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .option-btn:hover:not(.disabled) {
+            border-color: var(--primary);
+            background-color: #f0f9ff;
+        }
+
+        .option-letter {
+            font-weight: bold;
+            margin-right: 12px;
+            min-width: 24px;
+        }
+
+        .option-btn.correct {
+            border-color: var(--correct);
+            background-color: #dcfce7;
+            color: #14532d;
+        }
+
+        .option-btn.incorrect {
+            border-color: var(--incorrect);
+            background-color: #fee2e2;
+            color: #7f1d1d;
+        }
+
+        .option-btn.disabled {
+            cursor: default;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background-color: #ffffff;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background-color: #f1f5f9;
+        }
+
+        .result-screen {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #e0e7ff;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 20px auto;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="header-left">
+            <button class="btn-back" onclick="goBack()">&#8592; Domov</button>
+            <h1>test_proj_1</h1>
+        </div>
+        <div class="timer" id="timer">00:00</div>
+    </header>
+
+    <main id="quiz-container">
+        <!-- Otázka sa načita sem -->
+    </main>
+
+    <div class="navigation" id="nav-container">
+        <button class="btn btn-secondary" id="prev-btn" onclick="prevQuestion()">Predchádzajúca</button>
+        <button class="btn" id="next-btn" onclick="nextQuestion()">Nasledujúca &gt;</button>
+    </div>
+
+    <div id="result-container" class="result-screen hidden">
+        <h2>Výsledok testu</h2>
+        <div class="score-circle" id="score-display">0%</div>
+        <p id="score-text"></p>
+        <div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px;">
+            <button class="btn btn-secondary" onclick="goBack()">Späť na prehľad</button>
+            <button class="btn" onclick="restartQuiz()">Opakovať test</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const quizData = [
+    {
+        question: "Elektrické spotrebiče triedy I. sú",
+        norm: "STN 33 2000-4-41:2019",
+        options: [
+            "s privedeným ochranným vodičom. Ochrana pred úrazom el. prúdom je zaistená dvojitou izoláciou a pripojením ochranného vodiča na ochrannú svorku",
+            "s privedeným ochranným vodičom. Ochrana pred úrazom el. prúdom je zaistená dvojitou izoláciou a pripojením neživej časti k ochrannému vodiču",
+            "s privedeným ochranným vodičom. Ochrana pred úrazom el. prúdom je zaistená základnou izoláciou a pripojením neživej časti k ochrannému vodiču"
+        ],
+        correct: 2
+    },
+    {
+        question: "Čo je to schéma",
+        norm: "STN EN 61082-1:2015",
+        options: [
+            "uvedenie informácií pomocou výkresov, kde pre vyznačenie predmetov a ich vzájomných vzťahov používame grafické značky",
+            "uvedenie informácií pomocou výkresov, kde sú znázornené objekty prevažne v mierke k vzájomnému vzťahu",
+            "uvedenie informácií pomocou výkresov, kde sú vyznačené vzťahy medzi dvoma a viac premennými veličinami a operáciami"
+        ],
+        correct: 0
+    },
+    {
+        question: "Signálne svietidlo červené znamená",
+        norm: "STN EN 60204-1:2019",
+        options: [
+            "príkaz na činnosť",
+            "výstrahu - varovanie",
+            "nebezpečenstvo"
+        ],
+        correct: 2
+    },
+    {
+        question: "Označenie rozvodnej siete TN-S znamená",
+        norm: "STN 33 2000-4-41:2019",
+        options: [
+            "elektrická striedavá sieť s uzemneným bodom zdroja. Neživé časti el. spotrebičov sú spojené s uzemňovačmi elektricky nezávislými od uzemňovacej siete . Funkcia neutrálneho a ochranného vodiča je zlúčená do jedného kombinovaného vodiča PEN",
+            "elektrická striedavá sieť s uzemneným bodom zdroja. Neživé časti el. spotrebičov sú s týmto bodom spojené. Funkcia neutrálneho a ochranného vodiča je zlúčená do jedného kombinovaného vodiča PEN",
+            "elektrická striedavá sieť s uzemneným bodom zdroja. Neživé časti el. spotrebičov sú s týmto bodom spojené cez ochranný vodič PE. Funkcia neutrálneho a ochranného vodiča je samostatná"
+        ],
+        correct: 2
+    },
+    {
+        question: "Čo je to diagram",
+        norm: "STN EN 61082-1:2015",
+        options: [
+            "uvedenie informácií pomocou výkresov, kde sú vyznačené vzťahy medzi dvoma a viac premennými veličinami a operáciami",
+            "uvedenie informácií pomocou výkresov, kde sú znázornené objekty prevažne v mierke k vzájomnému vzťahu",
+            "uvedenie informácií pomocou výkresov, kde pre vyznačenie predmetov a ich vzájomných vzťahov používame grafické značky"
+        ],
+        correct: 0
+    },
+    {
+        question: "VTZ elektrické zaradené do skupiny A je",
+        norm: "vyhláška 508/2009 Z. z.",
+        options: [
+            "elektrická inštalácia v objekte určenom na zhromažďovanie viac ako 300 osôb v jednom priestore vrátane ochrany pred účinkami atmosférickej elektriny",
+            "elektrická inštalácia v objekte určenom na zhromažďovanie viac ako 250 osôb v jednom priestore vrátane ochrany pred účinkami atmosférickej elektriny",
+            "elektrická inštalácia v objekte určenom na zhromažďovanie viac ako 200 osôb v jednom priestore vrátane ochrany pred účinkami atmosférickej elektriny"
+        ],
+        correct: 1
+    },
+    {
+        question: "Autorizovaným stavebným inžinierom je ten, kto je zapísaný v zozname autorizovaných stavebných inžinierov",
+        norm: "zákon 237/2000 Z. z.",
+        options: [
+            "v zmysle zákona č. 237/2000 Z. z. oprávnenou osobou",
+            "v zmysle zákona č. 124/2006 Z. z. oprávnenou osobou",
+            "v zmysle vyhlášky č. 508/2009 Z. z. oprávnenou osobou"
+        ],
+        correct: 0
+    },
+    {
+        question: "Vyrábať, montovať na mieste budúcej prevádzky a rekonštruovať vyhradené technické zariadenie možno iba podľa konštrukčnej dokumentácie, ku ktorej bolo vydané odborné stanovisko OPOm podľa § 14 ods. 1 písm. d) zákona, ktorým sa posudzuje konštrukčná dokumentácia",
+        norm: "vyhláška 508/2009 Z. z.",
+        options: [
+            "pri VTZ elektrickom sa odborné stanovisko k dokumentácii vyžaduje okrem skupiny C",
+            "pri VTZ elektrickom sa odborné stanovisko k dokumentácii nevyžaduje",
+            "pri VTZ elektrickom sa odborné stanovisko k dokumentácii vyžaduje iba na technické zariadenie skupiny A"
+        ],
+        correct: 2
+    },
+    {
+        question: "V zmysle zákona č. 25/2025 Z. z. generálny projektant zodpovedá",
+        norm: "zákon 25/2025 Z. z.",
+        options: [
+            "za použiteľnosť projektovej dokumentácie a bezpečnosť práce počas realizácie stavby",
+            "za úplnosť projektovej dokumentácie a bezpečnosť práce počas realizácie stavby",
+            "za komplexnosť a úplnosť projektovej dokumentácie a jej použiteľnosť"
+        ],
+        correct: 2
+    },
+    {
+        question: "Podkladom pre konanie na stavebnom úrade je okrem stavebného zámeru aj správa o prerokovaní stavebného zámeru. Kto ju vypracuje?",
+        norm: "zákon 25/2025 Z. z.",
+        options: [
+            "stavebník, alebo ním poverený projektant",
+            "stavebný inšpektorát",
+            "stavebný úrad"
+        ],
+        correct: 0
+    }
+];
+
+let currentQuestion = 0;
+let userAnswers = new Array(quizData.length).fill(null);
+let secondsElapsed = 0;
+let timerInterval;
+
+function startTimer() {
+    timerInterval = setInterval(() => {
+        secondsElapsed++;
+        const mins = Math.floor(secondsElapsed / 60).toString().padStart(2, '0');
+        const secs = (secondsElapsed % 60).toString().padStart(2, '0');
+        document.getElementById('timer').innerText = `${mins}:${secs}`;
+    }, 1000);
+}
+
+function renderQuestion() {
+    const quizContainer = document.getElementById('quiz-container');
+    const q = quizData[currentQuestion];
+    
+    let html = `
+        <div class="question-card">
+            <div class="question-title">${currentQuestion + 1}. ${q.question}</div>
+            <div class="question-norm">${q.norm}</div>
+            <div class="options">
+    `;
+
+    q.options.forEach((opt, idx) => {
+        const letter = String.fromCharCode(65 + idx);
+        let statusClass = '';
+        
+        if (userAnswers[currentQuestion] !== null) {
+            statusClass = 'disabled ';
+            if (idx === q.correct) {
+                statusClass += 'correct';
+            } else if (idx === userAnswers[currentQuestion]) {
+                statusClass += 'incorrect';
+            }
+        }
+
+        html += `
+            <button class="option-btn ${statusClass}" onclick="selectAnswer(${idx})" ${userAnswers[currentQuestion] !== null ? 'disabled' : ''}>
+                <span class="option-letter">${letter})</span>
+                <span>${opt}</span>
+            </button>
+        `;
+    });
+
+    html += `
+            </div>
+        </div>
+    `;
+
+    quizContainer.innerHTML = html;
+
+    document.getElementById('prev-btn').style.visibility = currentQuestion === 0 ? 'hidden' : 'visible';
+    
+    if (currentQuestion === quizData.length - 1) {
+        document.getElementById('next-btn').innerText = 'Vyhodnotiť test';
+    } else {
+        document.getElementById('next-btn').innerText = 'Nasledujúca >';
+    }
+}
+
+function selectAnswer(index) {
+    if (userAnswers[currentQuestion] === null) {
+        userAnswers[currentQuestion] = index;
+        renderQuestion();
+    }
+}
+
+function nextQuestion() {
+    if (currentQuestion < quizData.length - 1) {
+        currentQuestion++;
+        renderQuestion();
+    } else {
+        showResults();
+    }
+}
+
+function prevQuestion() {
+    if (currentQuestion > 0) {
+        currentQuestion--;
+        renderQuestion();
+    }
+}
+
+function showResults() {
+    clearInterval(timerInterval);
+    document.getElementById('quiz-container').classList.add('hidden');
+    document.getElementById('nav-container').classList.add('hidden');
+    
+    let correctCount = 0;
+    userAnswers.forEach((ans, idx) => {
+        if (ans === quizData[idx].correct) {
+            correctCount++;
+        }
+    });
+
+    const scorePct = Math.round((correctCount / quizData.length) * 100);
+    const resultScreen = document.getElementById('result-container');
+    
+    document.getElementById('score-display').innerText = `${scorePct}%`;
+    document.getElementById('score-text').innerText = `Správne ste odpovedali na ${correctCount} z ${quizData.length} otázok.`;
+    
+    resultScreen.classList.remove('hidden');
+}
+
+function restartQuiz() {
+    currentQuestion = 0;
+    userAnswers = new Array(quizData.length).fill(null);
+    secondsElapsed = 0;
+    
+    document.getElementById('result-container').classList.add('hidden');
+    document.getElementById('quiz-container').classList.remove('hidden');
+    document.getElementById('nav-container').classList.remove('hidden');
+    
+    clearInterval(timerInterval);
+    startTimer();
+    renderQuestion();
+}
+
+function goBack() {
+    window.location.href = 'index.html'; 
+}
+
+// Inicializácia
+startTimer();
+renderQuestion();
+</script>
+
+</body>
+</html>1.
