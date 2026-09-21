@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Proj 2 - Revízny technik (10 otázok)</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    body {
+      background-color: #f4f6f8;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .quiz-container {
+      background: #ffffff;
+      max-width: 800px;
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      padding: 25px;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #eef2f5;
+      padding-bottom: 15px;
+      margin-bottom: 20px;
+    }
+    .header h2 {
+      margin: 0;
+      color: #1e293b;
+      font-size: 1.4rem;
+    }
+    .progress {
+      font-weight: 600;
+      color: #64748b;
+    }
+    .question-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #0f172a;
+      margin-bottom: 5px;
+      line-height: 1.4;
+    }
+    .question-norm {
+      color: #64748b;
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+    }
+    .options-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+    .option-btn {
+      background-color: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 14px 18px;
+      text-align: left;
+      font-size: 1rem;
+      color: #334155;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      line-height: 1.4;
+    }
+    .option-btn:hover:not(:disabled) {
+      border-color: #2563eb;
+      background-color: #f8fafc;
+    }
+    .option-btn.selected {
+      border-color: #2563eb;
+      background-color: #eff6ff;
+    }
+    .option-btn.correct {
+      background-color: #86efac !important;
+      border-color: #22c55e !important;
+      color: #064e3b !important;
+      font-weight: 600;
+    }
+    .option-btn.incorrect {
+      background-color: #fca5a5 !important;
+      border-color: #ef4444 !important;
+      color: #7f1d1d !important;
+    }
+    .navigation {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 2px solid #eef2f5;
+      padding-top: 20px;
+    }
+    .nav-btn {
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #334155;
+      transition: background 0.2s;
+    }
+    .nav-btn:hover:not(:disabled) {
+      background-color: #f1f5f9;
+    }
+    .nav-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .primary-btn {
+      background-color: #2563eb;
+      color: #ffffff;
+      border: none;
+    }
+    .primary-btn:hover:not(:disabled) {
+      background-color: #1d4ed8;
+    }
+    .results-container {
+      text-align: center;
+      padding: 20px 0;
+    }
+    .results-container h3 {
+      font-size: 1.8rem;
+      color: #0f172a;
+      margin-bottom: 10px;
+    }
+    .score {
+      font-size: 1.3rem;
+      color: #334155;
+      margin-bottom: 25px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="quiz-container">
+  <div class="header">
+    <h2>Test Proj 2 - Odborná spôsobilosť</h2>
+    <div class="progress" id="progress">Otázka 1 z 10</div>
+  </div>
+
+  <div id="quiz-body">
+    <div class="question-title" id="question-text"></div>
+    <div class="question-norm" id="norm-text"></div>
+
+    <div class="options-container" id="options-container"></div>
+
+    <div class="navigation">
+      <button class="nav-btn" id="prev-btn" onclick="prevQuestion()">&lt; Predchádzajúca</button>
+      <button class="nav-btn primary-btn" id="next-btn" onclick="nextQuestion()">Nasledujúca &gt;</button>
+    </div>
+  </div>
+
+  <div id="results-body" class="results-container" style="display: none;">
+    <h3>Test bol dokončený!</h3>
+    <div class="score" id="score-text"></div>
+    <button class="nav-btn primary-btn" onclick="restartQuiz()">Spustiť test znova</button>
+  </div>
+</div>
+
+<script>
+  const questions = [
+    {
+      q: "Označenie rozvodnej siete TN-S znamená",
+      norm: "STN 33 2000-4-41:2019",
+      options: [
+        "elektrická striedavá sieť s uzemneným bodom zdroja. Neživé časti el. spotrebičov sú s týmto bodom spojené cez ochranný vodič PE. Funkcia neutrálneho a ochranného vodiča je samostatná",
+        "elektrická striedavá sieť s uzemneným bodom zdroja. Neživé časti el. spotrebičov sú s týmto bodom spojené. Funkcia neutrálneho a ochranného vodiča je zlúčená do jednoho kombinovaného vodiča PEN",
+        "elektrická striedavá sieť s uzemneným bodom zdroja. Neživé časti el. spotrebičov sú spojené s uzemňovačmi elektricky nezávislými od uzemňovacej siete . Funkcia neutrálneho a ochranného vodiča je zlúčená do jednoho kombinovaného vodiča PEN"
+      ],
+      correct: 0
+    },
+    {
+      q: "VTZ elektrické zaradené do skupiny A je",
+      norm: "vyhláška 508/2009 Z. z.",
+      options: [
+        "elektrická inštalácia v objekte určenom na zhromažďovanie viac ako 300 osôb v jednom priestore vrátane ochrany pred účinkami atmosférickej elektriny",
+        "elektrická inštalácia v objekte určenom na zhromažďovanie viac ako 200 osôb v jednom priestore vrátane ochrany pred účinkami atmosférickej elektriny",
+        "elektrická inštalácia v objekte určenom na zhromažďovanie viac ako 250 osôb v jednom priestore vrátane ochrany pred účinkami atmosférickej elektriny"
+      ],
+      correct: 2
+    },
+    {
+      q: "V jednosmerných obvodoch vodiče",
+      norm: "STN 33 2000-1:2009",
+      options: [
+        "PEL resp, PEM nie sú živými vodičmi neprenášajú pracovný prúd",
+        "PEL resp, PEM nie sú živými vodičmi aj keď prenášajú pracovný prúd",
+        "PEL resp, PEM sú živými vodičmi, prenášajú pracovný prúd"
+      ],
+      correct: 1
+    },
+    {
+      q: "Projektant ktorý nie je oprávnená osoba pre projektovanie v zmysle zákona č. 237/2000 Z. z. môže",
+      norm: "zákon 237/2000 Z. z.",
+      options: [
+        "vypracovať projekt stavieb potrebného na vydanie stavebného povolenia",
+        "vykonávať stavebný dozor",
+        "vypracovať projekt stavieb potrebného na vydanie odborného stanoviska ku konštrukčnej dokumentácii v zmysle vyhlášky č. 508/2009 Z. z."
+      ],
+      correct: 2
+    },
+    {
+      q: "Čo je to schéma",
+      norm: "STN EN 61082-1:2015",
+      options: [
+        "uvedenie informácií pomocou výkresov, kde sú znázornené objekty prevažne v mierke k vzájomnému vzťahu",
+        "uvedenie informácií pomocou výkresov, kde sú vyznačené vzťahy medzi dvoma a viac premennými veličinami a operáciami",
+        "uvedenie informácií pomocou výkresov, kde pre vyznačenie predmetov a ich vzájomných vzťahov používame grafické značky"
+      ],
+      correct: 2
+    },
+    {
+      q: "Signálne svietidlo červené znamená",
+      norm: "STN EN 60204-1:2019",
+      options: [
+        "príkaz na činnosť",
+        "výstrahu - varovanie",
+        "nebezpečenstvo"
+      ],
+      correct: 2
+    },
+    {
+      q: "V jednosmerných obvodoch vodič PEL",
+      norm: "STN 33 2000-1:2009",
+      options: [
+        "je v dvojvodičovom obvode",
+        "sa nenachádza",
+        "je v trojvodičovom obvode"
+      ],
+      correct: 0
+    },
+    {
+      q: "Elektrické zariadenia v priestoroch prístupných laikom a osobám poučeným musia mať vo všeobecnosti stupeň ochrany krytom aspoň",
+      norm: "STN 33 2000-4-41:2019",
+      options: [
+        "IP4X",
+        "IP3X",
+        "IP2X"
+      ],
+      correct: 2
+    },
+    {
+      q: "Generálnym projektantom a projektantom časti projektovej dokumentácie, podľa §35 zákona 25/2025 Z.z.",
+      norm: "zákon 25/2025 Z. z.",
+      options: [
+        "nemusí byť oprávnená osoba",
+        "môže byť osoba s príslušným odborným vzdelaním",
+        "môže byť len oprávnená osoba"
+      ],
+      correct: 2
+    },
+    {
+      q: "Stavba musí byť naprojektovaná tak, aby zodpovedala základným požiadavkám na stavby, stavebno-technickým požiadavkám na výstavbu a všeobecným technickým požiadavkám na bezbariérovú prístupnosť a užívanie stavieb",
+      norm: "zákon 25/2025 Z. z.",
+      options: [
+        "maximálne 50 rokov",
+        "po celý čas životnosti",
+        "podľa zadania investora"
+      ],
+      correct: 1
+    }
+  ];
+
+  let currentQuestion = 0;
+  let userAnswers = new Array(questions.length).fill(null);
+
+  function loadQuestion() {
+    const q = questions[currentQuestion];
+    document.getElementById('progress').innerText = `Otázka ${currentQuestion + 1} z ${questions.length}`;
+    document.getElementById('question-text').innerText = `${currentQuestion + 1}. ${q.q}`;
+    document.getElementById('norm-text').innerText = q.norm;
+
+    const optionsContainer = document.getElementById('options-container');
+    optionsContainer.innerHTML = '';
+
+    const letters = ['A)', 'B)', 'C)'];
+
+    q.options.forEach((opt, index) => {
+      const btn = document.createElement('button');
+      btn.className = 'option-btn';
+
+      if (userAnswers[currentQuestion] !== null) {
+        if (index === q.correct) {
+          btn.classList.add('correct');
+        } else if (index === userAnswers[currentQuestion]) {
+          btn.classList.add('incorrect');
+        }
+      }
+
+      btn.innerHTML = `<strong>${letters[index]}</strong> <span>${opt}</span>`;
+      btn.onclick = () => selectOption(index);
+      optionsContainer.appendChild(btn);
+    });
+
+    document.getElementById('prev-btn').disabled = currentQuestion === 0;
+    
+    if (currentQuestion === questions.length - 1) {
+      document.getElementById('next-btn').innerText = 'Dokončiť test';
+    } else {
+      document.getElementById('next-btn').innerText = 'Nasledujúca >';
+    }
+  }
+
+  function selectOption(index) {
+    userAnswers[currentQuestion] = index;
+    loadQuestion();
+  }
+
+  function prevQuestion() {
+    if (currentQuestion > 0) {
+      currentQuestion--;
+      loadQuestion();
+    }
+  }
+
+  function nextQuestion() {
+    if (currentQuestion < questions.length - 1) {
+      currentQuestion++;
+      loadQuestion();
+    } else {
+      showResults();
+    }
+  }
+
+  function showResults() {
+    document.getElementById('quiz-body').style.display = 'none';
+    document.getElementById('results-body').style.display = 'block';
+
+    let score = 0;
+    questions.forEach((q, i) => {
+      if (userAnswers[i] === q.correct) score++;
+    });
+
+    const percentage = Math.round((score / questions.length) * 100);
+    document.getElementById('score-text').innerHTML = `Získali ste <strong>${score}</strong> z <strong>${questions.length}</strong> bodov (${percentage}%).`;
+  }
+
+  function restartQuiz() {
+    currentQuestion = 0;
+    userAnswers = new Array(questions.length).fill(null);
+    document.getElementById('quiz-body').style.display = 'block';
+    document.getElementById('results-body').style.display = 'none';
+    loadQuestion();
+  }
+
+  loadQuestion();
+</script>
+
+</body>
+</html>
