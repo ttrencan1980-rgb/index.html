@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <title>Správa - Kód pre tento týždeň</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f4f6f9;
+    }
+    .card {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .code {
+      font-size: 3em;
+      font-weight: bold;
+      color: #0056b3;
+      margin-top: 15px;
+      letter-spacing: 4px;
+    }
+    .master {
+      margin-top: 25px;
+      padding-top: 15px;
+      border-top: 1px solid #eee;
+      font-size: 0.95em;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2>Platný kód pre používateľov tento týždeň:</h2>
+    <div id="code" class="code">----</div>
+    <div class="master">Tvoj trvalý hlavný kód: <strong>2206</strong></div>
+  </div>
+
+  <script>
+    function getWeeklyCode() {
+      const now = new Date();
+      const d = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+      const dayNum = d.getUTCDay() || 7;
+      d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+      const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+      const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+      const year = d.getUTCFullYear();
+
+      let rawVal = (weekNo * 7393 + year * 17) % 9000 + 1000;
+      return String(rawVal);
+    }
+
+    document.getElementById("code").innerText = getWeeklyCode();
+  </script>
+
+</body>
+</html>
