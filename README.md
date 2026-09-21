@@ -52,11 +52,13 @@
     }
     .pass-input {
       padding: 12px;
-      font-size: 16px;
+      font-size: 18px;
+      letter-spacing: 4px;
+      font-weight: bold;
       border: 1.5px solid #cbd5e1;
       border-radius: 8px;
       width: 100%;
-      max-width: 250px;
+      max-width: 200px;
       margin-bottom: 12px;
       text-align: center;
     }
@@ -82,10 +84,10 @@
     }
     .key-placeholder {
       margin-top: 20px;
-      font-size: 13px;
+      font-size: 14px;
       color: #64748b;
       font-weight: 600;
-      letter-spacing: 1px;
+      letter-spacing: 2px;
     }
 
     /* Štýly pre sekcie a kategórie */
@@ -172,11 +174,11 @@
   <!-- FORMULÁR NA ZADANIE HESLA -->
   <div id="lock-screen" class="lock-screen">
     <h2>🔒 Prístup je zamknutý</h2>
-    <p style="margin-bottom: 15px;">Zadajte prístupové heslo pre tento týždeň:</p>
-    <input type="password" id="pass-input" class="pass-input" placeholder="Zadajte heslo">
+    <p style="margin-bottom: 15px;">Zadajte 4-miestny kód pre tento týždeň:</p>
+    <input type="password" id="pass-input" class="pass-input" maxlength="4" placeholder="••••">
     <br>
     <button onclick="checkPassword()" class="btn-unlock">Odomknúť testy</button>
-    <div id="error-msg" class="error-msg">Nesprávne heslo! Skúste znova.</div>
+    <div id="error-msg" class="error-msg">Nesprávny kód! Skúste znova.</div>
     <br>
     <div class="key-placeholder">🔑 Týždenný kód: ****</div>
   </div>
@@ -215,10 +217,10 @@
 </div>
 
 <script>
-  // NASTAVENIE KĽÚČA
-  const SECRET_KEY = "Elektro";
+  // TAJNÉ ZÁKLADNÉ ČÍSLO (Môžeš si ho zmeniť na akékoľvek číslo, napr. 2000, 5500...)
+  const TAJNE_BISLO = 1000;
 
-  // Vypočíta číslo týždňa v roku
+  // Funkcia na výpočet čísla aktuálneho týždňa v roku
   function getWeekNumber(d) {
     d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
     d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
@@ -226,12 +228,13 @@
     return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
   }
 
-  // Generuje aktuálne heslo (napr. Elektro39)
+  // Vypočíta 4-miestny kód: TAJNE_BISLO + číslo týždňa
   function getWeeklyPassword() {
-    return `${SECRET_KEY}${getWeekNumber(new Date())}`;
+    const tyzden = getWeekNumber(new Date());
+    return String(TAJNE_BISLO + tyzden);
   }
 
-  // Kontrola po načítaní
+  // Kontrola po načítaní stránky
   window.onload = function() {
     const savedPass = localStorage.getItem("elektro_test_auth");
     if (savedPass === getWeeklyPassword()) {
