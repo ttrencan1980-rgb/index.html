@@ -3,281 +3,200 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aplikácia Elektro Testy</title>
+  <title>Revízny technik - Testovacia aplikácia</title>
   <style>
-    * { 
-      box-sizing: border-box; 
-    }
-    body { 
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
-      background-color: #f8fafc; 
-      margin: 0; 
-      padding: 16px; 
-      display: flex; 
-      flex-direction: column; 
-      align-items: center; 
-    }
-    .container { 
-      max-width: 600px; 
-      width: 100%; 
-    }
-    header { 
-      text-align: center; 
-      margin-bottom: 24px; 
-    }
-    h1 { 
-      color: #0f172a; 
-      font-size: 24px; 
-      margin: 0 0 6px 0; 
-    }
-    p { 
-      color: #64748b; 
-      font-size: 14px; 
-      margin: 0; 
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f6f9;
+      color: #333;
     }
 
-    /* Štýly pre zámok / prihlasovacie okno */
-    .lock-screen {
+    #lock-screen {
+      max-width: 420px;
+      margin: 60px auto;
+      padding: 30px;
       background: #ffffff;
-      border-radius: 16px;
-      padding: 30px 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
       text-align: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-      border: 1px solid #e2e8f0;
-      margin-bottom: 20px;
     }
-    .lock-screen h2 {
+
+    #lock-screen h2 {
       margin-top: 0;
-      color: #0f172a;
+      color: #0056b3;
     }
-    .pass-input {
-      padding: 12px;
-      font-size: 16px;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 8px;
+
+    #lock-screen input {
       width: 100%;
-      max-width: 250px;
-      margin-bottom: 12px;
+      padding: 12px;
+      margin: 18px 0;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 1.2em;
       text-align: center;
+      box-sizing: border-box;
+      outline: none;
     }
-    .btn-unlock {
-      background-color: #2563eb;
+
+    #lock-screen input:focus {
+      border-color: #0056b3;
+    }
+
+    #lock-screen button {
+      width: 100%;
+      padding: 12px;
+      background-color: #0056b3;
       color: white;
       border: none;
-      padding: 12px 24px;
-      font-size: 15px;
-      font-weight: 600;
       border-radius: 8px;
+      font-size: 1.1em;
+      font-weight: bold;
       cursor: pointer;
-      transition: background 0.2s;
     }
-    .btn-unlock:hover {
-      background-color: #1d4ed8;
+
+    #lock-screen button:hover {
+      background-color: #003d80;
     }
+
     .error-msg {
-      color: #ef4444;
-      font-size: 13px;
-      margin-top: 10px;
+      color: #d9534f;
+      margin-top: 15px;
+      font-weight: bold;
       display: none;
     }
-    .key-placeholder {
-      margin-top: 20px;
-      font-size: 13px;
-      color: #64748b;
-      font-weight: 600;
-      letter-spacing: 1px;
+
+    #app-content {
+      display: none;
+      max-width: 900px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
     }
 
-    /* Štýly pre sekcie a kategórie */
-    .category-card {
-      background: #ffffff;
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-      border: 1px solid #e2e8f0;
-    }
-    .category-header {
-      display: flex;
-      align-items: center;
-      margin-bottom: 16px;
+    .header-title {
+      border-bottom: 2px solid #0056b3;
       padding-bottom: 10px;
-      border-bottom: 2px solid #f1f5f9;
+      margin-bottom: 25px;
+      color: #0056b3;
     }
-    .category-title {
-      font-size: 18px;
-      font-weight: 700;
-      color: #1e293b;
+
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .category-card {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 15px;
+      background: #fafafa;
+    }
+
+    .category-card h3 {
+      margin-top: 0;
+      color: #0056b3;
+    }
+
+    .test-list {
+      list-style: none;
+      padding: 0;
       margin: 0;
     }
-    .badge-cat {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      padding: 4px 8px;
-      border-radius: 6px;
-      margin-right: 10px;
-    }
-    .cat-rt { background-color: #dbeafe; color: #1e40af; }
-    .cat-proj { background-color: #fef3c7; color: #92400e; }
-    .cat-lps { background-color: #dcfce7; color: #166534; }
 
-    /* Mriežka tlačidiel pre testy */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-    }
-    @media (max-width: 400px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
-    }
-    .btn-test {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background-color: #f8fafc;
-      color: #334155;
-      text-decoration: none;
-      padding: 12px 14px;
-      border-radius: 10px;
-      font-weight: 600;
-      font-size: 14px;
-      border: 1px solid #cbd5e1;
-      transition: all 0.15s ease;
-    }
-    .btn-test:hover {
-      background-color: #f1f5f9;
-      border-color: #94a3b8;
-    }
-    .btn-test:active {
-      background-color: #e2e8f0;
-      transform: scale(0.97);
-    }
-    .arrow {
-      color: #94a3b8;
-      font-size: 12px;
+    .test-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
     }
   </style>
 </head>
 <body>
 
-<div class="container">
-  <header>
-    <h1>⚡ Aplikácia Elektro Testy</h1>
-    <p>Vyberte si kategóriu a test</p>
-  </header>
-
-  <!-- FORMULÁR NA ZADANIE HESLA -->
-  <div id="lock-screen" class="lock-screen">
-    <h2>🔒 Prístup je zamknutý</h2>
-    <p style="margin-bottom: 15px;">Zadajte prístupové heslo pre tento týždeň:</p>
-    <input type="password" id="pass-input" class="pass-input" placeholder="Zadajte heslo">
-    <br>
-    <button onclick="checkPassword()" class="btn-unlock">Odomknúť testy</button>
-    <div id="error-msg" class="error-msg">Nesprávne heslo! Skúste znova.</div>
-    <br>
-    <div class="key-placeholder">🔑 Týždenný kód: ****</div>
+  <div id="lock-screen">
+    <h2>Prístup k testom</h2>
+    <p>Pre vstup do aplikácie zadajte aktuálny týždenný kód od správcu.</p>
+    
+    <input type="password" id="access-code-input" placeholder="Zadajte 4-miestny kód">
+    <button onclick="checkWeeklyCode()">Odomknúť aplikáciu</button>
+    
+    <div id="error-message" class="error-msg">Nesprávny kód! Vyžiadajte si platný kód pre tento týždeň.</div>
   </div>
 
-  <!-- OBSAH TESTOV (Skrytý až do odomknutia) -->
-  <div id="content-screen" style="display: none;">
-
-    <!-- 1. KATEGÓRIA: REVÍZNY TECHNIK (RT) -->
-    <div class="category-card">
-      <div class="category-header">
-        <span class="badge-cat cat-rt">§ 24</span>
-        <h2 class="category-title">Revízny Technik (RT)</h2>
+  <div id="app-content">
+    <h1 class="header-title">Aplikácia pre elektrotechnikov a revíznych technikov</h1>
+    
+    <div class="categories-grid">
+      <div class="category-card">
+        <h3>1. Revízny technik (RT)</h3>
+        <ul class="test-list">
+          <li>Test 1 (12 otázok)</li>
+          <li>Test 2 (12 otázok)</li>
+          <li>Test 3 (12 otázok)</li>
+        </ul>
       </div>
-      <div class="grid" id="list-rt"></div>
-    </div>
 
-    <!-- 2. KATEGÓRIA: PROJEKTANT (PROJ) -->
-    <div class="category-card">
-      <div class="category-header">
-        <span class="badge-cat cat-proj">Projektovanie</span>
-        <h2 class="category-title">Projektant (PROJ)</h2>
+      <div class="category-card">
+        <h3>2. Projektant (Proj)</h3>
+        <ul class="test-list">
+          <li>Test 1 (12 otázok)</li>
+          <li>Test 2 (12 otázok)</li>
+          <li>Test 3 (12 otázok)</li>
+        </ul>
       </div>
-      <div class="grid" id="list-proj"></div>
-    </div>
 
-    <!-- 3. KATEGÓRIA: OCHRANA PRED BLESKOM (LPS) -->
-    <div class="category-card">
-      <div class="category-header">
-        <span class="badge-cat cat-lps">STN EN 62305</span>
-        <h2 class="category-title">Bleskozvody (LPS)</h2>
+      <div class="category-card">
+        <h3>3. Bleskozvody (Ochrana pred bleskom)</h3>
+        <ul class="test-list">
+          <li>Test 1 (12 otázok)</li>
+          <li>Test 2 (12 otázok)</li>
+          <li>Test 3 (12 otázok)</li>
+        </ul>
       </div>
-      <div class="grid" id="list-lps"></div>
     </div>
-
   </div>
-</div>
 
-<script>
-  // NASTAVENIE KĽÚČA
-  const SECRET_KEY = "Elektro";
+  <script>
+    const MASTER_CODE = "2206"; // Tvoj trvalý hlavný kód
 
-  // Vypočíta číslo týždňa v roku
-  function getWeekNumber(d) {
-    d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
-    var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-    return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
-  }
+    // Nový stabilný matematický vzorec pre generovanie kódov
+    function getWeeklyCode() {
+      const now = new Date();
+      const d = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+      const dayNum = d.getUTCDay() || 7;
+      d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+      const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+      const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+      const year = d.getUTCFullYear();
 
-  // Generuje aktuálne heslo (napr. Elektro39)
-  function getWeeklyPassword() {
-    return `${SECRET_KEY}${getWeekNumber(new Date())}`;
-  }
-
-  // Kontrola po načítaní
-  window.onload = function() {
-    const savedPass = localStorage.getItem("elektro_test_auth");
-    if (savedPass === getWeeklyPassword()) {
-      unlockContent();
+      // Mathematický vzorec (Hash kód na 4 cifry)
+      let rawVal = (weekNo * 7393 + year * 17) % 9000 + 1000;
+      return String(rawVal);
     }
-  };
 
-  function checkPassword() {
-    const inputPass = document.getElementById("pass-input").value.trim();
-    if (inputPass === getWeeklyPassword()) {
-      localStorage.setItem("elektro_test_auth", getWeeklyPassword());
-      unlockContent();
-    } else {
-      document.getElementById("error-msg").style.display = "block";
+    const correctWeeklyCode = getWeeklyCode();
+
+    function checkWeeklyCode() {
+      const userInput = document.getElementById("access-code-input").value.trim();
+      
+      if (userInput === correctWeeklyCode || userInput === MASTER_CODE) {
+        document.getElementById("lock-screen").style.display = "none";
+        document.getElementById("app-content").style.display = "block";
+      } else {
+        document.getElementById("error-message").style.display = "block";
+      }
     }
-  }
 
-  function unlockContent() {
-    document.getElementById("lock-screen").style.display = "none";
-    document.getElementById("content-screen").style.display = "block";
-    renderAllCategories();
-  }
-
-  // Generovanie tlačidiel pre 12 testov v každej sekcii
-  const testyPerKategoria = 12;
-
-  function renderCategory(containerId, prefix, titlePrefix) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-    container.innerHTML = '';
-
-    for (let i = 1; i <= testyPerKategoria; i++) {
-      const link = document.createElement('a');
-      link.href = `${prefix}-${i}.html`;
-      link.className = 'btn-test';
-      link.innerHTML = `<span>${titlePrefix} ${i}</span> <span class="arrow">▶</span>`;
-      container.appendChild(link);
-    }
-  }
-
-  function renderAllCategories() {
-    renderCategory('list-rt', 'test-rt', 'Test RT');
-    renderCategory('list-proj', 'test-proj', 'Test PROJ');
-    renderCategory('list-lps', 'test-lps', 'Test LPS');
-  }
-</script>
+    document.getElementById("access-code-input").addEventListener("keypress", function(event) {
+      if (event.key === "Enter") {
+        checkWeeklyCode();
+      }
+    });
+  </script>
 
 </body>
 </html>
