@@ -158,12 +158,14 @@
 </head>
 <body>
 
-<div class="quiz-container">
-    <div class="quiz-header">
-        <button class="home-btn" id="homeBtn" title="Domov / Reset">🏠</button>
-        <span class="progress-text" id="progressText">Otázka 1 z 29</span>
-        <div class="timer-badge">⏱️ <span id="timeDisplay">00:00</span></div>
-    </div>
+<div class="container">
+    <header>
+        <div class="header-left">
+            <button class="btn-back" onclick="goBack()">&#8592; Domov</button>
+            <h1>Test TSLPS1</h1>
+        </div>
+        <div class="timer" id="timer">00:00</div>
+    </header>
 
     <div id="quizBody">
         <div class="question-title" id="questionTitle">Názov otázky...</div>
