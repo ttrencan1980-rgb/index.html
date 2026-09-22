@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test RT5 - Revízny Techník</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+            color: #212529;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .card {
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid #e9ecef;
+        }
+        .question-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 6px;
+            color: #1a1a1a;
+        }
+        .norm-title {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-bottom: 20px;
+        }
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .option-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 18px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            background-color: #ffffff;
+            font-size: 1rem;
+            line-height: 1.4;
+            transition: all 0.2s ease;
+        }
+        .option-item.correct {
+            background-color: #72f78e;
+            border-color: #5cd373;
+            color: #000000;
+            font-weight: 500;
+        }
+        .option-item.incorrect {
+            background-color: #ff5252;
+            border-color: #e04848;
+            color: #ffffff;
+            font-weight: 500;
+        }
+        .option-item.correct-outline {
+            border: 2px solid #5cd373;
+            background-color: #ffffff;
+            color: #000000;
+            font-weight: 500;
+        }
+        .label {
+            font-weight: 600;
+            margin-right: 12px;
+            min-width: 25px;
+        }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+        .btn-group-left {
+            display: flex;
+            gap: 10px;
+        }
+        .btn {
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid transparent;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-outline {
+            background-color: #ffffff;
+            border-color: #ced4da;
+            color: #333333;
+        }
+        .btn-primary {
+            background-color: #1d68d8;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Otázka 1 -->
+    <div class="card">
+        <h2 class="question-title">Vedúci práce je</h2>
+        <div class="norm-title">STN 34 3100:2001</div>
+        <div class="options-list">
+            <div class="option-item"><span class="label">A)</span> vedúca osoba na vykonávané práce</div>
+            <div class="option-item"><span class="label">B)</span> poverená osoba za prevádzku</div>
+            <div class="option-item correct"><span class="label">C)</span> poverená osoba s najväčšou zodpovednosťou za vykonávané práce</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 2 -->
+    <div class="card">
+        <h2 class="question-title">Prostriedky osobnej ochrany používame</h2>
+        <div class="norm-title">zákon 124/2006 Z. z.</div>
+        <div class="options-list">
+            <div class="option-item correct"><span class="label">A)</span> ak nie je možné chrániť účinne pracovníka iným spôsobom</div>
+            <div class="option-item"><span class="label">B)</span> u mladistvých pracovníkov</div>
+            <div class="option-item"><span class="label">C)</span> v obmedzených pracovných priestoroch</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 3 -->
+    <div class="card">
+        <h2 class="question-title">Čo je účelom požitia ochrany elektrického zariadenia triedy II alebo s rovnocennou izoláciou</h2>
+        <div class="norm-title">STN 33 2000-4-41:2019</div>
+        <div class="options-list">
+            <div class="option-item"><span class="label">A)</span> aby sme nemuseli pripájať na zariadenie ochranný vodič</div>
+            <div class="option-item"><span class="label">B)</span> aby sa lepšie zabránilo dotyku so živou časťou</div>
+            <div class="option-item correct"><span class="label">C)</span> aby sa zabránilo výskytu nebezpečného napätia na prístupných častiach elektrických zariadeniach v dôsledku poruchy základnej izolácií</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 4 -->
+    <div class="card">
+        <h2 class="question-title">Môže porucha jedného ochranného opatrenia narušiť ostatné ochranné opatrenia</h2>
+        <div class="norm-title">STN 33 2000-4-41:2019</div>
+        <div class="options-list">
+            <div class="option-item correct"><span class="label">A)</span> nie</div>
+            <div class="option-item"><span class="label">B)</span> áno</div>
+            <div class="option-item"><span class="label">C)</span> áno ak tieto ochranné opatrenia sú zriadené v priestoroch bez prístupu laikov</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 5 -->
+    <div class="card">
+        <h2 class="question-title">Kedy musí byť vykonaná dodatočná ochrana prúdovými chráničmi v striedavej sieťi s ochranným opatrením automatickým odpojením od zdroja</h2>
+        <div class="norm-title">STN 33 2000-4-41:2019</div>
+        <div class="options-list">
+            <div class="option-item"><span class="label">A)</span> pre zásuvky s menovitým prúdom nad 32 A používané laikmi</div>
+            <div class="option-item correct-outline"><span class="label">B)</span> ak sú používané mobilné zariadenia vo vonkajšom prostredí s prúdom do 32 A</div>
+            <div class="option-item incorrect"><span class="label">C)</span> pre zásuvky s menovitým prúdom do 32 A, ktoré nemôžu používať laici</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 6 -->
+    <div class="card">
+        <h2 class="question-title">Čo musí zaisťovať ochranné opatrenie spočívajúce vo zvýšenej ochrane</h2>
+        <div class="norm-title">STN 33 2000-4-41:2019</div>
+        <div class="options-list">
+            <div class="option-item incorrect"><span class="label">A)</span> zvýšenú ochranu živej časti</div>
+            <div class="option-item"><span class="label">B)</span> ochranu neživej časti</div>
+            <div class="option-item correct-outline"><span class="label">C)</span> základnú ochranu aj ochranu pri poruche</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 7 -->
+    <div class="card">
+        <h2 class="question-title">Akú základnú podmienku musí u sieťí TN spĺňať impedancia slučky</h2>
+        <div class="norm-title">STN 33 2000-4-41:2019</div>
+        <div class="options-list">
+            <div class="option-item correct"><span class="label">A)</span> Zs ≤ U0/Ia</div>
+            <div class="option-item"><span class="label">B)</span> Zs ≤ U0 x Ia</div>
+            <div class="option-item"><span class="label">C)</span> Zs ≥ U0/Ia</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 8 -->
+    <div class="card">
+        <h2 class="question-title">Koľko ochranných opatrení musí byť uplatnených v každej časti inštalácií</h2>
+        <div class="norm-title">STN 33 2000-4-41:2019</div>
+        <div class="options-list">
+            <div class="option-item"><span class="label">A)</span> min. dva alebo viac ochranných opatrení, pričom sa musia zohľadniť podmienky vonkajších vplyvov</div>
+            <div class="option-item correct"><span class="label">B)</span> jedno alebo viac ochranných opatrení, pričom sa musia zohľadniť podmienky vonkajších vplyvov</div>
+            <div class="option-item"><span class="label">C)</span> min. základná a doplnková ochrana, pričom sa musia zohľadniť podmienky vonkajších vplyvov</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 9 -->
+    <div class="card">
+        <h2 class="question-title">Aké maximálne dotykové napätie nesmie byť prekročené pri základnej ochrane pomocou SELV alebo PELV v nebezpečných priestoroch?</h2>
+        <div class="norm-title">STN EN 61140:2018</div>
+        <div class="options-list">
+            <div class="option-item correct-outline"><span class="label">A)</span> efektívnu hodnotu 6 V striedavého napätia a 15 V jednosmerného napätia</div>
+            <div class="option-item incorrect"><span class="label">B)</span> efektívnu hodnotu 12 V striedavého napätia a 30 V jednosmerného napätia</div>
+            <div class="option-item"><span class="label">C)</span> efektívnu hodnotu 20 V striedavého napätia a 50 V jednosmerného napätia</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 10 -->
+    <div class="card">
+        <h2 class="question-title">Musia byť oddelené živé časti obvodov SELV a PELV</h2>
+        <div class="norm-title">STN 33 2000-4-41:2019</div>
+        <div class="options-list">
+            <div class="option-item correct"><span class="label">A)</span> áno</div>
+            <div class="option-item"><span class="label">B)</span> áno u SELV</div>
+            <div class="option-item"><span class="label">C)</span> nie</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 11 -->
+    <div class="card">
+        <h2 class="question-title">Umiestnenie zásuviek a vypínačov nad pracovnou plochou v zóne ZV-s odporúča sa vo výške</h2>
+        <div class="norm-title">STN 33 2130:1983</div>
+        <div class="options-list">
+            <div class="option-item incorrect"><span class="label">A)</span> 1050 mm</div>
+            <div class="option-item"><span class="label">B)</span> 1250 mm</div>
+            <div class="option-item correct-outline"><span class="label">C)</span> 1150 mm</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 12 -->
+    <div class="card">
+        <h2 class="question-title">Úbytok napätia pre varný resp. topný odber v rozvode medzi rozvádzačom za elektromerom a spotrebičom nemá byť väčší ako</h2>
+        <div class="norm-title">STN 33 2130:1983</div>
+        <div class="options-list">
+            <div class="option-item"><span class="label">A)</span> 2%</div>
+            <div class="option-item correct"><span class="label">B)</span> 3%</div>
+            <div class="option-item"><span class="label">C)</span> 4%</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 13 -->
+    <div class="card">
+        <h2 class="question-title">Ktoré obvody pracovného stroja musia byť istené proti účinkom mimoriadne vysokej teploty</h2>
+        <div class="norm-title">STN EN 60204-1:2019</div>
+        <div class="options-list">
+            <div class="option-item"><span class="label">A)</span> ochrana je zabezpečená na prívode k stroju</div>
+            <div class="option-item correct"><span class="label">B)</span> obvody, ktoré môžu spôsobiť nebezpečnú situáciu</div>
+            <div class="option-item"><span class="label">C)</span> všetky</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 14 -->
+    <div class="card">
+        <h2 class="question-title">Aký minimálny stupeň ochrany musia mať elektroinštalačné kanály na pracovnom stroji</h2>
+        <div class="norm-title">STN EN 60204-1:2019</div>
+        <div class="options-list">
+            <div class="option-item correct-outline"><span class="label">A)</span> vhodný na ich použitie</div>
+            <div class="option-item incorrect"><span class="label">B)</span> IP44</div>
+            <div class="option-item"><span class="label">C)</span> IP20</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 15 -->
+    <div class="card">
+        <h2 class="question-title">Čo musí spĺňať inštalácia svorkových skríň a rozvodných škatúľ na strojnom zariadení</h2>
+        <div class="norm-title">STN EN 60204-1:2019</div>
+        <div class="options-list">
+            <div class="option-item"><span class="label">A)</span> poskytovať minimálnu ochranu IP43</div>
+            <div class="option-item correct"><span class="label">B)</span> byť prístupné z dôvodu údržby, musia poskytovať potrebnú ochranu IP podľa vonkajších vplyvov</div>
+            <div class="option-item"><span class="label">C)</span> byť z materiálu bezpečného pre obsluhu</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 16 -->
+    <div class="card">
+        <h2 class="question-title">Čo musí spĺňať inštalácia pevných kovových elektroinštalačných trubiek na strojnom zariadení</h2>
+        <div class="norm-title">STN EN 60204-1:2019</div>
+        <div class="options-list">
+            <div class="option-item correct-outline"><span class="label">A)</span> musia byť zhotovené z galvanizovanej ocele alebo koróziovzdorného materiálu vhodného pre dané podmienky</div>
+            <div class="option-item"><span class="label">B)</span> musia byť zhotovené z hliníka alebo koróziovzdorného materiálu vhodného pre dané podmienky</div>
+            <div class="option-item incorrect"><span class="label">C)</span> musia byť vyhotovené z nevodivého materiálu vhodného pre dané pre dané prostredie</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 17 -->
+    <div class="card">
+        <h2 class="question-title">Aké musí spĺňať podmienky kryt rozvádzača, ktorý je použitý ako časť ochranného vodiča</h2>
+        <div class="norm-title">STN EN 61439-1:2012</div>
+        <div class="options-list">
+            <div class="option-item correct"><span class="label">A)</span> ak je z vodivého materiálu nemusí sa izolovať od ochranného vodiča</div>
+            <div class="option-item"><span class="label">B)</span> ak je z vodivého materiálu musí sa izolovať od ochranného vodiča</div>
+            <div class="option-item"><span class="label">C)</span> ak je z nevodivého materiálu musí sa izolovať od ochranného vodiča</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 18 -->
+    <div class="card">
+        <h2 class="question-title">Elektrické zariadenie umiestnené v zóne 0 – plavárne musí mať min. krytie</h2>
+        <div class="norm-title">STN 33 2000-7-702:2019</div>
+        <div class="options-list">
+            <div class="option-item"><span class="label">A)</span> IP X6</div>
+            <div class="option-item incorrect"><span class="label">B)</span> IP X7</div>
+            <div class="option-item correct-outline"><span class="label">C)</span> IP X8</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 19 -->
+    <div class="card">
+        <h2 class="question-title">Svetelné obvody zdravotníckych priestoroch skupín 1</h2>
+        <div class="norm-title">STN 33 2000-7-710:2013</div>
+        <div class="options-list">
+            <div class="option-item"><span class="label">A)</span> v každej miestnosti sa musia aspoň dva svietidlá napájať zo záložného napájania</div>
+            <div class="option-item correct"><span class="label">B)</span> v každej miestnosti sa musí aspoň jedno svietidlo napájať zo záložného napájania</div>
+            <div class="option-item"><span class="label">C)</span> všetky svietidlá sa musia napájať aj zo záložného napájania</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 20 -->
+    <div class="card">
+        <h2 class="question-title">Minimálny prierez vodičov vedenia v stánkoch z Cu je</h2>
+        <div class="norm-title">STN 33 2000-7-704:2019</div>
+        <div class="options-list">
+            <div class="option-item"><span class="label">A)</span> 0,75 mm²</div>
+            <div class="option-item"><span class="label">B)</span> 2,5 mm²</div>
+            <div class="option-item correct"><span class="label">C)</span> 1,5 mm²</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 21 -->
+    <div class="card">
+        <h2 class="question-title">Ostatné obvody mimo zásuviek v poľnohospodárskych objektoch</h2>
+        <div class="norm-title">STN 33 2000-7-705:2007</div>
+        <div class="options-list">
+            <div class="option-item correct-outline"><span class="label">A)</span> sa musia chrániť prúdovým chráničom s vypínacím prúdom do 300 mA</div>
+            <div class="option-item incorrect"><span class="label">B)</span> sa musia chrániť prúdovým chráničom s vypínacím prúdom do 300 mA len v prípade ak nie je možné dosiahnuť dotykové napätie 25 V</div>
+            <div class="option-item"><span class="label">C)</span> sa musia chrániť prúdovým chráničom s vypínacím prúdom do 300 mA len v prípade ak nie je možné dosiahnuť dotykové napätie 60 V</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 22 -->
+    <div class="card">
+        <h2 class="question-title">Uzemnenie ochranného vodiča pri elektrických prípojkách sa zriadi ak vzdialenosť od najbližšieho uzemnenia a prípojkovou skriňou je</h2>
+        <div class="norm-title">STN 33 2000-4-41:2019</div>
+        <div class="options-list">
+            <div class="option-item"><span class="label">A)</span> &gt;300 m</div>
+            <div class="option-item correct-outline"><span class="label">B)</span> &gt;100 m</div>
+            <div class="option-item incorrect"><span class="label">C)</span> &gt;200 m</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 23 -->
+    <div class="card">
+        <h2 class="question-title">Pri križovatke izolovaného vedenia do 1 kV s vedením telefónnym je min. vzdialenosť silového vedenia (s rozpätím p.b. 20-35m) nad telefónnym</h2>
+        <div class="norm-title">STN 33 3300:1983</div>
+        <div class="options-list">
+            <div class="option-item"><span class="label">A)</span> 1,5 m</div>
+            <div class="option-item correct-outline"><span class="label">B)</span> 0,8 m</div>
+            <div class="option-item incorrect"><span class="label">C)</span> 1 m</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 24 -->
+    <div class="card">
+        <h2 class="question-title">Pri prípojkách do 1 kV vzdialenosť závesného kábla od stabilného vodivého plota je min.</h2>
+        <div class="norm-title">STN 33 3300:1983</div>
+        <div class="options-list">
+            <div class="option-item"><span class="label">A)</span> 3 m</div>
+            <div class="option-item correct-outline"><span class="label">B)</span> 1 m</div>
+            <div class="option-item incorrect"><span class="label">C)</span> 2 m</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 25 -->
+    <div class="card">
+        <h2 class="question-title">Pri použití ochranného opatrenia SELV alebo PELV na DC strane FVE nesmie napätie UOC MAX prekročiť hodnotu</h2>
+        <div class="norm-title">STN 33 2000-7-712:2022</div>
+        <div class="options-list">
+            <div class="option-item correct-outline"><span class="label">A)</span> 120 V</div>
+            <div class="option-item incorrect"><span class="label">B)</span> 50 V</div>
+            <div class="option-item"><span class="label">C)</span> 60 V</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 26 -->
+    <div class="card">
+        <h2 class="question-title">Aké sú prípustné polomery valivej gule pre vyšetrenie zachytávacej sústavy pre triedu LPS III</h2>
+        <div class="norm-title">STN EN 62305-3:2012</div>
+        <div class="options-list">
+            <div class="option-item"><span class="label">A)</span> 30 m</div>
+            <div class="option-item"><span class="label">B)</span> 20 m</div>
+            <div class="option-item correct"><span class="label">C)</span> 45 m</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 27 -->
+    <div class="card">
+        <h2 class="question-title">Aký je prípustný vrcholový uhol pre vyšetrenie zachytávacej sústavy pri metóde pomocou ochranného uhlu</h2>
+        <div class="norm-title">STN EN 62305-3:2012</div>
+        <div class="options-list">
+            <div class="option-item"><span class="label">A)</span> podľa triedy LEMP a výšky objektu</div>
+            <div class="option-item correct"><span class="label">B)</span> podľa triedy LPS a výšky objektu</div>
+            <div class="option-item"><span class="label">C)</span> podľa triedy LEMPS a výšky objektu</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 28 -->
+    <div class="card">
+        <h2 class="question-title">Akým požiadavkám má odpovedať konštrukcia a inštalácia LPS</h2>
+        <div class="norm-title">STN EN 62305-3:2012</div>
+        <div class="options-list">
+            <div class="option-item"><span class="label">A)</span> Zvody sa môžu inštalovať do odkvapových rúr</div>
+            <div class="option-item correct"><span class="label">B)</span> Zvody sa musia inštalovať priamo a zvislo</div>
+            <div class="option-item"><span class="label">C)</span> Zvody sa musia inštalovať priamo a zvislo a do odkvapových rúr ak sú izolované</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 29 -->
+    <div class="card">
+        <h2 class="question-title">Vhodné uzemnenie a pospojovanie je založené na kompletnom systéme uzemnení. Čo tento systém zahrňuje</h2>
+        <div class="norm-title">STN EN 62305-4:2013</div>
+        <div class="options-list">
+            <div class="option-item"><span class="label">A)</span> kompletný systém spája uzemňovaciu sústavu a zachytávaciu sústavu</div>
+            <div class="option-item"><span class="label">B)</span> kompletný systém spája uzemňovaciu sústavu a zvodovú sústavu</div>
+            <div class="option-item correct"><span class="label">C)</span> kompletný systém spája uzemňovaciu sústavu a sieť pospájania</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 30 -->
+    <div class="card">
+        <h2 class="question-title">Ako sú označované základné typy škôd pri výpočtoch</h2>
+        <div class="norm-title">STN EN 62305-2:2013</div>
+        <div class="options-list">
+            <div class="option-item correct"><span class="label">A)</span> D1 úraz živých bytostí , D2 hmotná škoda , D3 porucha elektrických a elektronických systémov</div>
+            <div class="option-item"><span class="label">B)</span> D1 ľudské životy , D2 verejné služby , D3 porucha elektrických a elektronických systémov</div>
+            <div class="option-item"><span class="label">C)</span> D1 ľudské životy , D2 verejné služby , D3 kultúrne dedičstvo , D4 ekonomické</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 31 -->
+    <div class="card">
+        <h2 class="question-title">Minimálny požadovaný izolačný odpor el. inštalácie s menovitým napätím nad 500 V je</h2>
+        <div class="norm-title">STN 33 2000-6:2018</div>
+        <div class="options-list">
+            <div class="option-item"><span class="label">A)</span> ≥ 1,5 MΩ</div>
+            <div class="option-item correct"><span class="label">B)</span> ≥ 1,0 MΩ</div>
+            <div class="option-item"><span class="label">C)</span> ≥ 0,5 MΩ</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 32 -->
+    <div class="card">
+        <h2 class="question-title">Pravidelná revízia predlžovacieho prívodu vystaveného mechanickému namáhaniu zaradeného do skupiny C podľa oblasti jeho používania sa vykonáva</h2>
+        <div class="norm-title">STN 33 1630:2025</div>
+        <div class="options-list">
+            <div class="option-item"><span class="label">A)</span> 1 x za 12 mesiacov</div>
+            <div class="option-item"><span class="label">B)</span> 1 x za 24 mesiacov</div>
+            <div class="option-item correct"><span class="label">C)</span> 1 x za 6 mesiacov</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 33 -->
+    <div class="card">
+        <h2 class="question-title">Odpor ochranného pospájania pre skúšané zariadenie s dĺžkou káblov 10 m a prierezom do 1,5 mm2</h2>
+        <div class="norm-title">STN EN 50699:2022</div>
+        <div class="options-list">
+            <div class="option-item"><span class="label">A)</span> nesmie presiahnuť 0,5 Ω</div>
+            <div class="option-item"><span class="label">B)</span> nesmie presiahnuť 0,3 Ω</div>
+            <div class="option-item correct"><span class="label">C)</span> nesmie presiahnuť 0,4 Ω</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 34 -->
+    <div class="card">
+        <h2 class="question-title">Revízia (verification) je</h2>
+        <div class="norm-title">STN 33 2000-6:2018</div>
+        <div class="options-list">
+            <div class="option-item"><span class="label">A)</span> súbor, kontrola el. inštalácie použitím všetkých zmyslov potrebných na zistenie správnosti výberu a zhotovenia el. inštalácie</div>
+            <div class="option-item correct"><span class="label">B)</span> súbor všetkých opatrení, ktorými sa kontroluje súlad kompletnej el. inštalácie s harmonizačnými dokumentami</div>
+            <div class="option-item"><span class="label">C)</span> realizácia opatrení v el. inštalácii, ktoré preukážu jej spôsobilosť</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 35 -->
+    <div class="card">
+        <h2 class="question-title">Izolačný odpor náradia s prídavnou izoláciou nesmie byť</h2>
+        <div class="norm-title">STN EN 50699:2022</div>
+        <div class="options-list">
+            <div class="option-item"><span class="label">A)</span> menší ako 5 MΩ</div>
+            <div class="option-item"><span class="label">B)</span> menší ako 7 MΩ</div>
+            <div class="option-item correct"><span class="label">C)</span> menší ako 2 MΩ</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 36 -->
+    <div class="card">
+        <h2 class="question-title">Pravidelná revízia predlžovacieho prívodu bez mechanického namáhania zaradeného do skupiny B podľa oblasti jeho používania sa vykonáva</h2>
+        <div class="norm-title">STN 33 1630:2025</div>
+        <div class="options-list">
+            <div class="option-item correct"><span class="label">A)</span> 1 x za 6 mesiacov</div>
+            <div class="option-item"><span class="label">B)</span> 1 x za 12 mesiacov</div>
+            <div class="option-item"><span class="label">C)</span> 1 x za 24 mesiacov</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 37 -->
+    <div class="card">
+        <h2 class="question-title">Izolačný odpor náradia so zosilnenou izoláciou nesmie byť menší ako</h2>
+        <div class="norm-title">STN EN 50699:2022</div>
+        <div class="options-list">
+            <div class="option-item"><span class="label">A)</span> menší ako 5 MΩ</div>
+            <div class="option-item correct"><span class="label">B)</span> menší ako 2 MΩ</div>
+            <div class="option-item"><span class="label">C)</span> menší ako 7 MΩ</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 38 -->
+    <div class="card">
+        <h2 class="question-title">Izolačný odpor náradia so zosilnenou izoláciou nesmie byť menší ako</h2>
+        <div class="norm-title">STN EN 50699:2022</div>
+        <div class="options-list">
+            <div class="option-item"><span class="label">A)</span> menší ako 5 MΩ</div>
+            <div class="option-item"><span class="label">B)</span> menší ako 7 MΩ</div>
+            <div class="option-item correct"><span class="label">C)</span> menší ako 2 MΩ</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 39 -->
+    <div class="card">
+        <h2 class="question-title">Kedy sa musí prevádzať revízia systému ochranných opatrení LPMS</h2>
+        <div class="norm-title">STN EN 62305-4:2013</div>
+        <div class="options-list">
+            <div class="option-item correct"><span class="label">A)</span> v priebehu inštalácie SPM, po inštalácii SPM, periodicky, po akýchkoľvek zmenách súčastí patriacich k SPM, prípadne po zásahu blesku do stavby</div>
+            <div class="option-item"><span class="label">B)</span> v priebehu inštalácie SPM, po inštalácii SPM, periodicky, po akýchkoľvek zmenách súčastí patriacich k SPM, po zásahu blesku do stavby nie je potrebná</div>
+            <div class="option-item"><span class="label">C)</span> počas búrky</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+    <!-- Otázka 40 -->
+    <div class="card">
+        <h2 class="question-title">Čo nieje nutné kontrolovať v priebehu revízií LPS</h2>
+        <div class="norm-title">STN EN 62305-3:2012</div>
+        <div class="options-list">
+            <div class="option-item incorrect"><span class="label">A)</span> stav spojov, ekvipotenciálne pospájanie a uchytenie</div>
+            <div class="option-item"><span class="label">B)</span> hodnotu zemného odporu uzemňovacej sústavy</div>
+            <div class="option-item correct-outline"><span class="label">C)</span> požiadavky investora pri návrhu bleskozvodu</div>
+        </div>
+        <div class="controls">
+            <div class="btn-group-left">
+                <button class="btn btn-outline">&lt; Predchádzajúca</button>
+                <button class="btn btn-primary">Nasledujúca &gt;</button>
+            </div>
+            <button class="btn btn-outline">⚐ Zobraziť celý výsledok</button>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
