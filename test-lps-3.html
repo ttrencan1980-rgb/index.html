@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Odbornej Spôsobilosti - LPS 3</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --border-color: #e2e8f0;
+            --correct-bg: #dcfce7;
+            --correct-border: #22c55e;
+            --correct-text: #15803d;
+            --incorrect-bg: #fee2e2;
+            --incorrect-border: #ef4444;
+            --incorrect-text: #b91c1c;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #0f172a;
+            margin-bottom: 30px;
+        }
+
+        .question-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .question-header {
+            margin-bottom: 16px;
+        }
+
+        .question-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin: 0 0 8px 0;
+        }
+
+        .norm-reference {
+            font-size: 0.875rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .option:hover:not(.selected-correct):not(.selected-incorrect) {
+            border-color: #cbd5e1;
+            background-color: #f1f5f9;
+        }
+
+        .option-prefix {
+            font-weight: 700;
+            min-width: 20px;
+        }
+
+        /* Correct state */
+        .option.correct {
+            background-color: var(--correct-bg);
+            border-color: var(--correct-border);
+            color: var(--correct-text);
+            font-weight: 600;
+        }
+
+        /* Incorrect state */
+        .option.incorrect {
+            background-color: var(--incorrect-bg);
+            border-color: var(--incorrect-border);
+            color: var(--incorrect-text);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding: 20px 0;
+        }
+
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background-color: #ffffff;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+        }
+
+        .btn-secondary:hover {
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Test Odbornej Spôsobilosti (Elektrotechnika & LPS)</h1>
+
+    <!-- Otázka 1 -->
+    <div class="question-card">
+        <div class="question-header">
+            <h2 class="question-title">Autorizovaným stavebným inžinierom je ten, kto je zapísaný v zozname autorizovaných stavebných inžinierov[cite: 2]</h2>
+            <div class="norm-reference">zákon 237/2000 Z. z.[cite: 2]</div>
+        </div>
+        <ul class="options-list">
+            <li class="option">
+                <span class="option-prefix">A)</span>
+                <span>v zmysle zákona č. 124/2006 Z. z. oprávnenou osobou[cite: 2]</span>
+            </li>
+            <li class="option">
+                <span class="option-prefix">B)</span>
+                <span>v zmysle vyhlášky č. 508/2009 Z. z. oprávnenou osobou[cite: 2]</span>
+            </li>
+            <li class="option correct">
+                <span class="option-prefix">C)</span>
+                <span>v zmysle zákona č. 237/2000 Z. z. oprávnenou osobou[cite: 2]</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Otázka 2 -->
+    <div class="question-card">
+        <div class="question-header">
+            <h2 class="question-title">Označenie rozvodnej siete 3+PE 400V 50Hz znamená[cite: 2]</h2>
+            <div class="norm-reference">STN 33 2000-1:2009[cite: 2]</div>
+        </div>
+        <ul class="options-list">
+            <li class="option correct">
+                <span class="option-prefix">A)</span>
+                <span>trojfázová elektrická striedavá sieť s uzemneným bodom zdroja TN-S. Neživé časti el. spotrebičov sú spojené s ochranným vodičom PE[cite: 2]</span>
+            </li>
+            <li class="option">
+                <span class="option-prefix">B)</span>
+                <span>trojfázová elektrická striedavá sieť s uzemneným bodom zdroja TN-C. Neživé časti el. spotrebičov sú spojené s ochranným vodičom PE[cite: 2]</span>
+            </li>
+            <li class="option incorrect">
+                <span class="option-prefix">C)</span>
+                <span>trojfázová elektrická striedavá sieť s uzemneným bodom zdroja TN-C. Neživé časti el. spotrebičov sú s týmto bodom spojené. Funkcia neutrálneho a ochranného vodiča je spoločná[cite: 2]</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Otázka 3 -->
+    <div class="question-card">
+        <div class="question-header">
+            <h2 class="question-title">VTZ elektrické zaradené do skupiny A je[cite: 2]</h2>
+            <div class="norm-reference">vyhláška 508/2009 Z. z.[cite: 2]</div>
+        </div>
+        <ul class="options-list">
+            <li class="option">
+                <span class="option-prefix">A)</span>
+                <span>elektrická inštalácia v priestore s vonkajším vplyvom vody z iného zdroja ako z dažďa AD2 až AD8 vrátane ochrany pred účinkami atmosférickej elektriny[cite: 2]</span>
+            </li>
+            <li class="option incorrect">
+                <span class="option-prefix">B)</span>
+                <span>elektrická inštalácia v priestore s vonkajším vplyvom vody AD3 až AD8 vrátane ochrany pred účinkami atmosférickej elektriny[cite: 2]</span>
+            </li>
+            <li class="option correct">
+                <span class="option-prefix">C)</span>
+                <span>elektrická inštalácia v priestore s vonkajším vplyvom vody z iného zdroja ako z dažďa AD3 až AD8 vrátane ochrany pred účinkami atmosférickej elektriny[cite: 2]</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Otázka 4 -->
+    <div class="question-card">
+        <div class="question-header">
+            <h2 class="question-title">Vyrábať, montovať na mieste budúcej prevádzky a rekonštruovať vyhradené technické zariadenie možno iba podľa konštrukčnej dokumentácie, ku ktorej bolo vydané odborné stanovisko OPOM podľa § 14 ods. 1 písm. d) zákona, ktorým sa posudzuje konštrukčná dokumentácia[cite: 2]</h2>
+            <div class="norm-reference">vyhláška 508/2009 Z. z.[cite: 2]</div>
+        </div>
+        <ul class="options-list">
+            <li class="option correct">
+                <span class="option-prefix">A)</span>
+                <span>pri VTZ elektrickom sa odborné stanovisko k dokumentácii vyžaduje iba na technické zariadenie skupiny A[cite: 2]</span>
+            </li>
+            <li class="option">
+                <span class="option-prefix">B)</span>
+                <span>pri VTZ elektrickom sa odborné stanovisko k dokumentácii nevyžaduje[cite: 2]</span>
+            </li>
+            <li class="option">
+                <span class="option-prefix">C)</span>
+                <span>pri VTZ elektrickom sa odborné stanovisko k dokumentácii vyžaduje okrem skupiny C[cite: 2]</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Otázka 5 -->
+    <div class="question-card">
+        <div class="question-header">
+            <h2 class="question-title">Označenie rozvodnej siete IT znamená[cite: 2]</h2>
+            <div class="norm-reference">STN 33 2000-1:2009[cite: 2]</div>
+        </div>
+        <ul class="options-list">
+            <li class="option correct">
+                <span class="option-prefix">A)</span>
+                <span>elektrická striedavá sieť má všetky živé časti izolované od zeme, alebo jeden bod je spojený so zemou cez impedanciu.s uzemneným bodom zdroja. Neživé časti elektrickej inštalácie sú uzemnené jednotlivo alebo spoločne, alebo sú spojené s uzemnením siete[cite: 2]</span>
+            </li>
+            <li class="option">
+                <span class="option-prefix">B)</span>
+                <span>elektrická striedavá sieť s uzemneným bodom zdroja. Jeden bod priamo uzemnený pri zdroji neživé časti el. spotrebičov sú spojené so samostatnými uzemňovačmi nezávislými od zdroja[cite: 2]</span>
+            </li>
+            <li class="option incorrect">
+                <span class="option-prefix">C)</span>
+                <span>elektrická striedavá sieť s uzemneným bodom zdroja. Jeden bod priamo uzemnený pri zdroji, neživé časti inštalácie sú spojené s týmto bodom prostredníctvom ochranných vodičov[cite: 2]</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Otázka 6 -->
+    <div class="question-card">
+        <div class="question-header">
+            <h2 class="question-title">Zariadenie s impulzným výdržným napätím zodpovedajúcim kategórii prepätia II. je zariadenie[cite: 2]</h2>
+            <div class="norm-reference">STN 33 2000-4-443:2017[cite: 2]</div>
+        </div>
+        <ul class="options-list">
+            <li class="option correct">
+                <span class="option-prefix">A)</span>
+                <span>vhodné na pripojenie na pevné elektrické inštalácie zabezpečujúce normálny stupeň pohotovosti zvyčajne vyžadovaný pre elektrické spotrebiče[cite: 2]</span>
+            </li>
+            <li class="option incorrect">
+                <span class="option-prefix">B)</span>
+                <span>vhodné na použitie v napájacom bode elektrických inštalácií alebo v jeho blízkosti, napríklad pred hlavným domovým rozvádzačom[cite: 2]</span>
+            </li>
+            <li class="option">
+                <span class="option-prefix">C)</span>
+                <span>určené na použitie v pevných elektrických inštaláciách v hlavnom domovom rozvádzači a za ním, s vysokým stupňom pohotovosti[cite: 2]</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Otázka 7 -->
+    <div class="question-card">
+        <div class="question-header">
+            <h2 class="question-title">Signálne svietidlo červené znamená[cite: 2]</h2>
+            <div class="norm-reference">STN EN 60204-1:2019[cite: 2]</div>
+        </div>
+        <ul class="options-list">
+            <li class="option correct">
+                <span class="option-prefix">A)</span>
+                <span>nebezpečenstvo[cite: 2]</span>
+            </li>
+            <li class="option">
+                <span class="option-prefix">B)</span>
+                <span>výstrahu - varovanie[cite: 2]</span>
+            </li>
+            <li class="option">
+                <span class="option-prefix">C)</span>
+                <span>príkaz na činnosť[cite: 2]</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Otázka 8 -->
+    <div class="question-card">
+        <div class="question-header">
+            <h2 class="question-title">Označenie rozvodnej siete 3+PEN 400/230V 50Hz znamená[cite: 2]</h2>
+            <div class="norm-reference">STN 33 2000-1:2009[cite: 2]</div>
+        </div>
+        <ul class="options-list">
+            <li class="option">
+                <span class="option-prefix">A)</span>
+                <span>trojfázová elektrická striedavá sieť s uzemneným bodom zdroja TN-C. Neživé časti el. spotrebičov sú s týmto bodom spojené. Funkcia neutrálneho a ochranného vodiča je samostatná[cite: 2]</span>
+            </li>
+            <li class="option">
+                <span class="option-prefix">B)</span>
+                <span>trojfázová elektrická striedavá sieť s uzemneným bodom zdroja TN-S. Funkcia neutrálneho a ochranného vodiča je zlúčená do jedného kombinovaného vodiča PEN[cite: 2]</span>
+            </li>
+            <li class="option correct">
+                <span class="option-prefix">C)</span>
+                <span>trojfázová elektrická striedavá sieť s uzemneným bodom zdroja TN-C. Funkcia neutrálneho a ochranného vodiča je zlúčená do jedného kombinovaného vodiča PEN[cite: 2]</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Otázka 9 -->
+    <div class="question-card">
+        <div class="question-header">
+            <h2 class="question-title">Označenie rozvodnej siete TN-S znamená[cite: 2]</h2>
+            <div class="norm-reference">STN 33 2000-4-41:2019[cite: 2]</div>
+        </div>
+        <ul class="options-list">
+            <li class="option">
+                <span class="option-prefix">A)</span>
+                <span>elektrická striedavá sieť s uzemneným bodom zdroja. Neživé časti el. spotrebičov sú s týmto bodom spojené. Funkcia neutrálneho a ochranného vodiča je zlúčená do jedného kombinovaného vodiča PEN[cite: 2]</span>
+            </li>
+            <li class="option">
+                <span class="option-prefix">B)</span>
+                <span>elektrická striedavá sieť s uzemneným bodom zdroja. Neživé časti el. spotrebičov sú spojené s uzemňovačmi elektricky nezávislými od uzemňovacej siete . Funkcia neutrálneho a ochranného vodiča je zlúčená do jedného kombinovaného vodiča PEN[cite: 2]</span>
+            </li>
+            <li class="option correct">
+                <span class="option-prefix">C)</span>
+                <span>elektrická striedavá sieť s uzemneným bodom zdroja. Neživé časti el. spotrebičov sú s týmto bodom spojené cez ochranný vodič PE. Funkcia neutrálneho a ochranného vodiča je samostatná[cite: 2]</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Otázka 10 -->
+    <div class="question-card">
+        <div class="question-header">
+            <h2 class="question-title">Elektrické spotrebiče triedy I. sú[cite: 2]</h2>
+            <div class="norm-reference">STN 33 2000-4-41:2019[cite: 2]</div>
+        </div>
+        <ul class="options-list">
+            <li class="option">
+                <span class="option-prefix">A)</span>
+                <span>s privedeným ochranným vodičom. Ochrana pred úrazom el. prúdom je zaistená dvojitou izoláciou a pripojením ochranného vodiča na ochrannú svorku[cite: 2]</span>
+            </li>
+            <li class="option">
+                <span class="option-prefix">B)</span>
+                <span>s privedeným ochranným vodičom. Ochrana pred úrazom el. prúdom je zaistená dvojitou izoláciou a pripojením neživej časti k ochrannému vodiču[cite: 2]</span>
+            </li>
+            <li class="option correct">
+                <span class="option-prefix">C)</span>
+                <span>s privedeným ochranným vodičom. Ochrana pred úrazom el. prúdom je zaistená základnou izoláciou a pripojením neživej časti k ochrannému vodiču[cite: 2]</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Otázka 11 -->
+    <div class="question-card">
+        <div class="question-header">
+            <h2 class="question-title">Ako je charakterizovaná chránená stavba v zmysle STN EN 62305[cite: 2]</h2>
+            <div class="norm-reference">STN EN 62305-1:2012[cite: 2]</div>
+        </div>
+        <ul class="options-list">
+            <li class="option">
+                <span class="option-prefix">A)</span>
+                <span>Je to inžinierska sieť, pre ktorú sa vyžaduje ochrana pred účinkami blesku[cite: 2]</span>
+            </li>
+            <li class="option correct">
+                <span class="option-prefix">B)</span>
+                <span>Je to stavba, pre ktorú sa vyžaduje ochrana pred účinkami blesku[cite: 2]</span>
+            </li>
+            <li class="option incorrect">
+                <span class="option-prefix">C)</span>
+                <span>Je to stavba alebo inžinierska sieť, pre ktorú sa vyžaduje ochrana pred účinkami blesku[cite: 2]</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Otázka 12 -->
+    <div class="question-card">
+        <div class="question-header">
+            <h2 class="question-title">Ako je charakterizovaná rázová vlna (ráz)[cite: 2]</h2>
+            <div class="norm-reference">STN EN 62305-1:2012[cite: 2]</div>
+        </div>
+        <ul class="options-list">
+            <li class="option correct">
+                <span class="option-prefix">A)</span>
+                <span>Je to prechodná vlna vyvolaná LEMP prejavujúca sa ako prepätie alebo nadprúd[cite: 2]</span>
+            </li>
+            <li class="option">
+                <span class="option-prefix">B)</span>
+                <span>Je to prechodná vlna vyvolaná LPS prejavujúca sa ako prepätie alebo nadprúd[cite: 2]</span>
+            </li>
+            <li class="option">
+                <span class="option-prefix">C)</span>
+                <span>Je to prechodná vlna vyvolaná LEMPS prejavujúca sa ako prepätie alebo nadprúd[cite: 2]</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Otázka 13 -->
+    <div class="question-card">
+        <div class="question-header">
+            <h2 class="question-title">Normy rady STN EN 62305 využívajú v celom rozsahu skrátené názvy. Čo znamená označenie LPZ[cite: 2]</h2>
+            <div class="norm-reference">STN EN 62305-1:2012[cite: 2]</div>
+        </div>
+        <ul class="options-list">
+            <li class="option correct">
+                <span class="option-prefix">A)</span>
+                <span>Zóna ochrany pred bleskom[cite: 2]</span>
+            </li>
+            <li class="option">
+                <span class="option-prefix">B)</span>
+                <span>Úroveň ochrany pred bleskom[cite: 2]</span>
+            </li>
+            <li class="option">
+                <span class="option-prefix">C)</span>
+                <span>Systém ochrany pred bleskom[cite: 2]</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Otázka 14 -->
+    <div class="question-card">
+        <div class="question-header">
+            <h2 class="question-title">Aký je polomer valivej gule r v závislosti na triede LPS II[cite: 2]</h2>
+            <div class="norm-reference">STN EN 62305-1:2012[cite: 2]</div>
+        </div>
+        <ul class="options-list">
+            <li class="option">
+                <span class="option-prefix">A)</span>
+                <span>45 m[cite: 2]</span>
+            </li>
+            <li class="option correct">
+                <span class="option-prefix">B)</span>
+                <span>30 m[cite: 2]</span>
+            </li>
+            <li class="option">
+                <span class="option-prefix">C)</span>
+                <span>20 m[cite: 2]</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Otázka 15 -->
+    <div class="question-card">
+        <div class="question-header">
+            <h2 class="question-title">Ako je definované riziko R a čo táto hodnota predstavuje[cite: 2]</h2>
+            <div class="norm-reference">STN EN 62305-2:2013[cite: 2]</div>
+        </div>
+        <ul class="options-list">
+            <li class="option correct">
+                <span class="option-prefix">A)</span>
+                <span>Pravdepodobné priemerné ročné straty[cite: 2]</span>
+            </li>
+            <li class="option">
+                <span class="option-prefix">B)</span>
+                <span>Pravdepodobné priemerné straty za 100 rokov[cite: 2]</span>
+            </li>
+            <li class="option">
+                <span class="option-prefix">C)</span>
+                <span>Pravdepodobné priemerné straty po dobu životnosti[cite: 2]</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Otázka 16 -->
+    <div class="question-card">
+        <div class="question-header">
+            <h2 class="question-title">Čo je považované podľa návrhu ochrany pred bleskom za nebezpečnú udalosť[cite: 2]</h2>
+            <div class="norm-reference">STN EN 62305-2:2013[cite: 2]</div>
+        </div>
+        <ul class="options-list">
+            <li class="option correct">
+                <span class="option-prefix">A)</span>
+                <span>zásah blesku do chránenej stavby alebo v jej blízkosti, do alebo v blízkosti vedenia pripojeného k chránenej stavbe, ktorý môže spôsobiť škodu[cite: 2]</span>
+            </li>
+            <li class="option">
+                <span class="option-prefix">B)</span>
+                <span>zásah blesku do chránenej stavby alebo v jej blízkosti, ktorý nemôže spôsobiť škodu[cite: 2]</span>
+            </li>
+            <li class="option">
+                <span class="option-prefix">C)</span>
+                <span>zásah blesku do chránenej stavby alebo v jej blízkosti, do alebo v blízkosti vedenia pripojeného k chránenej stavbe, ktorý nemôže spôsobiť škodu[cite: 2]</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Otázka 17 -->
+    <div class="question-card">
+        <div class="question-header">
+            <h2 class="question-title">Ako sú označované základné typy škôd pri výpočtoch[cite: 2]</h2>
+            <div class="norm-reference">STN EN 62305-2:2013[cite: 2]</div>
+        </div>
+        <ul class="options-list">
+            <li class="option incorrect">
+                <span class="option-prefix">A)</span>
+                <span>D1 ľudské životy , D2 verejné služby , D3 kultúrne dedičstvo , D4 ekonomické[cite: 2]</span>
+            </li>
+            <li class="option">
+                <span class="option-prefix">B)</span>
+                <span>D1 ľudské životy , D2 verejné služby , D3 porucha elektrických a elektronických systémov[cite: 2]</span>
+            </li>
+            <li class="option correct">
+                <span class="option-prefix">C)</span>
+                <span>D1 úraz živých bytostí , D2 hmotná škoda , D3 porucha elektrických a elektronických systémov[cite: 2]</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Otázka 18 -->
+    <div class="question-card">
+        <div class="question-header">
+            <h2 class="question-title">Čo zahŕňa výpočet pri oceňovaní rizika stavby[cite: 2]</h2>
+            <div class="norm-reference">STN EN 62305-2:2013[cite: 2]</div>
+        </div>
+        <ul class="options-list">
+            <li class="option correct">
+                <span class="option-prefix">A)</span>
+                <span>vlastnú stavbu, stavebnú inštaláciu, obsah v stavbe, osoby v stavbe alebo osoby stojace v zóne do 3m od vonkajška stavby, prostredie ovplyvnené poškodením stavby[cite: 2]</span>
+            </li>
+            <li class="option">
+                <span class="option-prefix">B)</span>
+                <span>vlastnú stavbu, stavebnú inštaláciu, obsah v stavbe, osoby v stavbe alebo osoby stojace v zóne do 3m od vonkajška stavby, prostredie ovplyvnené poškodením stavby, pripojené inžinierske siete k stavbe[cite: 2]</span>
+            </li>
+            <li class="option incorrect">
+                <span class="option-prefix">C)</span>
+                <span>vlastnú stavbu, stavebnú inštaláciu, obsah v stavbe, osoby nachádzajúce sa v stavbe, prostredie ovplyvnené poškodením stavby, pripojené inžinierske siete k stavbe[cite: 2]</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Otázka 19 -->
+    <div class="question-card">
+        <div class="question-header">
+            <h2 class="question-title">Aké sú typické hodnoty vzdialeností medzi zvodmi u neizolovaného (neoddialeného) LPS triedy I[cite: 2]</h2>
+            <div class="norm-reference">STN EN 62305-3:2012[cite: 2]</div>
+        </div>
+        <ul class="options-list">
+            <li class="option">
+                <span class="option-prefix">A)</span>
+                <span>20 m[cite: 2]</span>
+            </li>
+            <li class="option correct">
+                <span class="option-prefix">B)</span>
+                <span>10 m[cite: 2]</span>
+            </li>
+            <li class="option incorrect">
+                <span class="option-prefix">C)</span>
+                <span>15 m[cite: 2]</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Otázka 20 -->
+    <div class="question-card">
+        <div class="question-header">
+            <h2 class="question-title">Pri akých stavbách môže vzniknúť nebezpečenstvo úderu do boku stavby[cite: 2]</h2>
+            <div class="norm-reference">STN EN 62305-3:2012[cite: 2]</div>
+        </div>
+        <ul class="options-list">
+            <li class="option correct">
+                <span class="option-prefix">A)</span>
+                <span>Výškových budovách nad 60m[cite: 2]</span>
+            </li>
+            <li class="option">
+                <span class="option-prefix">B)</span>
+                <span>Výškových budovách nad 50m[cite: 2]</span>
+            </li>
+            <li class="option">
+                <span class="option-prefix">C)</span>
+                <span>Výškových budovách nad 30m[cite: 2]</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Otázka 21 -->
+    <div class="question-card">
+        <div class="question-header">
+            <h2 class="question-title">Ak rezistivita vrchného podložia pôdy v okruhu do 3 m od zvodu je menšia ako 100 kΩm , pravdepodobnosť priblíženia alebo výskytu osôb v okolí stavby a v okolí zvodov je veľká a ak nie je použitá sústava aspoň 10 zvodov musia sa vykonať opatrenia pred dotykovým napätím[cite: 2]</h2>
+            <div class="norm-reference">STN EN 62305-3:2012[cite: 2]</div>
+        </div>
+        <ul class="options-list">
+            <li class="option">
+                <span class="option-prefix">A)</span>
+                <span>znížením odporu uzemnenia pod 5Ω[cite: 2]</span>
+            </li>
+            <li class="option correct">
+                <span class="option-prefix">B)</span>
+                <span>izoláciou odkrytého zvodu skúšanou impulzným výdržným napätím 100 kV, 1,2/50 μs, napr. zosieťovaným polyetylénom najmenej hrúbky 3 mm[cite: 2]</span>
+            </li>
+            <li class="option">
+                <span class="option-prefix">C)</span>
+                <span>znížením odporu uzemnenia pod 10Ω[cite: 2]</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Otázka 22 -->
+    <div class="question-card">
+        <div class="question-header">
+            <h2 class="question-title">Aké sú prípustné metódy pre stanovenie umiestnenia zachytávacej sústavy[cite: 2]</h2>
+            <div class="norm-reference">STN EN 62305-3:2012[cite: 2]</div>
+        </div>
+        <ul class="options-list">
+            <li class="option correct">
+                <span class="option-prefix">A)</span>
+                <span>metóda valivej gule, ochranného uhla, mriežkovej sústavy[cite: 2]</span>
+            </li>
+            <li class="option">
+                <span class="option-prefix">B)</span>
+                <span>iba metóda valivej gule[cite: 2]</span>
+            </li>
+            <li class="option">
+                <span class="option-prefix">C)</span>
+                <span>metóda výšky budovy a jej umiestnenia[cite: 2]</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Otázka 23 -->
+    <div class="question-card">
+        <div class="question-header">
+            <h2 class="question-title">Revízny technik musí pripraviť revíznu správu, ktorá bude pripojená k technickej dokumentácii a k predchádzajúcim revíznym správam. Aké informácie musí správa o revízii obsahovať[cite: 2]</h2>
+            <div class="norm-reference">STN EN 62305-4:2013[cite: 2]</div>
+        </div>
+        <ul class="options-list">
+            <li class="option">
+                <span class="option-prefix">A)</span>
+                <span>o vizuálnom stave systému ochrany pred bleskom bez výsledkov merania[cite: 2]</span>
+            </li>
+            <li class="option correct">
+                <span class="option-prefix">B)</span>
+                <span>o všeobecnom stave SPM, akejkoľvek odchýlke, výsledkoch meraní[cite: 2]</span>
+            </li>
+            <li class="option">
+                <span class="option-prefix">C)</span>
+                <span>o manažérstve rizika[cite: 2]</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Otázka 24 -->
+    <div class="question-card">
+        <div class="question-header">
+            <h2 class="question-title">Akým spôsobom sa pri revízii u zariadení LPMS kontrolujú časti systému uzemnení a sústavy pospojovania, ktoré nie je možné skontrolovať vizuálne[cite: 2]</h2>
+            <div class="norm-reference">STN EN 62305-4:2013[cite: 2]</div>
+        </div>
+        <ul class="options-list">
+            <li class="option">
+                <span class="option-prefix">A)</span>
+                <span>meraním uzemnenia[cite: 2]</span>
+            </li>
+            <li class="option correct">
+                <span class="option-prefix">B)</span>
+                <span>meraním elektrickej spojitosti[cite: 2]</span>
+            </li>
+            <li class="option">
+                <span class="option-prefix">C)</span>
+                <span>meraním uhla zachytávacej tyče[cite: 2]</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Otázka 25 -->
+    <div class="question-card">
+        <div class="question-header">
+            <h2 class="question-title">Vhodné uzemnenie a pospojovanie je založené na kompletnom systéme uzemnení. Čo tento systém zahrňuje[cite: 2]</h2>
+            <div class="norm-reference">STN EN 62305-4:2013[cite: 2]</div>
+        </div>
+        <ul class="options-list">
+            <li class="option">
+                <span class="option-prefix">A)</span>
+                <span>kompletný systém spája uzemňovaciu sústavu a zvodovú sústavu[cite: 2]</span>
+            </li>
+            <li class="option">
+                <span class="option-prefix">B)</span>
+                <span>kompletný systém spája uzemňovaciu sústavu a zachytávaciu sústavu[cite: 2]</span>
+            </li>
+            <li class="option correct">
+                <span class="option-prefix">C)</span>
+                <span>kompletný systém spája uzemňovaciu sústavu a sieť pospájania[cite: 2]</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Otázka 26 -->
+    <div class="question-card">
+        <div class="question-header">
+            <h2 class="question-title">Pri ekvipotencionálnom pospojovaní sa využíva zapojenie do hviezdy S, alebo zapojenie mrežové M. Ako musí byť zapojený elektronický systém do siete vyrovnania potenciálov pri konfigurácii S[cite: 2]</h2>
+            <div class="norm-reference">STN EN 62305-4:2013[cite: 2]</div>
+        </div>
+        <ul class="options-list">
+            <li class="option">
+                <span class="option-prefix">A)</span>
+                <span>max dvoma prípojnicami na vyrovnanie potenciálu[cite: 2]</span>
+            </li>
+            <li class="option correct">
+                <span class="option-prefix">B)</span>
+                <span>iba jednou prípojnicou na vyrovnanie potenciálu[cite: 2]</span>
+            </li>
+            <li class="option">
+                <span class="option-prefix">C)</span>
+                <span>dvoma prípojnicami na vyrovnanie potenciálu[cite: 2]</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Otázka 27 -->
+    <div class="question-card">
+        <div class="question-header">
+            <h2 class="question-title">Aký typ zemniča sa uprednostňuje pri stavbách s vysokým nebezpečenstvom požiaru[cite: 2]</h2>
+            <div class="norm-reference">STN EN 62305-3:2012[cite: 2]</div>
+        </div>
+        <ul class="options-list">
+            <li class="option">
+                <span class="option-prefix">A)</span>
+                <span>Typu C[cite: 2]</span>
+            </li>
+            <li class="option correct">
+                <span class="option-prefix">B)</span>
+                <span>Typu B[cite: 2]</span>
+            </li>
+            <li class="option incorrect">
+                <span class="option-prefix">C)</span>
+                <span>Typu A[cite: 2]</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Otázka 28 -->
+    <div class="question-card">
+        <div class="question-header">
+            <h2 class="question-title">Kde by malo byť zhotovené ekvipotencálne pospojovanie proti blesku medzi časťami LPS a inými vodivými konštrukciami vo vnútri nebezpečných priestorov[cite: 2]</h2>
+            <div class="norm-reference">STN EN 62305-3:2012[cite: 2]</div>
+        </div>
+        <ul class="options-list">
+            <li class="option">
+                <span class="option-prefix">A)</span>
+                <span>1m nad úrovňou terénu[cite: 2]</span>
+            </li>
+            <li class="option incorrect">
+                <span class="option-prefix">B)</span>
+                <span>do 1m nad úrovňou terénu[cite: 2]</span>
+            </li>
+            <li class="option correct">
+                <span class="option-prefix">C)</span>
+                <span>na úrovni terénu[cite: 2]</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Otázka 29 -->
+    <div class="question-card">
+        <div class="question-header">
+            <h2 class="question-title">Aký smie byť najmenší celkový počet zvodov v usporiadaní zemničov typu B inštalovaného v chránenej stavbe s nebezpečenstvom výbuchu[cite: 2]</h2>
+            <div class="norm-reference">STN EN 62305-3:2012[cite: 2]</div>
+        </div>
+        <ul class="options-list">
+            <li class="option">
+                <span class="option-prefix">A)</span>
+                <span>3[cite: 2]</span>
+            </li>
+            <li class="option incorrect">
+                <span class="option-prefix">B)</span>
+                <span>4[cite: 2]</span>
+            </li>
+            <li class="option correct">
+                <span class="option-prefix">C)</span>
+                <span>2[cite: 2]</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Otázka 30 -->
+    <div class="question-card">
+        <div class="question-header">
+            <h2 class="question-title">Ako majú byť navrhnuté časti LPS u stavieb s priestormi s nebezpečenstvom výbuchu[cite: 2]</h2>
+            <div class="norm-reference">STN EN 62305-3:2012[cite: 2]</div>
+        </div>
+        <ul class="options-list">
+            <li class="option correct">
+                <span class="option-prefix">A)</span>
+                <span>LPS sa má navrhnúť a zhotoviť tak, aby nevzniklo pri priamom údere blesku v mieste úderu žiadne tavenie a rozstreknutie[cite: 2]</span>
+            </li>
+            <li class="option">
+                <span class="option-prefix">B)</span>
+                <span>LPS sa má navrhnúť a zhotoviť v triede ochrany LPL I - II[cite: 2]</span>
+            </li>
+            <li class="option">
+                <span class="option-prefix">C)</span>
+                <span>LPS sa má navrhnúť a zhotoviť v triede ochrany LPL II[cite: 2]</span>
+            </li>
+        </ul>
+    </div>
+
+</div>
+
+</body>
+</html>
