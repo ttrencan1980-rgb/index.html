@@ -528,3 +528,117 @@ const quizData = [
                 "C) LPS sa má navrhnúť a zhotoviť v triede ochrany LPL II"
             ],
             correct: 0
+                 }
+];
+
+let currentQuestion = 0;
+let userAnswers = new Array(quizData.length).fill(null);
+let secondsElapsed = 0;
+let timerInterval = null;
+
+function startTimer() {
+    timerInterval = setInterval(() => {
+        secondsElapsed++;
+        const mins = Math.floor(secondsElapsed / 60).toString().padStart(2, '0');
+        const secs = (secondsElapsed % 60).toString().padStart(2, '0');
+        document.getElementById('timer').textContent = `Čas: ${mins}:${secs}`;
+    }, 1000);
+}
+
+function loadQuestion() {
+    const q = quizData[currentQuestion];
+    document.getElementById('question-text').textContent = `${currentQuestion + 1}. ${q.question}`;
+    document.getElementById('question-norm').textContent = q.norm;
+    document.getElementById('progress-text').textContent = `Otázka ${currentQuestion + 1} z ${quizData.length}`;
+
+    const optionsContainer = document.getElementById('options-container');
+    optionsContainer.innerHTML = '';
+
+    const letters = ['A)', 'B)', 'C)', 'D)'];
+
+    q.options.forEach((optText, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.innerHTML = `<strong>${letters[index]}</strong> <span>${optText}</span>`;
+        
+        if (userAnswers[currentQuestion] !== null) {
+            btn.disabled = true;
+            if (index === q.correct) {
+                btn.classList.add('correct');
+            }
+            if (userAnswers[currentQuestion] === index && index !== q.correct) {
+                btn.classList.add('incorrect');
+            }
+        } else {
+            btn.onclick = () => selectOption(index);
+        }
+
+        optionsContainer.appendChild(btn);
+    });
+
+    document.getElementById('prev-btn').disabled = currentQuestion === 0;
+    
+    if (currentQuestion === quizData.length - 1) {
+        document.getElementById('next-btn').textContent = 'Dokončiť test';
+    } else {
+        document.getElementById('next-btn').textContent = 'Nasledujúca >';
+    }
+}
+
+function selectOption(index) {
+    userAnswers[currentQuestion] = index;
+    loadQuestion();
+}
+
+function prevQuestion() {
+    if (currentQuestion > 0) {
+        currentQuestion--;
+        loadQuestion();
+    }
+}
+
+function nextQuestion() {
+    if (currentQuestion < quizData.length - 1) {
+        currentQuestion++;
+        loadQuestion();
+    } else {
+        showResults();
+    }
+}
+
+function showResults() {
+    clearInterval(timerInterval);
+    document.getElementById('quiz-screen').classList.add('hidden');
+    document.getElementById('results-screen').classList.remove('hidden');
+
+    let score = 0;
+    userAnswers.forEach((ans, idx) => {
+        if (ans === quizData[idx].correct) score++;
+    });
+
+    const percentage = Math.round((score / quizData.length) * 100);
+    document.getElementById('score-text').textContent = `${score} / ${quizData.length}`;
+    document.getElementById('percentage-text').textContent = `Úspešnosť: ${percentage}%`;
+}
+
+function restartQuiz() {
+    currentQuestion = 0;
+    userAnswers = new Array(quizData.length).fill(null);
+    secondsElapsed = 0;
+    clearInterval(timerInterval);
+    startTimer();
+    document.getElementById('results-screen').classList.add('hidden');
+    document.getElementById('quiz-screen').classList.remove('hidden');
+    loadQuestion();
+}
+
+// Inicializácia pri načítaní
+window.onload = () => {
+    startTimer();
+    loadQuestion();
+};
+</script>
+
+</body>
+</html>
+
