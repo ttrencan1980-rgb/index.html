@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test RT4 - Revízny technik</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        .question-card {
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #fff;
+        }
+        .question-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+        .norm-tag {
+            font-size: 0.85em;
+            color: #666;
+            margin-bottom: 12px;
+            font-style: italic;
+        }
+        .options {
+            list-style-type: none;
+            padding: 0;
+        }
+        .option {
+            padding: 10px 12px;
+            margin-bottom: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #fff;
+        }
+        .correct {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+            color: #155724 !important;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Test RT4</h1>
+
+    <!-- Otázka 1 -->
+    <div class="question-card">
+        <div class="question-title">1. Za bezpečnosť práce zodpovedá dozor od</div>
+        <div class="norm-tag">STN 34 3100:2001</div>
+        <ul class="options">
+            <li class="option">A) od podpísania B príkazu</li>
+            <li class="option">B) pokynu na zahájenie prác</li>
+            <li class="option correct">C) okamžiku, keď je pracovnej skupine dovolený vstup na pracovisko</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 2 -->
+    <div class="question-card">
+        <div class="question-title">2. B príkaz platí od</div>
+        <div class="norm-tag">STN 34 3100:2001</div>
+        <ul class="options">
+            <li class="option">A) doby, kedy vedúci práce dal pokyn k zahájeniu práce</li>
+            <li class="option correct">B) doby prevzatia pracoviska vedúcim práce</li>
+            <li class="option">C) zaistenia pracoviska</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 3 -->
+    <div class="question-card">
+        <div class="question-title">3. Čo musia spĺňať zábrany alebo kryty, ak by že je nutné tieto prekážky, kryty alebo časti krytov odstrániť</div>
+        <div class="norm-tag">STN 33 2000-4-41:2019</div>
+        <ul class="options">
+            <li class="option">A) odstránenie je možné aj bez použitia nástroja ale s kľúčom</li>
+            <li class="option correct">B) odstránenie je možné iba s použitím nástroja</li>
+            <li class="option">C) odstránenie je možné iba poškodením zábran alebo krytov</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 4 -->
+    <div class="question-card">
+        <div class="question-title">4. Môžu byť pri ochrane zábranami odstránené prekážky bez použitia kľúča</div>
+        <div class="norm-tag">STN 33 2000-4-41:2019</div>
+        <ul class="options">
+            <li class="option">A) áno ak zábrany nie sú upevnené pomocou skrutiek</li>
+            <li class="option">B) áno, ak medziľahlá zábrana, zaisťujúca stupeň ochrany aspoň IP1X zabraňuje dotyku so živými časťami, táto zábrana sa smie odstrániť iba použitím kľúča alebo nástroja</li>
+            <li class="option correct">C) áno, napr. po odpojení napájania živých častí, pred dotykom ktorých chránia zábrany alebo kryty, obnovenie napájania smie byť možné až po opätovnom nasadení alebo uzavretí zábran alebo krytov,</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 5 -->
+    <div class="question-card">
+        <div class="question-title">5. Čo nesmie byť použité za náhodný ochranný vodič</div>
+        <div class="norm-tag">STN 33 2000-5-54:2012</div>
+        <ul class="options">
+            <li class="option">A) káblové lávky, oceľové stožiare, potrubia</li>
+            <li class="option correct">B) zábradlia, rebríky, plot, koľajnice, nosné napínacie drôty, odnímateľné zariadenia</li>
+            <li class="option">C) vodivé konštrukčné prvky kovových konštrukcií, ktoré tvoria súvislý, trvalo prepojený celok</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 6 -->
+    <div class="question-card">
+        <div class="question-title">6. Ochrana pri poruche musí byť tvorená jedným alebo viacerými prostriedkami, ktoré na základnej ochrane nezávisia ani ju nedopĺňajú. Akými prostriedkami musí byť tvorená táto ochrana</div>
+        <div class="norm-tag">STN EN 61140:2018</div>
+        <ul class="options">
+            <li class="option">A) izoláciou</li>
+            <li class="option correct">B) nezávislými ochrannými prostriedkami, ktoré sa nesmú navzájom ovplyvňovať</li>
+            <li class="option">C) ochrannými prostriedkami, ktoré sa musia navzájom ovplyvňovať</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 7 -->
+    <div class="question-card">
+        <div class="question-title">7. Koľko ochranných opatrení musí byť uplatnených v každej časti inštalácie</div>
+        <div class="norm-tag">STN 33 2000-4-41:2019</div>
+        <ul class="options">
+            <li class="option">A) min. dva alebo viac ochranných opatrení, pričom sa musia zohľadniť podmienky vonkajších vplyvov</li>
+            <li class="option correct">B) jedno alebo viac ochranných opatrení, pričom sa musia zohľadniť podmienky vonkajších vplyvov</li>
+            <li class="option">C) min. základná a doplnková ochrana, pričom sa musia zohľadniť podmienky vonkajších vplyvov</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 8 -->
+    <div class="question-card">
+        <div class="question-title">8. Ktoré vodiče sa musia v elektrickej inštalácii spojiť s hlavnou uzemňovacou svorkou</div>
+        <div class="norm-tag">STN 33 2000-5-54:2012</div>
+        <ul class="options">
+            <li class="option">A) vodiče ochranného pospájania, ale uzemňovacie a vodiče na funkčné uzemnenie musia byť oddelené</li>
+            <li class="option correct">B) vodiče ochranného pospájania, uzemňovacie, ochranné vodiče, vodiče na funkčné uzemnenie</li>
+            <li class="option">C) ochranné vodiče prístupné v danej miestnosti</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 9 -->
+    <div class="question-card">
+        <div class="question-title">9. Ak sa pre ochranu pri poruche použité prúdové chrániče v sieťach TT, je nutné používať ďalšie ochranné zariadenia</div>
+        <div class="norm-tag">STN 33 2000-4-41:2019</div>
+        <ul class="options">
+            <li class="option">A) nie</li>
+            <li class="option correct">B) áno</li>
+            <li class="option">C) nie ak U0 ≤ 120V</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 10 -->
+    <div class="question-card">
+        <div class="question-title">10. Aké maximálne dotykové napätie nesmie byť prekročené pri základnej ochrane pomocou SELV alebo PELV v nebezpečných priestoroch?</div>
+        <div class="norm-tag">STN EN 61140:2018</div>
+        <ul class="options">
+            <li class="option">A) efektívnu hodnotu 20 V striedavého napätia a 50 V jednosmerného napätia</li>
+            <li class="option">B) efektívnu hodnotu 12 V striedavého napätia a 30 V jednosmerného napätia</li>
+            <li class="option correct">C) efektívnu hodnotu 6 V striedavého napätia a 15 V jednosmerného napätia</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 11 -->
+    <div class="question-card">
+        <div class="question-title">11. Elektrizácia bytu stupňa C – je byt</div>
+        <div class="norm-tag">STN 33 2130:1983</div>
+        <ul class="options">
+            <li class="option correct">A) v ktorom sa elektrina používa na osvetlenie, pre domáce elektro spotrebiče pripojené k rozvodu pohyblivým prívodom (cez zásuvky), alebo pevne pripojené spotrebiče s príkonom nad 3500 VA, a pre vytápanie a klimatizáciu</li>
+            <li class="option">B) v ktorom sa elektrina používa na osvetlenie, pre domáce elektro spotrebiče pripojené k rozvodu pohyblivým prívodom (cez zásuvky), alebo pevne pripojené spotrebiče s príkonom nad 3500 VA</li>
+            <li class="option">C) v ktorom sa elektrina používa na osvetlenie, pre domáce elektro spotrebiče pripojené k rozvodu pohyblivým prívodom (cez zásuvky), alebo pevne pripojené spotrebiče s príkonom do 3500 VA</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 12 -->
+    <div class="question-card">
+        <div class="question-title">12. Na jeden svetelný obvod sa môže pripojiť</div>
+        <div class="norm-tag">STN 33 2130:1983</div>
+        <ul class="options">
+            <li class="option">A) max. 10 svietidiel</li>
+            <li class="option">B) počet svietidiel s celkovým príkonom do 2000 VA</li>
+            <li class="option correct">C) toľko svietidiel, aby súčet ich menovitých prúdov neprekročil menovitý prúd istiaceho prístroja obvodu</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 13 -->
+    <div class="question-card">
+        <div class="question-title">13. Aká je minimálna/maximálna výška základnej oblasti k umiestňovaniu ovládacích zariadení pre obsluhu v pracovnej polohe v stroji</div>
+        <div class="norm-tag">STN EN 50274:2003</div>
+        <ul class="options">
+            <li class="option">A) 500 mm/1900 mm</li>
+            <li class="option">B) 600 mm/1600 mm</li>
+            <li class="option correct">C) 800 mm/1800 mm</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 14 -->
+    <div class="question-card">
+        <div class="question-title">14. Aké menovité napätie nesmie byť prekročené pri ochrane PELV na strojných zariadeniach</div>
+        <div class="norm-tag">STN EN 60204-1:2019</div>
+        <ul class="options">
+            <li class="option correct">A) AC 25 V</li>
+            <li class="option">B) AC 50 V</li>
+            <li class="option">C) AC 60 V</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 15 -->
+    <div class="question-card">
+        <div class="question-title">15. Ako musia byť montované ručne ovládané prvky riadiacich prístrojov</div>
+        <div class="norm-tag">STN EN 60204-1:2019</div>
+        <ul class="options">
+            <li class="option">A) nesmú byť nižšie ako 1,2 m nad obslužnou plošinou a majú byť ľahko dosiahnuteľné obsluhou z akéhokoľvek miesta</li>
+            <li class="option">B) nesmú byť nižšie ako 0,4 m nad obslužnou plošinou a majú byť ľahko dosiahnuteľné obsluhou z akéhokoľvek miesta</li>
+            <li class="option correct">C) nesmú byť nižšie ako 0,6 m nad obslužnou plošinou a majú byť ľahko dosiahnuteľné obsluhou z pracovného miesta</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 16 -->
+    <div class="question-card">
+        <div class="question-title">16. Je možné použiť ako hlavný vypínač stroja vidlicu prívodu</div>
+        <div class="norm-tag">STN EN 60204-1:2019</div>
+        <ul class="options">
+            <li class="option">A) nesmie</li>
+            <li class="option correct">B) môže sa použiť zásuvkové spojenie s ohybným káblom za určitých podmienok</li>
+            <li class="option">C) neodporúča sa</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 17 -->
+    <div class="question-card">
+        <div class="question-title">17. Núdzové zastavenie musí fungovať buď ako zastavenie kategórie 0 alebo ako zastavenie kategórie 1. Akej podmienke musí tento režim vyhovovať</div>
+        <div class="norm-tag">STN EN 60204-1:2019</div>
+        <ul class="options">
+            <li class="option">A) nemusí byť nadradená všetkým funkciám, len nebezpečným</li>
+            <li class="option">B) môže byť nadradená všetkým ostatným funkciám, len ak sa to vyžaduje</li>
+            <li class="option correct">C) musí byť nadradená všetkým ostatným funkciám a činnostiam vo všetkých režimoch</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 18 -->
+    <div class="question-card">
+        <div class="question-title">18. Elektrické zariadenie umiestnené v zóne 1 – plavárne musí mať min. krytie</div>
+        <div class="norm-tag">STN 33 2000-7-704:2019</div>
+        <ul class="options">
+            <li class="option">A) IP X5</li>
+            <li class="option correct">B) IP X4</li>
+            <li class="option">C) IP X6</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 19 -->
+    <div class="question-card">
+        <div class="question-title">19. Pre transformátory zdravotníckej IT sústavy sa vyžaduje</div>
+        <div class="norm-tag">STN 33 2000-7-710:2013</div>
+        <ul class="options">
+            <li class="option">A) použitie kompenzačných kondenzátorov</li>
+            <li class="option correct">B) monitorovanie preťaženia a vysokej teploty</li>
+            <li class="option">C) ochrana pred podpätím</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 20 -->
+    <div class="question-card">
+        <div class="question-title">20. Obvody na staveniskách napájajúce ručné elektrické zariadenia s menovitým prúdom do 32 A</div>
+        <div class="norm-tag">STN 33 2000-7-704:2019</div>
+        <ul class="options">
+            <li class="option">A) sa musia chrániť prúdovým chráničom s vypínacím prúdom do 30 mA len v prípade ak nie je možné dosiahnuť dotykové napätie 60 V</li>
+            <li class="option correct">B) sa musia chrániť prúdovým chráničom s vypínacím prúdom do 30 mA</li>
+            <li class="option">C) sa musia chrániť prúdovým chráničom s vypínacím prúdom do 30 mA v prípade ak nie je možné dosiahnuť dotykové napätie 25 V</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 21 -->
+    <div class="question-card">
+        <div class="question-title">21. V oblastiach s poľnohospodárskymi prevádzkarňami, v ktorých sa pohybujú vozidlá a mobilné poľnohospodárske stroje, samonosné závesné káble sa musia inštalovať vo výške aspoň</div>
+        <div class="norm-tag">STN 33 2000-7-705:2007</div>
+        <ul class="options">
+            <li class="option">A) 7,0 m</li>
+            <li class="option correct">B) 6,0 m</li>
+            <li class="option">C) 5,0 m</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 22 -->
+    <div class="question-card">
+        <div class="question-title">22. Pri vedeniach s holými vodičmi do 1 kV vzdialenosť živej časti vedenia nad oknom je min.</div>
+        <div class="norm-tag">STN 33 3300:1983</div>
+        <ul class="options">
+            <li class="option">A) 30 cm</li>
+            <li class="option">B) 50 cm</li>
+            <li class="option correct">C) 20 cm</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 23 -->
+    <div class="question-card">
+        <div class="question-title">23. Vodiče PEN a PE vo vonkajších vedeniach (distribučných rozvodov) sa musia uzemniť na trase vedenia každých</div>
+        <div class="norm-tag">STN 33 2000-4-41:2019</div>
+        <ul class="options">
+            <li class="option">A) 100 m</li>
+            <li class="option">B) 200 m</li>
+            <li class="option correct">C) 500 m</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 24 -->
+    <div class="question-card">
+        <div class="question-title">24. Prípojkovú skriňu možno umiestniť výnimočne aj v blízkosti nehnuteľnosti odberateľa spodný okraj skrine má byť</div>
+        <div class="norm-tag">STN 33 3320:2002</div>
+        <ul class="options">
+            <li class="option">A) 1,0 m nad definitívne upraveným terénom s prihliadnutím na miestne klimatické podmienky, odporúča sa, aby umiestnenie nebolo vyššie ako 1,5 m</li>
+            <li class="option correct">B) 0,6 m nad definitívne upraveným terénom s prihliadnutím na miestne klimatické podmienky, odporúča sa, aby umiestnenie nebolo vyššie ako 1,5 m</li>
+            <li class="option">C) 0,6 m nad definitívne upraveným terénom s prihliadnutím na miestne klimatické podmienky, odporúča sa, aby umiestnenie nebolo vyššie ako 2,0 m</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 25 -->
+    <div class="question-card">
+        <div class="question-title">25. Minimálna hodnota izolačného odporu na DC strane FVE pri napätí reťazca viac ako 500 V musí byť</div>
+        <div class="norm-tag">STN EN 62446-1:2016</div>
+        <ul class="options">
+            <li class="option">A) 2 MΩ</li>
+            <li class="option correct">B) 1 MΩ</li>
+            <li class="option">C) 7 MΩ</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 26 -->
+    <div class="question-card">
+        <div class="question-title">26. V akých prípadoch by mal byť na chránenej stavbe použitý izolovaný (oddialený) vonkajší LPS</div>
+        <div class="norm-tag">STN EN 62305-3:2012</div>
+        <ul class="options">
+            <li class="option">A) pri objektoch do výšky 10m</li>
+            <li class="option correct">B) ak tepelné a výbušné účinky v mieste zásahu alebo vo vodičoch, ktoré vedú bleskový prúd, môžu spôsobiť škody na stavbe alebo na jej vybavení</li>
+            <li class="option">C) ak tepelné a výbušné účinky v mieste zásahu alebo vo vodičoch, ktoré vedú bleskový prúd, môžu spôsobiť škody na stavbe alebo na jej vybavení a nie je možné použiť aktívny bleskozvod</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 27 -->
+    <div class="question-card">
+        <div class="question-title">27. Z čoho sa skladá uzemňovacia sústava v usporiadaní typu A</div>
+        <div class="norm-tag">STN EN 62305-3:2012</div>
+        <ul class="options">
+            <li class="option">A) z vodorovného alebo zvislého uzemňovača, inštalovaného v základoch chránenej stavby ktorý je spojený s každým zvodom</li>
+            <li class="option correct">B) z vodorovného alebo zvislého uzemňovača, inštalovaného mimo chránenej stavby ktorý je spojený s každým zvodom</li>
+            <li class="option">C) z vodorovného alebo zvislého uzemňovača, inštalovaného po obvode stavby ktorý je spojený s každým zvodom a vytvára uzatvorenú slučku</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 28 -->
+    <div class="question-card">
+        <div class="question-title">28. V ktorej časti objektu sa podľa rady STN EN 62305 nachádza zóna LPZ 0B</div>
+        <div class="norm-tag">STN EN 62305-4:2013</div>
+        <ul class="options">
+            <li class="option">A) vnútorná zóna– systém je chránený pred priamym zásahom blesku</li>
+            <li class="option correct">B) vonkajšia zóna – systém je chránený pred priamym zásahom blesku</li>
+            <li class="option">C) vonkajšia zóna – systém nie je chránený pred priamym zásahom blesku</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 29 -->
+    <div class="question-card">
+        <div class="question-title">29. Koľko zvodov je nutné inštalovať u neizolovaného (neoddialeného) LPS triedy III</div>
+        <div class="norm-tag">STN EN 62305-3:2012</div>
+        <ul class="options">
+            <li class="option correct">A) na každých 15m</li>
+            <li class="option">B) na každých 10m</li>
+            <li class="option">C) na každých 20m</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 30 -->
+    <div class="question-card">
+        <div class="question-title">30. Normy rady STN EN 62305 využívajú v celom rozsahu skrátené názvy. Čo znamená označenie LPS</div>
+        <div class="norm-tag">STN EN 62305-1:2012</div>
+        <ul class="options">
+            <li class="option correct">A) Systém ochrany pred bleskom</li>
+            <li class="option">B) Úroveň ochrany pred bleskom</li>
+            <li class="option">C) Zóna ochrany pred bleskom</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 31 -->
+    <div class="question-card">
+        <div class="question-title">31. Odpor ochranného pospájania pre skúšané zariadenie s dĺžkou káblov 10 m</div>
+        <div class="norm-tag">STN EN 50699:2022</div>
+        <ul class="options">
+            <li class="option correct">A) môže byť väčší ako 0,4 Ω</li>
+            <li class="option">B) nesmie presiahnuť 0,3 Ω</li>
+            <li class="option">C) nesmie presiahnuť 0,4 Ω</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 32 -->
+    <div class="question-card">
+        <div class="question-title">32. Elektrické ručné náradie je</div>
+        <div class="norm-tag">STN 33 1630:2025</div>
+        <ul class="options">
+            <li class="option">A) Elektrický spotrebič, ktorý je pomocou predlžovacieho prívodu trvalo pripojený k obvodu elektrickej inštalácie.</li>
+            <li class="option">B) Elektrický spotrebič, ktorý je pomocou žíl trvalo pripojený k obvodu elektrickej inštalácie.</li>
+            <li class="option correct">C) Elektrické náradie pripojené do siete vidlicou, ktoré je určené najmä na remeselnú činnosť, počas ktorej sa drží v ruke</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 33 -->
+    <div class="question-card">
+        <div class="question-title">33. Skúšobné napätie el. inštalácie s menovitým napätím SELV je</div>
+        <div class="norm-tag">STN 33 2000-6:2018</div>
+        <ul class="options">
+            <li class="option correct">A) 250 V DC</li>
+            <li class="option">B) 500 V DC</li>
+            <li class="option">C) 250 V AC</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 34 -->
+    <div class="question-card">
+        <div class="question-title">34. Minimálny požadovaný izolačný odpor el. inštalácie s napätím PELV je</div>
+        <div class="norm-tag">STN 33 2000-6:2018</div>
+        <ul class="options">
+            <li class="option">A) ≥ 1,5 MΩ</li>
+            <li class="option">B) ≥ 1 MΩ</li>
+            <li class="option correct">C) ≥ 0,5 MΩ</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 35 -->
+    <div class="question-card">
+        <div class="question-title">35. Izolačný odpor náradia so zosilnenou izoláciou nesmie byť menší ako</div>
+        <div class="norm-tag">STN EN 50699:2022</div>
+        <ul class="options">
+            <li class="option correct">A) menší ako 2 MΩ</li>
+            <li class="option">B) menší ako 7 MΩ</li>
+            <li class="option">C) menší ako 5 MΩ</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 36 -->
+    <div class="question-card">
+        <div class="question-title">36. Za mechanické namáhanie sa v súvislosti s predlžovacími prívodmi sa považuje vystavenie vonkajším mechanickým silám vznikajúcim počas ich používania napr. pri</div>
+        <div class="norm-tag">STN 33 1630:2025</div>
+        <ul class="options">
+            <li class="option correct">A) Upratovacej činnosti</li>
+            <li class="option">B) Napájaní kancelárskej techniky</li>
+            <li class="option">C) napájaní kuchynských spotrebičov</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 37 -->
+    <div class="question-card">
+        <div class="question-title">37. Pravidelná revízia elektrických spotrebičov okrem spotrebičov držaných v ruke zaradených do skupiny E podľa oblasti ich používania sa vykonáva</div>
+        <div class="norm-tag">STN 33 1630:2025</div>
+        <ul class="options">
+            <li class="option correct">A) 1 x za 24 mesiacov</li>
+            <li class="option">B) 1 x za 12 mesiacov</li>
+            <li class="option">C) 1 x za 6 mesiacov</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 38 -->
+    <div class="question-card">
+        <div class="question-title">38. Maximálna hodnota prúdu v ochrannom vodiči pre zariadenia, ktoré nie sú trvalo pripojené k napájacej sieti je</div>
+        <div class="norm-tag">STN EN 50699:2022</div>
+        <ul class="options">
+            <li class="option correct">A) vo všeobecnosti 3,5 mA</li>
+            <li class="option">B) vo všeobecnosti 5 mA</li>
+            <li class="option">C) vo všeobecnosti 10 mA</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 39 -->
+    <div class="question-card">
+        <div class="question-title">39. Aké sú minimálne intervaly medzi revíziami LPS hladiny I a II</div>
+        <div class="norm-tag">STN EN 62305-3:2012</div>
+        <ul class="options">
+            <li class="option">A) 4 roky</li>
+            <li class="option correct">B) 2 roky</li>
+            <li class="option">C) 3 roky</li>
+        </ul>
+    </div>
+
+    <!-- Otázka 40 -->
+    <div class="question-card">
+        <div class="question-title">40. Na základe akých údajov sa rozhoduje o ochrane stavby alebo inžinierskych sieťach pred bleskom, rovnako ako o výber ochranných opatrení</div>
+        <div class="norm-tag">STN EN 62305-1:2012</div>
+        <ul class="options">
+            <li class="option">A) vzdialenosť objektu od okolitých stavieb</li>
+            <li class="option">B) hodnoty investície</li>
+            <li class="option correct">C) strata alebo úraz ľudského života, strata služieb pre verejnosť, strata kultúrneho dedičstva</li>
+        </ul>
+    </div>
+
+</div>
+
+</body>
+</html>
