@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test LPS 6</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+    body {
+      background-color: #f5f6f8;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .quiz-container {
+      background: #ffffff;
+      width: 100%;
+      max-width: 800px;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    /* Top Bar */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #eef0f3;
+      padding-bottom: 12px;
+      margin-bottom: 20px;
+    }
+    .home-link {
+      text-decoration: none;
+      color: #0066cc;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    .quiz-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #333333;
+      margin: 0;
+    }
+    .timer {
+      font-size: 16px;
+      font-weight: bold;
+      color: #d9534f;
+      background: #fdf2f2;
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid #f5c6cb;
+    }
+    /* Question Card */
+    .question-card {
+      display: none;
+    }
+    .question-card.active {
+      display: block;
+    }
+    .question-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 6px;
+    }
+    .norm-tag {
+      font-size: 13px;
+      color: #666666;
+      margin-bottom: 20px;
+    }
+    /* Options */
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .option-btn {
+      display: flex;
+      align-items: flex-start;
+      padding: 14px 18px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      background-color: #ffffff;
+      font-size: 15px;
+      color: #333333;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s ease;
+      line-height: 1.4;
+    }
+    .option-btn:hover {
+      border-color: #bbbbbb;
+      background-color: #fafafa;
+    }
+    .option-btn .label {
+      font-weight: bold;
+      margin-right: 12px;
+      min-width: 24px;
+    }
+    /* Colors for correctness */
+    .option-btn.correct {
+      background-color: #70ff8b !important;
+      border-color: #42d15e !important;
+      color: #000000 !important;
+      font-weight: 500;
+    }
+    .option-btn.incorrect {
+      background-color: #ff5252 !important;
+      border-color: #e03838 !important;
+      color: #ffffff !important;
+    }
+    .option-btn.disabled {
+      pointer-events: none;
+    }
+    /* Bottom Navigation */
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #eef0f3;
+      padding-top: 16px;
+    }
+    .nav-btn {
+      padding: 10px 20px;
+      font-size: 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .btn-prev {
+      background-color: #ffffff;
+      border: 1px solid #cccccc;
+      color: #333333;
+    }
+    .btn-prev:hover {
+      background-color: #f0f0f0;
+    }
+    .btn-next {
+      background-color: #1d6bf3;
+      border: none;
+      color: #ffffff;
+    }
+    .btn-next:hover {
+      background-color: #1554c0;
+    }
+    .btn-result {
+      background-color: #ffffff;
+      border: 1px solid #cccccc;
+      color: #333333;
+    }
+    .btn-result:hover {
+      background-color: #f0f0f0;
+    }
+    .right-nav {
+      display: flex;
+      gap: 10px;
+    }
+    /* Final Score Screen */
+    .score-screen {
+      display: none;
+      text-align: center;
+      padding: 20px 0;
+    }
+    .score-screen h2 {
+      font-size: 24px;
+      color: #333333;
+    }
+    .score-screen p {
+      font-size: 18px;
+      color: #555555;
+    }
+  </style>
+</head>
+<body>
+
+<div class="quiz-container">
+  <!-- Top Navigation & Timer -->
+  <div class="top-bar">
+    <a href="#" class="home-link">&#8249; Domov</a>
+    <h1 class="quiz-title">Test LPS 6</h1>
+    <div class="timer" id="timer">Čas: 30:00</div>
+  </div>
+
+  <!-- Quiz Questions -->
+  <div id="quiz-questions">
+
+    <!-- Otázka 1 -->
+    <div class="question-card active" data-correct="C">
+      <div class="question-title">Čo je to diagram</div>
+      <div class="norm-tag">STN EN 61082-1:2015</div>
+      <div class="options-list">
+        <button class="option-btn" onclick="selectOption(this, 'A')"><span class="label">A)</span> uvedenie informácií pomocou výkresov, kde pre vyznačenie predmetov a ich vzájomných vzťahov používame grafické značky</button>
+        <button class="option-btn" onclick="selectOption(this, 'B')"><span class="label">B)</span> uvedenie informácií pomocou výkresov, kde sú znázornené objekty prevažne v mierke k vzájomnému vzťahu</button>
+        <button class="option-btn" onclick="selectOption(this, 'C')"><span class="label">C)</span> uvedenie informácií pomocou výkresov, kde sú vyznačené vzťahy medzi dvoma a viac premennými veličinami a operáciami</button>
+      </div>
+    </div>
+
+    <!-- Otázka 2 -->
+    <div class="question-card" data-correct="A">
+      <div class="question-title">Zariadenie s impulzným výdržným napätím zodpovedajúcim kategórii prepätia III. je zariadenie</div>
+      <div class="norm-tag">STN 33 2000-4-443:2017</div>
+      <div class="options-list">
+        <button class="option-btn" onclick="selectOption(this, 'A')"><span class="label">A)</span> určené na použitie v pevných elektrických inštaláciách v hlavnom domovom rozvádzači a za ním, s vysokým stupňom pohotovosti</button>
+        <button class="option-btn" onclick="selectOption(this, 'B')"><span class="label">B)</span> vhodné na použitie v napájacom bode elektrických inštalácií alebo v jeho blízkosti, napríklad pred hlavným domovým rozvádzačom</button>
+        <button class="option-btn" onclick="selectOption(this, 'C')"><span class="label">C)</span> vhodné na pripojenie na pevné elektrické inštalácie zabezpečujúce normálny stupeň pohotovosti zvyčajne vyžadovaný pre elektrické spotrebiče</button>
+      </div>
+    </div>
+
+    <!-- Otázka 3 -->
+    <div class="question-card" data-correct="B">
+      <div class="question-title">Elektrické spotrebiče triedy I. sú</div>
+      <div class="norm-tag">STN 33 2000-4-41:2019</div>
+      <div class="options-list">
+        <button class="option-btn" onclick="selectOption(this, 'A')"><span class="label">A)</span> s privedeným ochranným vodičom. Ochrana pred úrazom el. prúdom je zaistená dvojitou izoláciou a pripojením ochranného vodiča na ochrannú svorku</button>
+        <button class="option-btn" onclick="selectOption(this, 'B')"><span class="label">B)</span> s privedeným ochranným vodičom. Ochrana pred úrazom el. prúdom je zaistená základnou izoláciou a pripojením neživej časti k ochrannému vodiču</button>
+        <button class="option-btn" onclick="selectOption(this, 'C')"><span class="label">C)</span> s privedeným ochranným vodičom. Ochrana pred úrazom el. prúdom je zaistená dvojitou izoláciou a pripojením neživej časti k ochrannému vodiču</button>
+      </div>
+    </div>
+
+    <!-- Otázka 4 -->
+    <div class="question-card" data-correct="B">
+      <div class="question-title">V jednosmerných obvodoch vodič PEL</div>
+      <div class="norm-tag">STN 33 2000-1:2009</div>
+      <div class="options-list">
+        <button class="option-btn" onclick="selectOption(this, 'A')"><span class="label">A)</span> je v trojvodičovom obvode</button>
+        <button class="option-btn" onclick="selectOption(this, 'B')"><span class="label">B)</span> je v dvojvodičovom obvode</button>
+        <button class="option-btn" onclick="selectOption(this, 'C')"><span class="label">C)</span> sa nenachádza</button>
+      </div>
+    </div>
+
+    <!-- Otázka 5 -->
+    <div class="question-card" data-correct="B">
+      <div class="question-title">Čo je technická dokumentácia</div>
+      <div class="norm-tag">STN EN 61082-1:2015</div>
+      <div class="options-list">
+        <button class="option-btn" onclick="selectOption(this, 'A')"><span class="label">A)</span> je to nevyhnutný prostriedok k dôkazu, že projekt je spracovaný podľa technických a bezpečnostných predpisov</button>
+        <button class="option-btn" onclick="selectOption(this, 'B')"><span class="label">B)</span> je to nevyhnutný prostriedok k dôkazu, že je vyhovené všetkým požiadavkám na bezpečnosť, prostredie a kvalitu vo vzťahu k produktu, alebo systému</button>
+        <button class="option-btn" onclick="selectOption(this, 'C')"><span class="label">C)</span> je to nevyhnutný prostriedok k dôkazu, že projekt je spracovaný podľa harmonizovaných technických a bezpečnostných predpisov</button>
+      </div>
+    </div>
+
+    <!-- Otázka 6 -->
+    <div class="question-card" data-correct="C">
+      <div class="question-title">Vyrábať, montovať na mieste budúcej prevádzky a rekonštruovať vyhradené technické zariadenie možno iba podľa konštrukčnej dokumentácie, ku ktorej bolo vydané odborné stanovisko OPOm podľa § 14 ods. 1 písm. d) zákona, ktorým sa posudzuje konštrukčná dokumentácia</div>
+      <div class="norm-tag">vyhláška 508/2009 Z. z.</div>
+      <div class="options-list">
+        <button class="option-btn" onclick="selectOption(this, 'A')"><span class="label">A)</span> pri VTZ elektrickom sa odborné stanovisko k dokumentácii vyžaduje okrem skupiny C</button>
+        <button class="option-btn" onclick="selectOption(this, 'B')"><span class="label">B)</span> pri VTZ elektrickom sa odborné stanovisko k dokumentácii nevyžaduje</button>
+        <button class="option-btn" onclick="selectOption(this, 'C')"><span class="label">C)</span> pri VTZ elektrickom sa odborné stanovisko k dokumentácii vyžaduje iba na technické zariadenie skupiny A</button>
+      </div>
+    </div>
+
+    <!-- Otázka 7 -->
+    <div class="question-card" data-correct="C">
+      <div class="question-title">Symbolom Ia pri vyhodnocovaní impedančnej slučky označujeme</div>
+      <div class="norm-tag">STN 33 2000-4-41:2019</div>
+      <div class="options-list">
+        <button class="option-btn" onclick="selectOption(this, 'A')"><span class="label">A)</span> menovitý prúd ochranného prístroja v ampéroch (A) , zaisťujúci samočinné odpojenie</button>
+        <button class="option-btn" onclick="selectOption(this, 'B')"><span class="label">B)</span> menovitý prúd istiaceho prístroja v ampéroch (A) , zaisťujúci samočinné odpojenie</button>
+        <button class="option-btn" onclick="selectOption(this, 'C')"><span class="label">C)</span> prúd v ampéroch (A), zaisťujúci samočinné odpojenie odpájacím prístrojom v stanovenom čase</button>
+      </div>
+    </div>
+
+    <!-- Otázka 8 -->
+    <div class="question-card" data-correct="A">
+      <div class="question-title">Označenie rozvodnej siete 3+PEN 400/230V 50Hz znamená</div>
+      <div class="norm-tag">STN 33 2000-1:2009</div>
+      <div class="options-list">
+        <button class="option-btn" onclick="selectOption(this, 'A')"><span class="label">A)</span> trojfázová elektrická striedavá sieť s uzemneným bodom zdroja TN-C. Funkcia neutrálneho a ochranného vodiča je zlúčená do jedného kombinovaného vodiča PEN</button>
+        <button class="option-btn" onclick="selectOption(this, 'B')"><span class="label">B)</span> trojfázová elektrická striedavá sieť s uzemneným bodom zdroja TN-C. Neživé časti el. spotrebičov sú s týmto bodom spojené. Funkcia neutrálneho a ochranného vodiča je samostatná</button>
+        <button class="option-btn" onclick="selectOption(this, 'C')"><span class="label">C)</span> trojfázová elektrická striedavá sieť s uzemneným bodom zdroja TN-S. Funkcia neutrálneho a ochranného vodiča je zlúčená do jedného kombinovaného vodiča PEN</button>
+      </div>
+    </div>
+
+    <!-- Otázka 9 -->
+    <div class="question-card" data-correct="C">
+      <div class="question-title">Autorizovaným stavebným inžinierom je ten, kto je zapísaný v zozname autorizovaných stavebných inžinierov</div>
+      <div class="norm-tag">zákon 237/2000 Z. z.</div>
+      <div class="options-list">
+        <button class="option-btn" onclick="selectOption(this, 'A')"><span class="label">A)</span> v zmysle zákona č. 124/2006 Z. z. oprávnenou osobou</button>
+        <button class="option-btn" onclick="selectOption(this, 'B')"><span class="label">B)</span> v zmysle vyhlášky č. 508/2009 Z. z. oprávnenou osobou</button>
+        <button class="option-btn" onclick="selectOption(this, 'C')"><span class="label">C)</span> v zmysle zákona č. 237/2000 Z. z. oprávnenou osobou</button>
+      </div>
+    </div>
+
+    <!-- Otázka 10 -->
+    <div class="question-card" data-correct="A">
+      <div class="question-title">Vyhláška č. 508/2009 Z. z. okrem iného pojednáva o</div>
+      <div class="norm-tag">vyhláška 508/2009 Z. z.</div>
+      <div class="options-list">
+        <button class="option-btn" onclick="selectOption(this, 'A')"><span class="label">A)</span> obsahu konštrukčnej dokumentácie</button>
+        <button class="option-btn" onclick="selectOption(this, 'B')"><span class="label">B)</span> obsahu projektovej dokumentácie ktorá sa predkladá k stavebnému konaniu</button>
+        <button class="option-btn" onclick="selectOption(this, 'C')"><span class="label">C)</span> obsahu sprievodnej dokumentácie ktorá sa predkladá k stavebnému konaniu</button>
+      </div>
+    </div>
+
+    <!-- Otázka 11 -->
+    <div class="question-card" data-correct="C">
+      <div class="question-title">Normy rady STN EN 62305 využívajú v celom rozsahu skrátené názvy. Čo znamená označenie LPL</div>
+      <div class="norm-tag">STN EN 62305-1:2012</div>
+      <div class="options-list">
+        <button class="option-btn" onclick="selectOption(this, 'A')"><span class="label">A)</span> Zóna ochrany pred bleskom</button>
+        <button class="option-btn" onclick="selectOption(this, 'B')"><span class="label">B)</span> Systém ochrany pred bleskom</button>
+        <button class="option-btn" onclick="selectOption(this, 'C')"><span class="label">C)</span> Úroveň ochrany pred bleskom</button>
+      </div>
+    </div>
+
+    <!-- Otázka 12 -->
+    <div class="question-card" data-correct="A">
+      <div class="question-title">Normy rady STN EN 62305 využívajú v celom rozsahu skrátené názvy. Čo znamená označenie SPD</div>
+      <div class="norm-tag">STN EN 62305-1:2012</div>
+      <div class="options-list">
+        <button class="option-btn" onclick="selectOption(this, 'A')"><span class="label">A)</span> Prepäťové ochranné zariadenie</button>
+        <button class="option-btn" onclick="selectOption(this, 'B')"><span class="label">B)</span> Zóna ochrany pred bleskom</button>
+        <button class="option-btn" onclick="selectOption(this, 'C')"><span class="label">C)</span> Úroveň ochrany pred bleskom</button>
+      </div>
+    </div>
+
+    <!-- Otázka 13 -->
+    <div class="question-card" data-correct="A">
+      <div class="question-title">Aká je maximálna uvažovaná vrcholová hodnota bleskového prúdu I v závislosti na triede LPL</div>
+      <div class="norm-tag">STN EN 62305-1:2012</div>
+      <div class="options-list">
+        <button class="option-btn" onclick="selectOption(this, 'A')"><span class="label">A)</span> 200 kA</button>
+        <button class="option-btn" onclick="selectOption(this, 'B')"><span class="label">B)</span> 100 kA</button>
+        <button class="option-btn" onclick="selectOption(this, 'C')"><span class="label">C)</span> 150 kA</button>
+      </div>
+    </div>
+
+    <!-- Otázka 14 -->
+    <div class="question-card" data-correct="A">
+      <div class="question-title">Normy rady STN EN 62305 využívajú v celom rozsahu skrátené názvy. Čo znamená označenie LEMP</div>
+      <div class="norm-tag">STN EN 62305-1:2012</div>
+      <div class="options-list">
+        <button class="option-btn" onclick="selectOption(this, 'A')"><span class="label">A)</span> Elektromagnetický impulz vyvolaný bleskom</button>
+        <button class="option-btn" onclick="selectOption(this, 'B')"><span class="label">B)</span> Zóna ochrany pred bleskom</button>
+        <button class="option-btn" onclick="selectOption(this, 'C')"><span class="label">C)</span> Úroveň ochrany pred bleskom</button>
+      </div>
+    </div>
+
+    <!-- Otázka 15 -->
+    <div class="question-card" data-correct="B">
+      <div class="question-title">Ako sú označované základné typy škôd pri výpočtoch</div>
+      <div class="norm-tag">STN EN 62305-2:2013</div>
+      <div class="options-list">
+        <button class="option-btn" onclick="selectOption(this, 'A')"><span class="label">A)</span> D1 ľudské životy , D2 verejné služby , D3 porucha elektrických a elektronických systémov</button>
+        <button class="option-btn" onclick="selectOption(this, 'B')"><span class="label">B)</span> D1 úraz živých bytostí , D2 hmotná škoda , D3 porucha elektrických a elektronických systémov</button>
+        <button class="option-btn" onclick="selectOption(this, 'C')"><span class="label">C)</span> D1 ľudské životy , D2 verejné služby , D3 kultúrne dedičstvo , D4 ekonomické</button>
+      </div>
+    </div>
+
+    <!-- Otázka 16 -->
+    <div class="question-card" data-correct="C">
+      <div class="question-title">Čo je považované podľa návrhu ochrany pred bleskom za nebezpečnú udalosť</div>
+      <div class="norm-tag">STN EN 62305-2:2013</div>
+      <div class="options-list">
+        <button class="option-btn" onclick="selectOption(this, 'A')"><span class="label">A)</span> zásah blesku do chránenej stavby alebo v jej blízkosti, ktorý nemôže spôsobiť škodu</button>
+        <button class="option-btn" onclick="selectOption(this, 'B')"><span class="label">B)</span> zásah blesku do chránenej stavby alebo v jej blízkosti, do alebo v blízkosti vedenia pripojeného k chránenej stavbe, ktorý nemôže spôsobiť škodu</button>
+        <button class="option-btn" onclick="selectOption(this, 'C')"><span class="label">C)</span> zásah blesku do chránenej stavby alebo v jej blízkosti, do alebo v blízkosti vedenia pripojeného k chránenej stavbe, ktorý môže spôsobiť škodu</button>
+      </div>
+    </div>
+
+    <!-- Otázka 17 -->
+    <div class="question-card" data-correct="A">
+      <div class="question-title">Aké základné typy strát rozoznávame na chránenom objekte</div>
+      <div class="norm-tag">STN EN 62305-2:2013</div>
+      <div class="options-list">
+        <button class="option-btn" onclick="selectOption(this, 'A')"><span class="label">A)</span> L1 strata ľudských životov , L2 strata služby pre verejnosť , L3 strata kultúrneho dedičstva , L4 strata ekonomickej hodnoty</button>
+        <button class="option-btn" onclick="selectOption(this, 'B')"><span class="label">B)</span> L1 úraz živých bytostí , L2 hmotná škoda , L3 porucha elektrických a elektronických systémov</button>
+        <button class="option-btn" onclick="selectOption(this, 'C')"><span class="label">C)</span> L1 strata ľudských životov , L2 strata služby pre verejnosť , L3 strata kultúrneho dedičstva , L4 strata elektrických a elektronických systémov</button>
+      </div>
+    </div>
+
+    <!-- Otázka 18 -->
+    <div class="question-card" data-correct="C">
+      <div class="question-title">Čo zahŕňa výpočet pri oceňovaní rizika stavby</div>
+      <div class="norm-tag">STN EN 62305-2:2013</div>
+      <div class="options-list">
+        <button class="option-btn" onclick="selectOption(this, 'A')"><span class="label">A)</span> vlastnú stavbu, stavebnú inštaláciu, obsah v stavbe, osoby nachádzajúce sa v stavbe, prostredie ovplyvnené poškodením stavby, pripojené inžinierske siete k stavbe</button>
+        <button class="option-btn" onclick="selectOption(this, 'B')"><span class="label">B)</span> vlastnú stavbu, stavebnú inštaláciu, obsah v stavbe, osoby v stavbe alebo osoby stojace v zóne do 3m od vonkajška stavby, prostredie ovplyvnené poškodením stavby, pripojené inžinierske siete k stavbe</button>
+        <button class="option-btn" onclick="selectOption(this, 'C')"><span class="label">C)</span> vlastnú stavbu, stavebnú inštaláciu, obsah v stavbe, osoby v stavbe alebo osoby stojace v zóne do 3m od vonkajška stavby, prostredie ovplyvnené poškodením stavby</button>
+      </div>
+    </div>
+
+    <!-- Otázka 19 -->
+    <div class="question-card" data-correct="A">
+      <div class="question-title">Aký typ uzemňovacej sústavy sa uprednostňuje v stavbách, kde sú inštalované elektronické systémy</div>
+      <div class="norm-tag">STN EN 62305-3:2012</div>
+      <div class="options-list">
+        <button class="option-btn" onclick="selectOption(this, 'A')"><span class="label">A)</span> B</button>
+        <button class="option-btn" onclick="selectOption(this, 'B')"><span class="label">B)</span> A</button>
+        <button class="option-btn" onclick="selectOption(this, 'C')"><span class="label">C)</span> C</button>
+      </div>
+    </div>
+
+    <!-- Otázka 20 -->
+    <div class="question-card" data-correct="B">
+      <div class="question-title">Akým opatrením je možné znížiť nebezpečenstvo pred vznikom krokových napätí vzniknutých v okolí vonkajších zvodov LPS</div>
+      <div class="norm-tag">STN EN 62305-3:2012</div>
+      <div class="options-list">
+        <button class="option-btn" onclick="selectOption(this, 'A')"><span class="label">A)</span> zabezpečiť rezistivitu vrchného podložia pôdy v okruhu do 3 m od zvodu min 5 kΩm</button>
+        <button class="option-btn" onclick="selectOption(this, 'B')"><span class="label">B)</span> zabezpečiť rezistivitu vrchného podložia pôdy v okruhu do 3 m od zvodu min 100 kΩm</button>
+        <button class="option-btn" onclick="selectOption(this, 'C')"><span class="label">C)</span> zabezpečiť rezistivitu vrchného podložia pôdy v okruhu do 3 m od zvodu max 5 kΩm</button>
+      </div>
+    </div>
+
+    <!-- Otázka 21 -->
+    <div class="question-card" data-correct="A">
+      <div class="question-title">Aký je doporučený maximálny odpor uzemnenia k zariadeniu LPS</div>
+      <div class="norm-tag">STN EN 62305-3:2012</div>
+      <div class="options-list">
+        <button class="option-btn" onclick="selectOption(this, 'A')"><span class="label">A)</span> 10 Ω</button>
+        <button class="option-btn" onclick="selectOption(this, 'B')"><span class="label">B)</span> 15 Ω</button>
+        <button class="option-btn" onclick="selectOption(this, 'C')"><span class="label">C)</span> 5 Ω</button>
+      </div>
+    </div>
+
+    <!-- Otázka 22 -->
+    <div class="question-card" data-correct="C">
+      <div class="question-title">Z čoho sa skladá vonkajší systém ochrany pred bleskom</div>
+      <div class="norm-tag">STN EN 62305-3:2012</div>
+      <div class="options-list">
+        <button class="option-btn" onclick="selectOption(this, 'A')"><span class="label">A)</span> Sústavy zvodov a uzemnenia</button>
+        <button class="option-btn" onclick="selectOption(this, 'B')"><span class="label">B)</span> Zachytávacej sústavy a sústavy zvodov</button>
+        <button class="option-btn" onclick="selectOption(this, 'C')"><span class="label">C)</span> Zachytávacej sústavy, sústavy zvodov a uzemňovacia sústava</button>
+      </div>
+    </div>
+
+    <!-- Otázka 23 -->
+    <div class="question-card" data-correct="A">
+      <div class="question-title">Kde je vhodné použiť priestorové tienenie stavby</div>
+      <div class="norm-tag">STN EN 62305-4:2013</div>
+      <div class="options-list">
+        <button class="option-btn" onclick="selectOption(this, 'A')"><span class="label">A)</span> tam kde je účelnejšie a užitočnejšie chrániť definovanú zónu stavby namiesto niekoľko jednotlivých zariadení</button>
+        <button class="option-btn" onclick="selectOption(this, 'B')"><span class="label">B)</span> tam kde nie je možné použiť metódu valivej gule</button>
+        <button class="option-btn" onclick="selectOption(this, 'C')"><span class="label">C)</span> tam kde je účelnejšie a užitočnejšie chrániť jednotlivé zariadenie</button>
+      </div>
+    </div>
+
+    <!-- Otázka 24 -->
+    <div class="question-card" data-correct="B">
+      <div class="question-title">Aké úkony sa nepožadujú pri výkone vizuálnej prehliadky pri revízii systému ochranných opatrení LPMS</div>
+      <div class="norm-tag">STN EN 62305-4:2013</div>
+      <div class="options-list">
+        <button class="option-btn" onclick="selectOption(this, 'A')"><span class="label">A)</span> kontrola uvoľnenia spojov</button>
+        <button class="option-btn" onclick="selectOption(this, 'B')"><span class="label">B)</span> meranie spojitosti</button>
+        <button class="option-btn" onclick="selectOption(this, 'C')"><span class="label">C)</span> kontrola trasy vedení</button>
+      </div>
+    </div>
+
+    <!-- Otázka 25 -->
+    <div class="question-card" data-correct="A">
+      <div class="question-title">Revízni technik musí pripraviť revíznu správu, ktorá bude pripojená k technickej dokumentácii a k predchádzajúcim revíznym správam. Aké informácie musí správa o revízii obsahovať</div>
+      <div class="norm-tag">STN EN 62305-4:2013</div>
+      <div class="options-list">
+        <button class="option-btn" onclick="selectOption(this, 'A')"><span class="label">A)</span> o všeobecnom stave SPM, akejkoľvek odchýlke, výsledkoch meraní</button>
+        <button class="option-btn" onclick="selectOption(this, 'B')"><span class="label">B)</span> o vizuálnom stave systému ochrany pred bleskom bez výsledkov merania</button>
+        <button class="option-btn" onclick="selectOption(this, 'C')"><span class="label">C)</span> o manažérstve rizika</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Navigation Buttons -->
+  <div class="nav-bar" id="nav-bar">
+    <button class="nav-btn btn-prev" onclick="changeQuestion(-1)">&#8249; Predchádzajúca</button>
+    <div class="right-nav">
+      <button class="nav-btn btn-next" onclick="changeQuestion(1)">Nasledujúca &#8250;</button>
+      <button class="nav-btn btn-result" onclick="showResults()">Zobraziť celý výsledok</button>
+    </div>
+  </div>
+
+  <!-- Final Score Screen -->
+  <div class="score-screen" id="score-screen">
+    <h2>Test bol dokončený!</h2>
+    <p id="score-text"></p>
+    <button class="nav-btn btn-next" onclick="restartQuiz()">Spustiť znova</button>
+  </div>
+</div>
+
+<script>
+  let currentQuestion = 0;
+  const questions = document.querySelectorAll('.question-card');
+  const totalQuestions = questions.length;
+  let score = 0;
+  let userAnswers = new Array(totalQuestions).fill(null);
+
+  // Timer setup (30 minutes)
+  let timeInSeconds = 30 * 60;
+  const timerElement = document.getElementById('timer');
+  
+  const timerInterval = setInterval(() => {
+    let minutes = Math.floor(timeInSeconds / 60);
+    let seconds = timeInSeconds % 60;
+    
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    seconds = seconds < 10 ? '0' + seconds : seconds;
+    
+    timerElement.textContent = `Čas: ${minutes}:${seconds}`;
+    
+    if (timeInSeconds <= 0) {
+      clearInterval(timerInterval);
+      showResults();
+    }
+    timeInSeconds--;
+  }, 1000);
+
+  function showQuestion(index) {
+    questions.forEach((q, i) => {
+      q.classList.toggle('active', i === index);
+    });
+  }
+
+  function changeQuestion(direction) {
+    let newIndex = currentQuestion + direction;
+    if (newIndex >= 0 && newIndex < totalQuestions) {
+      currentQuestion = newIndex;
+      showQuestion(currentQuestion);
+    }
+  }
+
+  function selectOption(button, selectedLetter) {
+    const parentCard = questions[currentQuestion];
+    const correctLetter = parentCard.getAttribute('data-correct');
+    const buttons = parentCard.querySelectorAll('.option-btn');
+
+    // Prevent re-selection
+    buttons.forEach(btn => btn.classList.add('disabled'));
+
+    userAnswers[currentQuestion] = selectedLetter;
+
+    if (selectedLetter === correctLetter) {
+      button.classList.add('correct');
+      score++;
+    } else {
+      button.classList.add('incorrect');
+      // Highlight the correct answer as well
+      buttons.forEach(btn => {
+        if (btn.querySelector('.label').textContent.includes(correctLetter)) {
+          btn.classList.add('correct');
+        }
+      });
+    }
+  }
+
+  function showResults() {
+    document.getElementById('quiz-questions').style.display = 'none';
+    document.getElementById('nav-bar').style.display = 'none';
+    
+    const scoreScreen = document.getElementById('score-screen');
+    const scoreText = document.getElementById('score-text');
+    scoreText.textContent = `Získali ste ${score} z ${totalQuestions} bodov (${Math.round((score / totalQuestions) * 100)}%).`;
+    scoreScreen.style.display = 'block';
+  }
+
+  function restartQuiz() {
+    location.reload();
+  }
+</script>
+
+</body>
+</html>
