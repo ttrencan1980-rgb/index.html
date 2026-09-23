@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Projektant 4</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f9;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Top Bar */
+        header {
+            background-color: #ffffff;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .home-btn {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .home-btn:hover {
+            background-color: #5a6268;
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .timer {
+            font-size: 18px;
+            font-weight: bold;
+            color: #d9534f;
+            background: #fff0f0;
+            padding: 6px 12px;
+            border-radius: 4px;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Main Container */
+        main {
+            flex: 1;
+            max-width: 900px;
+            width: 100%;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .question-card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .question-text {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #111;
+        }
+
+        .norm-text {
+            font-size: 13px;
+            color: #6c757d;
+            margin-bottom: 20px;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background-color: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 15px;
+            text-align: left;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .option-btn:hover:not([disabled]) {
+            border-color: #cbd5e1;
+            background-color: #f8fafc;
+        }
+
+        .option-prefix {
+            font-weight: bold;
+            margin-right: 12px;
+            min-width: 25px;
+        }
+
+        /* Correct / Incorrect styles */
+        .option-btn.correct {
+            background-color: #4cd964 !important;
+            border-color: #4cd964 !important;
+            color: #ffffff !important;
+            font-weight: 500;
+        }
+
+        .option-btn.incorrect {
+            background-color: #ff3b30 !important;
+            border-color: #ff3b30 !important;
+            color: #ffffff !important;
+            font-weight: 500;
+        }
+
+        /* Navigation Footer */
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .nav-btn {
+            background-color: #ffffff;
+            border: 1px solid #ced4da;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #333;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover:not([disabled]) {
+            background-color: #e2e6ea;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .next-btn {
+            background-color: #0066cc;
+            color: white;
+            border: none;
+        }
+
+        .next-btn:hover:not([disabled]) {
+            background-color: #0052a3;
+        }
+
+        .question-counter {
+            font-size: 14px;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <button class="home-btn" onclick="goHome()">Domov</button>
+        <div class="header-title">Test proj4</div>
+        <div class="timer" id="timer">40:00</div>
+    </header>
+
+    <main>
+        <div class="question-card">
+            <div class="question-text" id="question-text">Načítavam otázku...</div>
+            <div class="norm-text" id="norm-text"></div>
+            
+            <div class="options-container" id="options-container">
+                <!-- Odpovede sa vygenerujú dynamically -->
+            </div>
+        </div>
+
+        <div class="nav-container">
+            <button class="nav-btn" id="prev-btn" onclick="prevQuestion()">‹ Predchádzajúca</button>
+            <span class="question-counter" id="question-counter">Otázka 1 z 10</span>
+            <button class="nav-btn next-btn" id="next-btn" onclick="nextQuestion()">Nasledujúca ›</button>
+        </div>
+    </main>
+
+    <script>
+        // Data z dodaného Word dokumentu / obrázkov
+        const quizData = [
+            {
+                question: "Symbolom U0 pri vyhodnocovaní impedančnej slučky označujeme",
+                norm: "STN 33 2000-4-41:2019",
+                options: [
+                    "menovité napätie krajného vodiča proti zemi vo voltoch (V) namerané pri zdroji v čase merania impedančnej slučky",
+                    "menovité napätie krajného vodiča proti zemi vo voltoch (V)",
+                    "menovité združené napätie medzi krajnými vodičmi vo voltoch (V)"
+                ],
+                correct: 1 // Index 1 = B
+            },
+            {
+                question: "Čo je technická dokumentácia",
+                norm: "STN EN 61082-1:2015",
+                options: [
+                    "je to nevyhnutný prostriedok k dôkazu, že projekt je spracovaný podľa technických a bezpečnostných predpisov",
+                    "je to nevyhnutný prostriedok k dôkazu, že projekt je spracovaný podľa harmonizovaných technických a bezpečnostných predpisov",
+                    "je to nevyhnutný prostriedok k dôkazu, že je vyhovené všetkým požiadavkám na bezpečnosť, prostredie a kvalitu vo vzťahu k produktu, alebo systému"
+                ],
+                correct: 2 // Index 2 = C
+            },
+            {
+                question: "Zariadenie s impulzným výdržným napätím zodpovedajúcim kategórii prepätia IV je zariadenie",
+                norm: "STN 33 2000-4-443:2017",
+                options: [
+                    "vhodné na použitie v napájacom bode elektrických inštalácií alebo v jeho blízkosti, napríklad pred hlavným domovým rozvádzačom",
+                    "vhodné na pripojenie na pevné elektrické inštalácie zabezpečujúce normálny stupeň pohotovosti zvyčajne vyžadovaný pre elektrické spotrebiče",
+                    "určené na použitie v pevných elektrických inštaláciách v hlavnom domovom rozvádzači a za ním, s vysokým stupňom pohotovosti"
+                ],
+                correct: 0 // Index 0 = A
+            },
+            {
+                question: "Čo je to schéma",
+                norm: "STN EN 61082-1:2015",
+                options: [
+                    "uvedenie informácií pomocou výkresov, kde sú znázornené objekty prevažne v mierke k vzájomnému vzťahu",
+                    "uvedenie informácií pomocou výkresov, kde sú vyznačené vzťahy medzi dvoma a viac premennými veličinami a operáciami",
+                    "uvedenie informácií pomocou výkresov, kde pre vyznačenie predmetov a ich vzájomných vzťahov používame grafické značky"
+                ],
+                correct: 2 // Index 2 = C
+            },
+            {
+                question: "Obsah projektovej dokumentácie ktorá sa predkladá k stavebnému konaniu určuje",
+                norm: "vyhláška 453/2000 Z. z.",
+                options: [
+                    "zákon č. 124/2006 Z. z.",
+                    "vyhláška č. 453/2000 Z. z.",
+                    "vyhláška č. 508/2009 Z. z."
+                ],
+                correct: 1 // Index 1 = B
+            },
+            {
+                question: "Impedanciu poruchovej slučky označujeme symbolom",
+                norm: "STN 33 2000-4-41:2019",
+                options: [
+                    "ZS",
+                    "RP",
+                    "RS"
+                ],
+                correct: 0 // Index 0 = A
+            },
+            {
+                question: "Elektrické zariadenia v priestoroch prístupných laikom a osobám poučeným musia mať vo všeobecnosti stupeň ochrany krytom aspoň",
+                norm: "STN 33 2000-4-41:2019",
+                options: [
+                    "IP2X",
+                    "IP3X",
+                    "IP4X"
+                ],
+                correct: 0 // Index 0 = A
+            },
+            {
+                question: "VTZ elektrické zaradené do skupiny A je",
+                norm: "vyhláška 508/2009 Z. z.",
+                options: [
+                    "elektrická inštalácia v objekte určenom na zhromažďovanie viac ako 250 osôb v jednom priestore vrátane ochrany pred účinkami atmosférickej elektriny",
+                    "elektrická inštalácia v objekte určenom na zhromažďovanie viac ako 300 osôb v jednom priestore vrátane ochrany pred účinkami atmosférickej elektriny",
+                    "elektrická inštalácia v objekte určenom na zhromažďovanie viac ako 200 osôb v jednom priestore vrátane ochrany pred účinkami atmosférickej elektriny"
+                ],
+                correct: 0 // Index 0 = A
+            },
+            {
+                question: "Vypracovanie projektovej dokumentácie na ohlásenie stavebných úprav a drobných stavieb, projektovej dokumentácie jednoduchej stavby, okrem bytovej budovy s viac ako 3 bytmi a stavby určenej na užívanie verejnosťou",
+                norm: "zákon 25/2025 Z. z.",
+                options: [
+                    "nie je vyhradenou činnosťou vo výstavbe",
+                    "je v kompetencii stavebného úradu",
+                    "je vyhradenou činnosťou vo výstavbe"
+                ],
+                correct: 0 // Index 0 = A
+            },
+            {
+                question: "Generálnym projektantom a projektantom časti projektovej dokumentácie, podľa §35 zákona 25/2025 Z.z.",
+                norm: "zákon 25/2025 Z. z.",
+                options: [
+                    "môže byť osoba s príslušným odborným vzdelaním",
+                    "môže byť len oprávnená osoba",
+                    "nemusí byť oprávnená osoba"
+                ],
+                correct: 1 // Index 1 = B
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+
+        // Časovač (40 minút)
+        let timeInSeconds = 40 * 60;
+        const timerElement = document.getElementById('timer');
+
+        const timerInterval = setInterval(() => {
+            const minutes = Math.floor(timeInSeconds / 60);
+            const seconds = timeInSeconds % 60;
+            timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeInSeconds <= 0) {
+                clearInterval(timerInterval);
+                alert("Čas vypršal!");
+            } else {
+                timeInSeconds--;
+            }
+        }, 1000);
+
+        function loadQuestion() {
+            const currentData = quizData[currentQuestionIndex];
+            
+            document.getElementById('question-text').textContent = currentData.question;
+            document.getElementById('norm-text').textContent = currentData.norm;
+            document.getElementById('question-counter').textContent = `Otázka ${currentQuestionIndex + 1} z ${quizData.length}`;
+
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+
+            const prefixes = ['A)', 'B)', 'C)', 'D)'];
+
+            currentData.options.forEach((optionText, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                
+                // Ak už užívateľ odpovedal na túto otázku
+                if (userAnswers[currentQuestionIndex] !== null) {
+                    btn.disabled = true;
+                    if (index === currentData.correct) {
+                        btn.classList.add('correct');
+                    } else if (index === userAnswers[currentQuestionIndex]) {
+                        btn.classList.add('incorrect');
+                    }
+                }
+
+                btn.onclick = () => selectAnswer(index);
+
+                btn.innerHTML = `
+                    <span class="option-prefix">${prefixes[index]}</span>
+                    <span>${optionText}</span>
+                `;
+                
+                optionsContainer.appendChild(btn);
+            });
+
+            // Aktualizácia tlačidiel navigácie
+            document.getElementById('prev-btn').disabled = currentQuestionIndex === 0;
+            document.getElementById('next-btn').disabled = currentQuestionIndex === quizData.length - 1;
+        }
+
+        function selectAnswer(selectedIndex) {
+            userAnswers[currentQuestionIndex] = selectedIndex;
+            loadQuestion(); // Znovunačítanie aplikuje štýly
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            }
+        }
+
+        function goHome() {
+            // Funkcia pre návrat domov (napr. presmerovanie na index.html alebo upozornenie)
+            if (confirm("Naozaj sa chcete vrátiť na hlavnú stránku?")) {
+                window.location.href = "index.html"; 
+            }
+        }
+
+        // Inicializácia pri načítaní
+        loadQuestion();
+    </script>
+</body>
+</html>
