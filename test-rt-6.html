@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test RT6 - Revízny Technik</title>
+    <style>
+        :root {
+            --primary-blue: #1a73e8;
+            --primary-blue-hover: #1557b0;
+            --correct-green: #4caf50;
+            --correct-bg: #e8f5e9;
+            --incorrect-red: #f44336;
+            --incorrect-bg: #ffebee;
+            --text-dark: #202124;
+            --text-muted: #5f6368;
+            --border-color: #dadce0;
+            --bg-light: #f8f9fa;
+            --card-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .test-container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .header {
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .header h1 {
+            margin: 0 0 10px 0;
+            color: var(--text-dark);
+            font-size: 24px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary-blue);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            display: none;
+        }
+
+        .question-card.active {
+            display: block;
+        }
+
+        .question-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--text-dark);
+        }
+
+        .question-norm {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .option-btn {
+            display: flex;
+            align-items: flex-start;
+            padding: 14px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background-color: #fff;
+            cursor: pointer;
+            text-align: left;
+            font-size: 15px;
+            line-height: 1.4;
+            transition: all 0.2s ease;
+            color: var(--text-dark);
+        }
+
+        .option-btn:hover:not(.disabled) {
+            background-color: #f1f3f4;
+            border-color: #c6c9cc;
+        }
+
+        .option-btn .letter {
+            font-weight: bold;
+            margin-right: 12px;
+            min-width: 20px;
+        }
+
+        /* Test Feedback States */
+        .option-btn.correct {
+            background-color: var(--correct-bg) !important;
+            border-color: var(--correct-green) !important;
+            color: #1b5e20 !important;
+            font-weight: 500;
+        }
+
+        .option-btn.incorrect {
+            background-color: var(--incorrect-bg) !important;
+            border-color: var(--incorrect-red) !important;
+            color: #c62828 !important;
+        }
+
+        .option-btn.disabled {
+            cursor: default;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 4px;
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary-blue);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: #f1f3f4;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-blue-hover);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .result-screen {
+            display: none;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .result-screen.active {
+            display: block;
+        }
+
+        .score-display {
+            font-size: 48px;
+            font-weight: bold;
+            color: var(--primary-blue);
+            margin: 20px 0;
+        }
+
+        .score-text {
+            font-size: 18px;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="test-container">
+    <div class="header">
+        <h1>Test RT6 - Revízny Technik</h1>
+        <div id="counter-text" style="font-size: 14px; color: var(--text-muted);">Otázka 1 z 30</div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+    </div>
+
+    <div id="questions-wrapper">
+        <!-- Otázka 1 -->
+        <div class="question-card active" data-correct="C">
+            <div class="question-title">B príkaz platí od</div>
+            <div class="question-norm">STN 34 3100:2001</div>
+            <div class="options-container">
+                <button class="option-btn" onclick="selectOption(this, 'A')"><span class="letter">A)</span> zaistenia pracoviska</button>
+                <button class="option-btn" onclick="selectOption(this, 'B')"><span class="letter">B)</span> doby, kedy vedúci práce dal pokyn k zahájeniu práce</button>
+                <button class="option-btn" onclick="selectOption(this, 'C')"><span class="letter">C)</span> doby prevzatia pracoviska vedúcim práce</button>
+            </div>
+        </div>
+
+        <!-- Otázka 2 -->
+        <div class="question-card" data-correct="C">
+            <div class="question-title">Revízny technik</div>
+            <div class="question-norm">STN 34 3100:2001</div>
+            <div class="options-container">
+                <button class="option-btn" onclick="selectOption(this, 'A')"><span class="letter">A)</span> môže len vykonávať revízie v rozsahu osvedčenia</button>
+                <button class="option-btn" onclick="selectOption(this, 'B')"><span class="letter">B)</span> nemôže riadiť činnosť na VTZ elektrickom</button>
+                <button class="option-btn" onclick="selectOption(this, 'C')"><span class="letter">C)</span> môže riadiť a vykonávať činnosť na VTZ elektrickom a vykonávať revízie v rozsahu osvedčenia</button>
+            </div>
+        </div>
+
+        <!-- Otázka 3 -->
+        <div class="question-card" data-correct="B">
+            <div class="question-title">Aká je maximálna doba odpojenia pre koncové obvody neprekračujúce 32 A v sieťach TN 3x230/400V AC</div>
+            <div class="question-norm">STN 33 2000-4-41:2019</div>
+            <div class="options-container">
+                <button class="option-btn" onclick="selectOption(this, 'A')"><span class="letter">A)</span> 5 s</button>
+                <button class="option-btn" onclick="selectOption(this, 'B')"><span class="letter">B)</span> 0,4 s</button>
+                <button class="option-btn" onclick="selectOption(this, 'C')"><span class="letter">C)</span> 0,2 s</button>
+            </div>
+        </div>
+
+        <!-- Otázka 4 -->
+        <div class="question-card" data-correct="B">
+            <div class="question-title">Aký najmenší prierez musí mať ochranný vodič, ak má fázový vodič prierez 35 mm² a oba sú z rovnakého materiálu</div>
+            <div class="question-norm">STN 33 2000-5-54:2012</div>
+            <div class="options-container">
+                <button class="option-btn" onclick="selectOption(this, 'A')"><span class="letter">A)</span> 35 mm²</button>
+                <button class="option-btn" onclick="selectOption(this, 'B')"><span class="letter">B)</span> 16 mm²</button>
+                <button class="option-btn" onclick="selectOption(this, 'C')"><span class="letter">C)</span> 10 mm²</button>
+            </div>
+        </div>
+
+        <!-- Otázka 5 -->
+        <div class="question-card" data-correct="A">
+            <div class="question-title">Môžu sa funkčné a ochranné uzemnenia rôznych rozvodných sústav do 1000V vzájomne spájať</div>
+            <div class="question-norm">STN 33 2000-5-54:2012</div>
+            <div class="options-container">
+                <button class="option-btn" onclick="selectOption(this, 'A')"><span class="letter">A)</span> vo všetkých prípadoch</button>
+                <button class="option-btn" onclick="selectOption(this, 'B')"><span class="letter">B)</span> nikdy a nesmú spájať</button>
+                <button class="option-btn" onclick="selectOption(this, 'C')"><span class="letter">C)</span> len v nevyhnutných prípadoch</button>
+            </div>
+        </div>
+
+        <!-- Otázka 6 -->
+        <div class="question-card" data-correct="C">
+            <div class="question-title">Čo nesmie byť použité za náhodný ochranný vodič</div>
+            <div class="question-norm">STN 33 2000-5-54:2012</div>
+            <div class="options-container">
+                <button class="option-btn" onclick="selectOption(this, 'A')"><span class="letter">A)</span> vodivé konštrukčné prvky kovových konštrukcií, ktoré tvoria súvislý, trvalo prepojený celok</button>
+                <button class="option-btn" onclick="selectOption(this, 'B')"><span class="letter">B)</span> káblové lávky, oceľové stožiare, potrubia</button>
+                <button class="option-btn" onclick="selectOption(this, 'C')"><span class="letter">C)</span> zábradlia, rebríky, plot, koľajnice, nosné napínacie drôty, odnímateľné zariadenia</button>
+            </div>
+        </div>
+
+        <!-- Otázka 7 -->
+        <div class="question-card" data-correct="A">
+            <div class="question-title">Čo musí zahrňovať systém ochranného pospájania</div>
+            <div class="question-norm">STN 33 2000-4-41:2019</div>
+            <div class="options-container">
+                <button class="option-btn" onclick="selectOption(this, 'A')"><span class="letter">A)</span> všetky neživé časti upevnených zariadení súčasne prístupné dotyku, cudzie vodivé časti, ak je to možné tak aj hlavné kovové armatúry železobetónu.</button>
+                <button class="option-btn" onclick="selectOption(this, 'B')"><span class="letter">B)</span> cudzie vodivé časti</button>
+                <button class="option-btn" onclick="selectOption(this, 'C')"><span class="letter">C)</span> neživé časti upevnených zariadení</button>
+            </div>
+        </div>
+
+        <!-- Otázka 8 -->
+        <div class="question-card" data-correct="C">
+            <div class="question-title">Je prípustné použiť v pevných inštaláciách pripojených na siete TN vodič PEN o prierezu menším ako 10 mm² Cu alebo 16mm² Al</div>
+            <div class="question-norm">STN 33 2000-5-54:2012</div>
+            <div class="options-container">
+                <button class="option-btn" onclick="selectOption(this, 'A')"><span class="letter">A)</span> áno</button>
+                <button class="option-btn" onclick="selectOption(this, 'B')"><span class="letter">B)</span> áno v určitých prípadoch</button>
+                <button class="option-btn" onclick="selectOption(this, 'C')"><span class="letter">C)</span> nie</button>
+            </div>
+        </div>
+
+        <!-- Otázka 9 -->
+        <div class="question-card" data-correct="C">
+            <div class="question-title">Ak sa pre ochranu pri poruche použité prúdové chrániče v sieťach TT, je nutné používať ďalšie ochranné zariadenia</div>
+            <div class="question-norm">STN 33 2000-4-41:2019</div>
+            <div class="options-container">
+                <button class="option-btn" onclick="selectOption(this, 'A')"><span class="letter">A)</span> nie</button>
+                <button class="option-btn" onclick="selectOption(this, 'B')"><span class="letter">B)</span> nie ak U0 ≤ 120V</button>
+                <button class="option-btn" onclick="selectOption(this, 'C')"><span class="letter">C)</span> áno</button>
+            </div>
+        </div>
+
+        <!-- Otázka 10 -->
+        <div class="question-card" data-correct="C">
+            <div class="question-title">Ako musia byť v sieťach TT inštalované všetky neživé časti pri použití spoločného ochranného prístroja</div>
+            <div class="question-norm">STN 33 2000-4-41:2019</div>
+            <div class="options-container">
+                <button class="option-btn" onclick="selectOption(this, 'A')"><span class="letter">A)</span> musia byť spojené pomocou ochranného vodiča so samostatným uzemňovačom</button>
+                <button class="option-btn" onclick="selectOption(this, 'B')"><span class="letter">B)</span> musia byť spojené pomocou ochranného vodiča so samostatným uzemňovačom pre každý spotrebič</button>
+                <button class="option-btn" onclick="selectOption(this, 'C')"><span class="letter">C)</span> musia byť spojené pomocou ochranného vodiča so spoločným uzemňovačom</button>
+            </div>
+        </div>
+
+        <!-- Otázka 11 -->
+        <div class="question-card" data-correct="C">
+            <div class="question-title">Elektrizácia bytu stupňa B – je byt</div>
+            <div class="question-norm">STN 33 2130:1983</div>
+            <div class="options-container">
+                <button class="option-btn" onclick="selectOption(this, 'A')"><span class="letter">A)</span> v ktorom sa elektrina používa na osvetlenie, pre domáce elektro spotrebiče pripojené k rozvodu pohyblivým prívodom (cez zásuvky), alebo pevne pripojené spotrebiče s príkonom do 3500 VA</button>
+                <button class="option-btn" onclick="selectOption(this, 'B')"><span class="letter">B)</span> v ktorom sa elektrina používa na osvetlenie, pre domáce elektro spotrebiče pripojené k rozvodu pohyblivým prívodom (cez zásuvky), alebo pevne pripojené spotrebiče s príkonom nad 3500 VA, a pre vytápanie a klimatizáciu</button>
+                <button class="option-btn" onclick="selectOption(this, 'C')"><span class="letter">C)</span> v ktorom sa elektrina používa na osvetlenie, pre domáce elektro spotrebiče pripojené k rozvodu pohyblivým prívodom (cez zásuvky), alebo pevne pripojené spotrebiče s príkonom nad 3500 VA</button>
+            </div>
+        </div>
+
+        <!-- Otázka 12 -->
+        <div class="question-card" data-correct="B">
+            <div class="question-title">Úbytok napätia u iných ako svetelných odberov v rozvode medzi prípojkovou skriňou a rozvádzačom za elektromerom nesmie byť väčší ako</div>
+            <div class="question-norm">STN 33 2130:1983</div>
+            <div class="options-container">
+                <button class="option-btn" onclick="selectOption(this, 'A')"><span class="letter">A)</span> 4%</button>
+                <button class="option-btn" onclick="selectOption(this, 'B')"><span class="letter">B)</span> 3%</button>
+                <button class="option-btn" onclick="selectOption(this, 'C')"><span class="letter">C)</span> 2%</button>
+            </div>
+        </div>
+
+        <!-- Otázka 13 -->
+        <div class="question-card" data-correct="C">
+            <div class="question-title">Aké kovové časti smú prechádzať krytom rozvádzača pri použití ochrany úplnou izoláciou</div>
+            <div class="question-norm">STN EN 61439-1:2012</div>
+            <div class="options-container">
+                <button class="option-btn" onclick="selectOption(this, 'A')"><span class="letter">A)</span> nosné časti budovy</button>
+                <button class="option-btn" onclick="selectOption(this, 'B')"><span class="letter">B)</span> konštrukčné časti</button>
+                <button class="option-btn" onclick="selectOption(this, 'C')"><span class="letter">C)</span> izolované hriadele ovládacích častí</button>
+            </div>
+        </div>
+
+        <!-- Otázka 14 -->
+        <div class="question-card" data-correct="A">
+            <div class="question-title">Aký najmenší prierez iného ako Cu vodiča sa môže použiť pre ochranný obvod pracovného stroja</div>
+            <div class="question-norm">STN EN 60204-1:2019</div>
+            <div class="options-container">
+                <button class="option-btn" onclick="selectOption(this, 'A')"><span class="letter">A)</span> 16 mm²</button>
+                <button class="option-btn" onclick="selectOption(this, 'B')"><span class="letter">B)</span> 10 mm²</button>
+                <button class="option-btn" onclick="selectOption(this, 'C')"><span class="letter">C)</span> 25 mm²</button>
+            </div>
+        </div>
+
+        <!-- Otázka 15 -->
+        <div class="question-card" data-correct="C">
+            <div class="question-title">Pre aký význam je na pracovnom stroji možné použiť žlté tlačidlo</div>
+            <div class="question-norm">STN EN 60204-1:2019</div>
+            <div class="options-container">
+                <button class="option-btn" onclick="selectOption(this, 'A')"><span class="letter">A)</span> použitie v rizikových podmienkach</button>
+                <button class="option-btn" onclick="selectOption(this, 'B')"><span class="letter">B)</span> použitie v bežných podmienkach</button>
+                <button class="option-btn" onclick="selectOption(this, 'C')"><span class="letter">C)</span> použitie v abnormálnych podmienkach</button>
+            </div>
+        </div>
+
+        <!-- Otázka 16 -->
+        <div class="question-card" data-correct="A">
+            <div class="question-title">V akom prípade musí byť v blízkosti hlavného vypínača pracovného stroja umiestnený výstražný štítok upozorňujúci na nebezpečenstvo?</div>
+            <div class="question-norm">STN EN 60204-1:2019</div>
+            <div class="options-container">
+                <button class="option-btn" onclick="selectOption(this, 'A')"><span class="letter">A)</span> ak hlavný vypínač nevypína obvody stroja ktoré predstavujú výnimku</button>
+                <button class="option-btn" onclick="selectOption(this, 'B')"><span class="letter">B)</span> ak je použitý za hlavný vypínač istiaci prvok</button>
+                <button class="option-btn" onclick="selectOption(this, 'C')"><span class="letter">C)</span> vždy</button>
+            </div>
+        </div>
+
+        <!-- Otázka 17 -->
+        <div class="question-card" data-correct="B">
+            <div class="question-title">Ako musia byť v rozvádzačoch umiestnené svorky pre vstupujúce a vystupujúce vodiče PE, N a PEN</div>
+            <div class="question-norm">STN EN 61439-1:2012</div>
+            <div class="options-container">
+                <button class="option-btn" onclick="selectOption(this, 'A')"><span class="letter">A)</span> musia sa umiestniť s ohľadom na usporiadanie prístrojov</button>
+                <button class="option-btn" onclick="selectOption(this, 'B')"><span class="letter">B)</span> musia sa umiestniť vždy v blízkosti svoriek príslušných krajných vodičov</button>
+                <button class="option-btn" onclick="selectOption(this, 'C')"><span class="letter">C)</span> nie je potrebné ich špecificky umiestňovať</button>
+            </div>
+        </div>
+
+        <!-- Otázka 18 -->
+        <div class="question-card" data-correct="C">
+            <div class="question-title">Vypínač je možné inštalovať vedľa umývacej zóny</div>
+            <div class="question-norm">STN 33 2000-7-701:2007</div>
+            <div class="options-container">
+                <button class="option-btn" onclick="selectOption(this, 'A')"><span class="letter">A)</span> vo výške 120 cm min. 20 cm vedľa zóny</button>
+                <button class="option-btn" onclick="selectOption(this, 'B')"><span class="letter">B)</span> vo výške 120 cm min. 30 cm vedľa zóny</button>
+                <button class="option-btn" onclick="selectOption(this, 'C')"><span class="letter">C)</span> vo výške 120 cm tesne vedľa zóny</button>
+            </div>
+        </div>
+
+        <!-- Otázka 19 -->
+        <div class="question-card" data-correct="A">
+            <div class="question-title">Zdravotnícky priestor skupiny 0 je podľa STN 33 2000-7-710</div>
+            <div class="question-norm">STN 33 2000-7-710:2013</div>
+            <div class="options-container">
+                <button class="option-btn" onclick="selectOption(this, 'A')"><span class="letter">A)</span> zdravotnícky priestor, v ktorom nie je určené použitie nijakých aplikačných častí a v ktorom prerušenie (porucha) napájania nemôže spôsobiť ohrozenie života</button>
+                <button class="option-btn" onclick="selectOption(this, 'B')"><span class="letter">B)</span> zdravotnícky priestor, v ktorom je jednoznačne určené použitie aplikačných častí a v ktorom prerušenie (porucha) napájania môže spôsobiť ohrozenie života</button>
+                <button class="option-btn" onclick="selectOption(this, 'C')"><span class="letter">C)</span> zdravotnícky priestor, v ktorom sa aplikačné časti používajú pri úkonoch, napr. intrakardiálne úkony, chirurgické operácie, atď.</button>
+            </div>
+        </div>
+
+        <!-- Otázka 20 -->
+        <div class="question-card" data-correct="C">
+            <div class="question-title">Minimálny prierez vodičov vedenia v stánkoch z Cu je</div>
+            <div class="question-norm">STN 33 2000-7-704:2019</div>
+            <div class="options-container">
+                <button class="option-btn" onclick="selectOption(this, 'A')"><span class="letter">A)</span> 2,5 mm²</button>
+                <button class="option-btn" onclick="selectOption(this, 'B')"><span class="letter">B)</span> 0,75 mm²</button>
+                <button class="option-btn" onclick="selectOption(this, 'C')"><span class="letter">C)</span> 1,5 mm²</button>
+            </div>
+        </div>
+
+        <!-- Otázka 21 -->
+        <div class="question-card" data-correct="B">
+            <div class="question-title">V poľnohospodárskych objektoch z dôvodu ochrany pred požiarom sa musí inštalovať prúdový chránič s vypínacím prúdom do</div>
+            <div class="question-norm">STN 33 2000-7-705:2007</div>
+            <div class="options-container">
+                <button class="option-btn" onclick="selectOption(this, 'A')"><span class="letter">A)</span> 0,5 A</button>
+                <button class="option-btn" onclick="selectOption(this, 'B')"><span class="letter">B)</span> 0,3 A</button>
+                <button class="option-btn" onclick="selectOption(this, 'C')"><span class="letter">C)</span> 0,1 A</button>
+            </div>
+        </div>
+
+        <!-- Otázka 22 -->
+        <div class="question-card" data-correct="B">
+            <div class="question-title">Odpor uzemnenia neutrálneho bodu zdroja v sieťach s menovitým napätím 230V nemá byť väčší ako</div>
+            <div class="question-norm">STN 33 2000-4-41:2019</div>
+            <div class="options-container">
+                <button class="option-btn" onclick="selectOption(this, 'A')"><span class="letter">A)</span> 2 Ω</button>
+                <button class="option-btn" onclick="selectOption(this, 'B')"><span class="letter">B)</span> 5 Ω</button>
+                <button class="option-btn" onclick="selectOption(this, 'C')"><span class="letter">C)</span> 15 Ω</button>
+            </div>
+        </div>
+
+        <!-- Otázka 23 -->
+        <div class="question-card" data-correct="A">
+            <div class="question-title">Pri križovatke izolovaného vedenia do 1 kV s vedením telefónnym je min. vzdialenosť silového vedenia (s rozpätím p.b. do 20 m) nad telefónnym</div>
+            <div class="question-norm">STN 33 3300:1983</div>
+            <div class="options-container">
+                <button class="option-btn" onclick="selectOption(this, 'A')"><span class="letter">A)</span> 0,5 m</button>
+                <button class="option-btn" onclick="selectOption(this, 'B')"><span class="letter">B)</span> 1 m</button>
+                <button class="option-btn" onclick="selectOption(this, 'C')"><span class="letter">C)</span> 0,8 m</button>
+            </div>
+        </div>
+
+        <!-- Otázka 24 -->
+        <div class="question-card" data-correct="C">
+            <div class="question-title">Minimálne prierezy vodičov pre elektrické prípojky zhotovené káblovým vedením sú</div>
+            <div class="question-norm">STN 33 3320:2002</div>
+            <div class="options-container">
+                <button class="option-btn" onclick="selectOption(this, 'A')"><span class="letter">A)</span> 4 x 25 mm² Al pri odbočení z rozpojovacej alebo istiacej skrini káblového vedenia dodávateľa elektrickej energie zo samostatného istiaceho prvku</button>
+                <button class="option-btn" onclick="selectOption(this, 'B')"><span class="letter">B)</span> 4 x 16 mm² Al pri odbočení spojkou tvaru T, ale len so súhlasom dodávateľa elektrickej energie</button>
+                <button class="option-btn" onclick="selectOption(this, 'C')"><span class="letter">C)</span> 4 x 25 mm² Al pri odbočení spojkou tvaru T, ale len so súhlasom dodávateľa elektrickej energie</button>
+            </div>
+        </div>
+
+        <!-- Otázka 25 -->
+        <div class="question-card" data-correct="A">
+            <div class="question-title">Ak sa nevyžaduje prístroj istiaci pred nadprúdom, tak trvalá prúdová zaťažiteľnosť kábla PV reťazca</div>
+            <div class="question-norm">STN 33 2000-7-712:2022</div>
+            <div class="options-container">
+                <button class="option-btn" onclick="selectOption(this, 'A')"><span class="letter">A)</span> sa musí rovnať alebo byť väčšia ako maximálny skratový prúd PV reťazca</button>
+                <button class="option-btn" onclick="selectOption(this, 'B')"><span class="letter">B)</span> sa musí rovnať alebo byť väčšia ako menovitý prúd PV reťazca</button>
+                <button class="option-btn" onclick="selectOption(this, 'C')"><span class="letter">C)</span> sa musí rovnať alebo byť menšia ako maximálny skratový prúd PV reťazca</button>
+            </div>
+        </div>
+
+        <!-- Otázka 26 -->
+        <div class="question-card" data-correct="B">
+            <div class="question-title">Čo predstavuje skratka LPS v zmysle STN EN 62305</div>
+            <div class="question-norm">STN EN 62305-3:2012</div>
+            <div class="options-container">
+                <button class="option-btn" onclick="selectOption(this, 'A')"><span class="letter">A)</span> Úroveň ochrany pred bleskom</button>
+                <button class="option-btn" onclick="selectOption(this, 'B')"><span class="letter">B)</span> systém používaný na zníženie hmotnej škody spôsobenej zásahom blesku do stavby</button>
+                <button class="option-btn" onclick="selectOption(this, 'C')"><span class="letter">C)</span> Zóna ochrany pred bleskom</button>
+            </div>
+        </div>
+
+        <!-- Otázka 27 -->
+        <div class="question-card" data-correct="B">
+            <div class="question-title">Kde je vhodné použiť priestorové tienenie stavby</div>
+            <div class="question-norm">STN EN 62305-4:2013</div>
+            <div class="options-container">
+                <button class="option-btn" onclick="selectOption(this, 'A')"><span class="letter">A)</span> tam kde je účelnejšie a užitočnejšie chrániť jednotlivé zariadenie</button>
+                <button class="option-btn" onclick="selectOption(this, 'B')"><span class="letter">B)</span> tam kde je účelnejšie a užitočnejšie chrániť definovanú zónu stavby namiesto niekoľko jednotlivých zariadení</button>
+                <button class="option-btn" onclick="selectOption(this, 'C')"><span class="letter">C)</span> tam kde nie je možné použiť metódu valivej gule</button>
+            </div>
+        </div>
+
+        <!-- Otázka 28 -->
+        <div class="question-card" data-correct="A">
+            <div class="question-title">V ktorej časti objektu sa podľa rady STN EN 62305 nachádza zóna LPZ 0B</div>
+            <div class="question-norm">STN EN 62305-4:2013</div>
+            <div class="options-container">
+                <button class="option-btn" onclick="selectOption(this, 'A')"><span class="letter">A)</span> vonkajšia zóna – systém je chránený pred priamym zásahom blesku</button>
+                <button class="option-btn" onclick="selectOption(this, 'B')"><span class="letter">B)</span> vnútorná zóna– systém je chránený pred priamym zásahom blesku</button>
+                <button class="option-btn" onclick="selectOption(this, 'C')"><span class="letter">C)</span> vonkajšia zóna – systém nie je chránený pred priamym zásahom blesku</button>
+            </div>
+        </div>
+
+        <!-- Otázka 29 -->
+        <div class="question-card" data-correct="C">
+            <div class="question-title">Aký je polomer valivej gule r v závislosti na triede LPS II</div>
+            <div class="question-norm">STN EN 62305-1:2012</div>
+            <div class="options-container">
+                <button class="option-btn" onclick="selectOption(this, 'A')"><span class="letter">A)</span> 20 m</button>
+                <button class="option-btn" onclick="selectOption(this, 'B')"><span class="letter">B)</span> 45 m</button>
+                <button class="option-btn" onclick="selectOption(this, 'C')"><span class="letter">C)</span> 30 m</button>
+            </div>
+        </div>
+
+        <!-- Otázka 30 -->
+        <div class="question-card" data-correct="A">
+            <div class="question-title">Ak rezistivita vrchného podložia pôdy v okruhu do 3 m od zvodu je menšia ako 100 kΩm , pravdepodobnosť priblíženia alebo výskytu osôb v okolí stavby a v okolí zvodov je veľká a ak nie je použitá sústava aspoň 10 zvodov musia sa vykonať opatrenia pred dotykovým napätím</div>
+            <div class="question-norm">STN EN 62305-3:2012</div>
+            <div class="options-container">
+                <button class="option-btn" onclick="selectOption(this, 'A')"><span class="letter">A)</span> izoláciou odkrytého zvodu skúšanou impulzným výdržným napätím 100 kV, 1,2/50 μs, napr. zosieťovaným polyetylénom najmenej hrúbky 3 mm</button>
+                <button class="option-btn" onclick="selectOption(this, 'B')"><span class="letter">B)</span> znížením odporu uzemnenia pod 5Ω</button>
+                <button class="option-btn" onclick="selectOption(this, 'C')"><span class="letter">C)</span> znížením odporu uzemnenia pod 10Ω</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="result-screen" id="result-screen">
+        <h2>Test Dokončený!</h2>
+        <div class="score-display" id="score-display">0 / 30</div>
+        <div class="score-text" id="score-text">Úspešnosť: 0%</div>
+        <button class="btn btn-primary" onclick="restartTest()">Robiť test znova</button>
+    </div>
+
+    <div class="controls" id="controls">
+        <button class="btn btn-secondary" id="prev-btn" onclick="changeQuestion(-1)" disabled>Predchádzajúca</button>
+        <button class="btn btn-primary" id="next-btn" onclick="changeQuestion(1)">Nasledujúca &gt;</button>
+    </div>
+</div>
+
+<script>
+    let currentQuestionIndex = 0;
+    const questions = document.querySelectorAll('.question-card');
+    const totalQuestions = questions.length;
+    let score = 0;
+    let userAnswers = new Array(totalQuestions).fill(null);
+
+    function updateHeader() {
+        document.getElementById('counter-text').innerText = `Otázka ${currentQuestionIndex + 1} z ${totalQuestions}`;
+        const progressPercent = ((currentQuestionIndex + 1) / totalQuestions) * 100;
+        document.getElementById('progress-fill').style.width = `${progressPercent}%`;
+    }
+
+    function showQuestion(index) {
+        questions.forEach((q, i) => {
+            q.classList.toggle('active', i === index);
+        });
+
+        // Tlačidlá
+        document.getElementById('prev-btn').disabled = (index === 0);
+        
+        if (index === totalQuestions - 1) {
+            document.getElementById('next-btn').innerText = 'Zobraziť celý výsledok';
+        } else {
+            document.getElementById('next-btn').innerText = 'Nasledujúca >';
+        }
+
+        updateHeader();
+    }
+
+    function selectOption(button, letter) {
+        const currentQuestion = questions[currentQuestionIndex];
+        const correctLetter = currentQuestion.getAttribute('data-correct');
+        const buttons = currentQuestion.querySelectorAll('.option-btn');
+
+        // Ak už užívateľ odpovedal, zamedziť opätovnému kliku
+        if (userAnswers[currentQuestionIndex] !== null) return;
+
+        userAnswers[currentQuestionIndex] = letter;
+
+        buttons.forEach(btn => {
+            btn.classList.add('disabled');
+            const btnLetter = btn.querySelector('.letter').innerText.charAt(0);
+
+            if (btnLetter === correctLetter) {
+                btn.classList.add('correct');
+            }
+            if (btnLetter === letter && letter !== correctLetter) {
+                btn.classList.add('incorrect');
+            }
+        });
+
+        if (letter === correctLetter) {
+            score++;
+        }
+    }
+
+    function changeQuestion(direction) {
+        if (direction === 1 && currentQuestionIndex === totalQuestions - 1) {
+            finishTest();
+            return;
+        }
+
+        currentQuestionIndex += direction;
+        if (currentQuestionIndex < 0) currentQuestionIndex = 0;
+        if (currentQuestionIndex >= totalQuestions) currentQuestionIndex = totalQuestions - 1;
+
+        showQuestion(currentQuestionIndex);
+    }
+
+    function finishTest() {
+        document.getElementById('questions-wrapper').style.display = 'none';
+        document.getElementById('controls').style.display = 'none';
+        document.querySelector('.header').style.display = 'none';
+
+        const resultScreen = document.getElementById('result-screen');
+        resultScreen.classList.add('active');
+
+        document.getElementById('score-display').innerText = `${score} / ${totalQuestions}`;
+        const percentage = Math.round((score / totalQuestions) * 100);
+        document.getElementById('score-text').innerText = `Úspešnosť: ${percentage}%`;
+    }
+
+    function restartTest() {
+        score = 0;
+        currentQuestionIndex = 0;
+        userAnswers.fill(null);
+
+        // Reset tlačidiel v otázkach
+        questions.forEach(q => {
+            const buttons = q.querySelectorAll('.option-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('correct', 'incorrect', 'disabled');
+            });
+        });
+
+        document.getElementById('questions-wrapper').style.display = 'block';
+        document.getElementById('controls').style.display = 'flex';
+        document.querySelector('.header').style.display = 'block';
+        document.getElementById('result-screen').classList.remove('active');
+
+        showQuestion(0);
+    }
+
+    // Inicializácia pri načítaní
+    showQuestion(0);
+</script>
+
+</body>
+</html>
